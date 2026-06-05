@@ -1,0 +1,48 @@
+# =============================================================================
+# AIRFLOW CONTAINER DEPENDENCIES
+# All scanner pipeline dependencies live here.
+# Streamlit container has its own separate requirements.
+#
+# Pin ALL versions explicitly — no floating versions.
+# This is the only way to guarantee reproducibility across
+# local machine, team members and cloud deployment.
+# =============================================================================
+
+# ── Airflow core ──────────────────────────────────────────────────────────────
+# Constrained install — Airflow has very specific dependency requirements.
+# Always install via the constraints file for your Python version.
+# See install instructions below.
+apache-airflow==2.9.1
+
+# ── Data fetching ─────────────────────────────────────────────────────────────
+yfinance==0.2.40
+requests==2.31.0
+lxml==5.2.2                 # Required by pandas.read_html (Wikipedia scraping)
+html5lib==1.1               # Fallback HTML parser for pandas.read_html
+
+# ── Data manipulation ─────────────────────────────────────────────────────────
+pandas==2.2.2
+numpy==1.26.4
+
+# ── Indicator engines ─────────────────────────────────────────────────────────
+scipy==1.13.0               # LinReg slope calculation
+pandas-ta==0.3.14b          # Technical indicators base (used as reference)
+
+# ── Machine learning ──────────────────────────────────────────────────────────
+scikit-learn==1.4.2
+xgboost==2.0.3
+lightgbm==4.3.0
+
+# ── Database ──────────────────────────────────────────────────────────────────
+# sqlite3 is part of Python stdlib — no pip install needed
+
+# ── Configuration ─────────────────────────────────────────────────────────────
+PyYAML==6.0.1
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-dateutil==2.9.0
+pytz==2024.1
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest==8.2.0
+pytest-mock==3.14.0
