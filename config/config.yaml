@@ -23,7 +23,7 @@ logging:
   max_file_size_mb: 10
 ml:
   high_probability_threshold: 0.7
-  label_forward_days: 10
+  label_forward_days: 15
   min_training_samples: 500
   model_retrain_days: 7
 scanner:
