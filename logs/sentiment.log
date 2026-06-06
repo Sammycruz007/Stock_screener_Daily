@@ -1,0 +1,3 @@
+2026-06-06 11:12:02 | INFO     | sentiment                 | Logger initialised → logs\sentiment.log
+2026-06-06 11:12:02 | INFO     | sentiment                 | Sentiment fetch starting | 2 tickers | Date: 2026-06-06
+2026-06-06 11:12:02 | INFO     | sentiment                 | Sentiment fetch complete | Total: 2 | No options data: 0 | No short interest: 0

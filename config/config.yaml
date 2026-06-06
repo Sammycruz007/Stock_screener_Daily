@@ -1,193 +1,63 @@
-# =============================================================================
-# STOCK SCANNER — MASTER CONFIGURATION
-# =============================================================================
-# This is the single source of truth for ALL parameters in the pipeline.
-# Every module reads from here — nothing is hardcoded anywhere else.
-# All file paths are absolute and container-friendly (Docker compatible).
-# To tune the scanner behaviour, change values here — no code changes needed.
-# =============================================================================
-
-
-# ─────────────────────────────────────
-# UNIVERSE
-# What we scan and what we use as
-# market/sector health benchmarks
-# ─────────────────────────────────────
+database:
+  path: /app/data/scanner.db
+fetcher:
+  batch_size: 50
+  historical_days: 365
+  incremental_days: 5
+  max_workers: 10
+  retry_attempts: 3
+  retry_delay_seconds: 5
+filters:
+  min_avg_volume: 500000
+  min_price: 10.0
+linreg:
+  period: 200
+  std_devs:
+  - 1
+  - 2
+  - 3
+logging:
+  backup_count: 5
+  level: INFO
+  log_dir: logs
+  max_file_size_mb: 10
+ml:
+  high_probability_threshold: 0.7
+  label_forward_days: 10
+  min_training_samples: 500
+  model_retrain_days: 7
+scanner:
+  long_entry_sd_max: -3
+  long_entry_sd_min: -1
+  short_entry_sd_max: 3
+  short_entry_sd_min: 1
+scheduler:
+  run_time: '16:30'
+  timezone: America/New_York
+sentiment:
+  put_call_bearish_threshold: 1.2
+  put_call_bullish_threshold: 0.7
+  short_interest_high_threshold: 15.0
+smc:
+  choch_confirmation: close
+  min_pivot_candles: 5
 universe:
   indices:
-    - SPY       # Proxy for S&P 500    (market health check 1)
-    - QQQ       # Proxy for NASDAQ 100 (market health check 2)
-    - DIA       # Proxy for Dow Jones  (market health check 3)
-
+  - SPY
+  - QQQ
+  - DIA
   sectors:
-    - XLK       # Technology
-    - XLF       # Financials
-    - XLE       # Energy
-    - XLV       # Healthcare
-    - XLI       # Industrials
-    - XLY       # Consumer Discretionary
-    - XLP       # Consumer Staples
-    - XLU       # Utilities
-    - XLB       # Materials
-    - XLRE      # Real Estate
-    - XLC       # Communication Services
-
-
-# ─────────────────────────────────────
-# STAGE 1 FILTER
-# Applied BEFORE any indicator engine runs.
-# Removes illiquid and penny stocks from
-# the universe to keep scan quality high.
-# ─────────────────────────────────────
-filters:
-  min_price: 10.0             # Stock must close above $10
-  min_avg_volume: 500000      # 20-day average volume must exceed 500,000
-
-
-# ─────────────────────────────────────
-# LINREG ENGINE
-# Controls how the Linear Regression
-# line and standard deviation bands
-# are calculated.
-# ─────────────────────────────────────
-linreg:
-  period: 200                 # Number of candles used to fit the regression line
-  std_devs:                   # Standard deviation bands to compute above and below
-    - 1
-    - 2
-    - 3
-
-
-# ─────────────────────────────────────
-# SMC ENGINE
-# Controls Smart Money Concept logic:
-# swing detection and CHoCH.
-# ─────────────────────────────────────
-smc:
-  min_pivot_candles: 5        # A swing high/low needs at least 5 candles
-                              # on EACH side to be considered valid.
-                              # No upper cap — the engine finds the most
-                              # recent confirmed pivot regardless of distance.
-
-  choch_confirmation: close   # CHoCH is only confirmed when a candle CLOSES
-                              # beyond the swing point — not just a wick touch.
-                              # This is the conservative, reliable approach.
-
-
-# ─────────────────────────────────────
-# VOLUME ENGINE
-# Controls how accumulation and
-# distribution patterns are detected.
-# ─────────────────────────────────────
+  - XLK
+  - XLF
+  - XLE
+  - XLV
+  - XLI
+  - XLY
+  - XLP
+  - XLU
+  - XLB
+  - XLRE
+  - XLC
 volume:
-  lookback_days: 10           # How many recent candles to assess volume trend over
-  avg_volume_period: 20       # Period for computing the baseline average volume
-                              # Used to judge whether today's volume is high or low
-
-
-# ─────────────────────────────────────
-# SCANNER
-# Defines the entry zones for long
-# and short setups relative to the
-# LinReg standard deviation bands.
-# ─────────────────────────────────────
-scanner:
-  # LONG: price must be BELOW the LinReg line
-  # between -1 SD and -3 SD (mean reversion buy zone)
-  long_entry_sd_min: -1       # Upper boundary of long entry zone
-  long_entry_sd_max: -3       # Lower boundary of long entry zone
-
-  # SHORT: price must be ABOVE the LinReg line
-  # between +1 SD and +3 SD (mean reversion sell zone)
-  short_entry_sd_min: 1       # Lower boundary of short entry zone
-  short_entry_sd_max: 3       # Upper boundary of short entry zone
-
-
-# ─────────────────────────────────────
-# SENTIMENT
-# Thresholds for interpreting Put/Call
-# Ratio and Short Interest signals.
-# ─────────────────────────────────────
-sentiment:
-  # Put/Call Ratio interpretation:
-  # Low ratio = more calls than puts = bullish options sentiment
-  # High ratio = more puts than calls = bearish options sentiment
-  put_call_bullish_threshold: 0.7       # Below this = bullish sentiment
-  put_call_bearish_threshold: 1.2       # Above this = bearish sentiment
-
-  # Short Interest:
-  # High short interest on a long setup = potential short squeeze fuel
-  short_interest_high_threshold: 15.0  # % of float shorted — above this = high
-
-
-# ─────────────────────────────────────
-# ML MODELS
-# Controls training and inference
-# behaviour for both models.
-# ─────────────────────────────────────
-ml:
-  # How far forward we look to determine if a setup "succeeded"
-  # Success = price reached the LinReg mean within this many days
-  label_forward_days: 10
-
-  # Don't attempt training until we have at least this many labelled samples
-  # Too few samples = unreliable model
-  min_training_samples: 500
-
-  # Retrain models every N days to keep them fresh on recent market behaviour
-  model_retrain_days: 7
-
-  # ML Score threshold — only stocks above this are considered high probability
-  high_probability_threshold: 0.70
-
-
-# ─────────────────────────────────────
-# SCHEDULER
-# When Airflow triggers the daily
-# pipeline run.
-# ─────────────────────────────────────
-scheduler:
-  run_time: "16:30"               # 4:30 PM — 30 minutes after US market close
-  timezone: "America/New_York"    # Always Eastern Time
-
-
-# ─────────────────────────────────────
-# DATABASE
-# SQLite file location.
-# Path must be reachable inside the
-# Docker container (shared volume).
-# ─────────────────────────────────────
-database:
-  path: "/app/data/scanner.db"    # Absolute path inside airflow container
-
-
-# ─────────────────────────────────────
-# LOGGING
-# Controls log file behaviour.
-# Rotating logs prevent disk from
-# filling up over time.
-# ─────────────────────────────────────
-logging:
-  level: "INFO"                   # DEBUG / INFO / WARNING / ERROR / CRITICAL
-  log_dir: "/app/logs"            # Absolute path inside container
-  max_file_size_mb: 10            # Rotate log file after it hits 10 MB
-  backup_count: 5                 # Keep last 5 rotated files then delete oldest
-
-
-# ─────────────────────────────────────
-# DATA FETCHING
-# Controls yfinance download behaviour
-# and parallel processing.
-# ─────────────────────────────────────
-fetcher:
-  batch_size: 50              # How many tickers to process per parallel batch
-  max_workers: 10             # Number of parallel threads for batch downloading
-  retry_attempts: 3           # How many times to retry a failed ticker fetch
-  retry_delay_seconds: 5      # Seconds to wait before first retry
-                              # Delay doubles each retry (exponential backoff)
-
-  historical_days: 365        # Days of history to pull on FIRST RUN
-                              # (ticker not yet in database)
-
-  incremental_days: 5         # Days to re-fetch on daily runs
-                              # (small buffer to catch any missed trading days)
+  avg_volume_period: 20
+  lookback_days: 10
