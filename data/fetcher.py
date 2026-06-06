@@ -3,16 +3,50 @@ data/fetcher.py
 ---------------
 Data fetching layer for the Stock Scanner pipeline.
 
-Responsibilities:
-- Download S&P 500 + NASDAQ 100 tickers (full universe)
-- First run: fetch 365 days of OHLCV history
-- Daily runs: incremental fetch (last 5 days only)
-- Parallel batch downloading via concurrent.futures
-- Retry logic via error_handler decorator
-- Data validation before writing to SQLite
-- Fetch indices (SPY, QQQ, DIA) and sector ETFs separately
+CHANGES FROM PREVIOUS VERSION:
+- Universe now pulled from NASDAQ FTP listings (nasdaqlisted.txt + otherlisted.txt)
+  instead of Wikipedia scraping S&P500 + NASDAQ100 only.
+- This gives us ~6,000 raw tickers across NYSE + NASDAQ
+- Stage 1 filter (price > $10, vol > 500K) reduces this to ~1,500 quality names
+- Sector data fetched dynamically from yfinance ticker.info
+- Sector stored in ticker_metadata table (no hardcoded SECTOR_MAP)
+- Unclassified stocks (no sector from yfinance) flagged but not excluded
+
+LOGICAL FLOW:
+─────────────
+STEP 1 — Get full universe from NASDAQ FTP:
+   Download nasdaqlisted.txt  → all NASDAQ listed stocks
+   Download otherlisted.txt   → all NYSE + NYSE American listed stocks
+   Combine, deduplicate, clean → ~6,000 raw tickers
+
+STEP 2 — Filter out non-stocks:
+   Remove warrants (ticker ends with W)
+   Remove rights (ticker ends with R)
+   Remove units (ticker ends with U)
+   Remove preferred shares (ticker contains -)
+   Remove test issues (flagged in the file)
+   Remove ETFs (flagged in the file) EXCEPT our 11 sector ETFs + 3 indices
+   → Reduces to ~4,000 clean stock tickers
+
+STEP 3 — Smart fetch OHLCV data:
+   First run  → full 365-day history
+   Daily runs → incremental last 5 days only
+   Parallel batches of 50 tickers, 10 workers
+
+STEP 4 — Stage 1 filter:
+   Price > $10 AND average volume > 500K
+   → Reduces to ~1,500 actionable tickers
+
+STEP 5 — Fetch sector metadata:
+   For each ticker that passed Stage 1
+   Fetch ticker.info from yfinance
+   Extract sector name → map to sector ETF
+   Store in ticker_metadata table
+   Tag unclassified stocks with sector = 'Unclassified'
 """
 
+import ftplib
+import io
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -20,13 +54,13 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
-import requests
 import yaml
 
 from data.database import (
     write_raw_prices,
-    get_last_fetch_date,
     write_filtered_universe,
+    write_ticker_metadata,
+    get_last_fetch_date,
 )
 from utils.logging import get_fetcher_logger
 from utils.error_handler import (
@@ -34,7 +68,6 @@ from utils.error_handler import (
     graceful,
     validate_dataframe,
     DataFetchError,
-    DataValidationError,
 )
 
 logger = get_fetcher_logger()
@@ -49,9 +82,9 @@ def _load_config() -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
-config = _load_config()
-FETCHER_CFG = config["fetcher"]
-FILTER_CFG  = config["filters"]
+config       = _load_config()
+FETCHER_CFG  = config["fetcher"]
+FILTER_CFG   = config["filters"]
 UNIVERSE_CFG = config["universe"]
 
 BATCH_SIZE       = FETCHER_CFG["batch_size"]
@@ -61,143 +94,319 @@ RETRY_DELAY      = FETCHER_CFG["retry_delay_seconds"]
 HISTORICAL_DAYS  = FETCHER_CFG["historical_days"]
 INCREMENTAL_DAYS = FETCHER_CFG["incremental_days"]
 
-MIN_PRICE        = FILTER_CFG["min_price"]
-MIN_AVG_VOLUME   = FILTER_CFG["min_avg_volume"]
+MIN_PRICE      = FILTER_CFG["min_price"]
+MIN_AVG_VOLUME = FILTER_CFG["min_avg_volume"]
+
+# NASDAQ FTP details
+FTP_HOST    = "ftp.nasdaqtrader.com"
+FTP_DIR     = "SymbolDirectory"
+NASDAQ_FILE = "nasdaqlisted.txt"
+OTHER_FILE  = "otherlisted.txt"
+
+# Sector name → ETF mapping
+# yfinance returns sector as a plain English string
+# We map that to the corresponding sector ETF ticker
+SECTOR_NAME_TO_ETF = {
+    "Technology"            : "XLK",
+    "Financial Services"    : "XLF",
+    "Energy"                : "XLE",
+    "Healthcare"            : "XLV",
+    "Industrials"           : "XLI",
+    "Consumer Cyclical"     : "XLY",
+    "Consumer Defensive"    : "XLP",
+    "Utilities"             : "XLU",
+    "Basic Materials"       : "XLB",
+    "Real Estate"           : "XLRE",
+    "Communication Services": "XLC",
+}
 
 
 # =============================================================================
-# UNIVERSE — fetch S&P 500 + NASDAQ 100 tickers
+# STEP 1 — FULL UNIVERSE FROM NASDAQ FTP
 # =============================================================================
 
-def get_sp500_tickers() -> list[str]:
+def _download_ftp_file(filename: str) -> pd.DataFrame:
     """
-    Scrape S&P 500 tickers from Wikipedia.
+    Download a single file from the NASDAQ FTP server.
+
+    FLOW:
+    1. Connect to ftp.nasdaqtrader.com anonymously
+    2. Navigate to SymbolDirectory folder
+    3. Download the file into memory (no disk write needed)
+    4. Parse as pipe-delimited text into a DataFrame
+    5. Return DataFrame
+
+    Args:
+        filename: 'nasdaqlisted.txt' or 'otherlisted.txt'
 
     Returns:
-        List of ticker strings
+        DataFrame with raw ticker listing data
     """
-    logger.info("Fetching S&P 500 tickers from Wikipedia")
+    logger.info(f"Downloading {filename} from NASDAQ FTP")
+
     try:
-        url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-        tables = pd.read_html(url)
-        tickers = tables[0]["Symbol"].tolist()
-        # Clean tickers — Wikipedia uses '.' but yfinance uses '-'
-        tickers = [t.replace(".", "-") for t in tickers]
-        logger.info(f"S&P 500: {len(tickers)} tickers fetched")
-        return tickers
+        # ── Connect anonymously ───────────────────────────────────────────────
+        ftp = ftplib.FTP(FTP_HOST)
+        ftp.login("anonymous", "")       # Anonymous login — no credentials needed
+        ftp.cwd(FTP_DIR)                 # Navigate to SymbolDirectory
+
+        # ── Download file into memory buffer ──────────────────────────────────
+        buffer = io.BytesIO()
+        ftp.retrbinary(f"RETR {filename}", buffer.write)
+        ftp.quit()
+
+        # ── Parse pipe-delimited content ──────────────────────────────────────
+        buffer.seek(0)
+        content = buffer.read().decode("utf-8")
+
+        # Files use | as delimiter, last line is a file creation timestamp — skip it
+        lines = [l for l in content.strip().split("\n") if "File Creation Time" not in l]
+        clean_content = "\n".join(lines)
+
+        df = pd.read_csv(io.StringIO(clean_content), sep="|")
+
+        logger.info(f"{filename}: {len(df)} rows downloaded")
+        return df
+
     except Exception as e:
-        raise DataFetchError(f"Failed to fetch S&P 500 tickers: {e}") from e
+        raise DataFetchError(f"FTP download failed for {filename}: {e}") from e
 
 
-def get_nasdaq100_tickers() -> list[str]:
+def _parse_nasdaq_listed(df: pd.DataFrame) -> list[str]:
     """
-    Scrape NASDAQ 100 tickers from Wikipedia.
+    Extract clean stock tickers from nasdaqlisted.txt.
+
+    FILE COLUMNS:
+    Symbol | Security Name | Market Category | Test Issue |
+    Financial Status | Round Lot Size | ETF | NextShares
+
+    FILTERS APPLIED:
+    - Test Issue == 'N'     (exclude test symbols)
+    - ETF == 'N'            (exclude ETFs — except our protected ones)
+    - Symbol has no special characters except - (preferred shares use -)
+    - Remove warrants (W suffix), rights (R suffix), units (U suffix)
+
+    Args:
+        df: Raw DataFrame from nasdaqlisted.txt
 
     Returns:
-        List of ticker strings
+        List of clean ticker strings
     """
-    logger.info("Fetching NASDAQ 100 tickers from Wikipedia")
-    try:
-        url = "https://en.wikipedia.org/wiki/Nasdaq-100"
-        tables = pd.read_html(url)
-        # NASDAQ 100 table is usually the 4th table on the page
-        for table in tables:
-            if "Ticker" in table.columns:
-                tickers = table["Ticker"].tolist()
-                logger.info(f"NASDAQ 100: {len(tickers)} tickers fetched")
-                return tickers
-        raise DataFetchError("Could not find ticker column in NASDAQ 100 Wikipedia page")
-    except Exception as e:
-        raise DataFetchError(f"Failed to fetch NASDAQ 100 tickers: {e}") from e
+    protected = set(UNIVERSE_CFG["indices"] + UNIVERSE_CFG["sectors"])
+
+    # Exclude test issues
+    df = df[df["Test Issue"] == "N"]
+
+    # Exclude ETFs (but keep our protected sector ETFs and indices)
+    df = df[
+        (df["ETF"] == "N") |
+        (df["Symbol"].isin(protected))
+    ]
+
+    tickers = df["Symbol"].tolist()
+    return tickers
+
+
+def _parse_other_listed(df: pd.DataFrame) -> list[str]:
+    """
+    Extract clean stock tickers from otherlisted.txt.
+
+    FILE COLUMNS:
+    ACT Symbol | Security Name | Exchange | CQS Symbol |
+    ETF | Round Lot Size | Test Issue | NASDAQ Symbol
+
+    FILTERS APPLIED:
+    - Test Issue == 'N'
+    - ETF == 'N' (except protected)
+
+    Args:
+        df: Raw DataFrame from otherlisted.txt
+
+    Returns:
+        List of clean ticker strings
+    """
+    protected = set(UNIVERSE_CFG["indices"] + UNIVERSE_CFG["sectors"])
+
+    df = df[df["Test Issue"] == "N"]
+    df = df[
+        (df["ETF"] == "N") |
+        (df["ACT Symbol"].isin(protected))
+    ]
+
+    tickers = df["ACT Symbol"].tolist()
+    return tickers
+
+
+def _clean_tickers(tickers: list[str]) -> list[str]:
+    """
+    Clean and filter raw ticker list.
+
+    REMOVES:
+    - Warrants  : ticker ending in W  (e.g. SPCEQ → skip, AACLW → skip)
+    - Rights    : ticker ending in R  (e.g. AACBR → skip)
+    - Units     : ticker ending in U  (e.g. AACBU → skip)
+    - Preferred : ticker containing $ (e.g. BAC-PK → skip on $ variant)
+    - Too long  : ticker > 5 chars (usually special instruments)
+    - Empty     : any null/empty strings
+
+    KEEPS:
+    - Clean common stock tickers (1-5 alphanumeric chars)
+    - Our protected indices and sector ETFs always kept
+
+    Args:
+        tickers: Raw list of ticker strings
+
+    Returns:
+        Cleaned, deduplicated, sorted list of tickers
+    """
+    protected = set(UNIVERSE_CFG["indices"] + UNIVERSE_CFG["sectors"])
+    cleaned   = []
+
+    for ticker in tickers:
+        # Always keep protected tickers regardless of format
+        if ticker in protected:
+            cleaned.append(ticker)
+            continue
+
+        # Skip empty or null
+        if not ticker or pd.isna(ticker):
+            continue
+
+        ticker = str(ticker).strip().upper()
+
+        # Skip warrants, rights, units by suffix
+        if ticker.endswith(("W", "R", "U")):
+            continue
+
+        # Skip preferred shares (contain -)
+        if "-" in ticker:
+            continue
+
+        # Skip anything longer than 5 characters
+        if len(ticker) > 5:
+            continue
+
+        # Skip non-alphanumeric tickers
+        if not ticker.isalpha():
+            continue
+
+        cleaned.append(ticker)
+
+    # Deduplicate and sort
+    result = sorted(list(set(cleaned)))
+    return result
 
 
 def get_full_universe() -> list[str]:
     """
-    Combine S&P 500 + NASDAQ 100 + indices + sectors into
-    a deduplicated universe.
+    Download and combine the full US stock universe from NASDAQ FTP.
+
+    FLOW:
+    1. Download nasdaqlisted.txt (NASDAQ stocks)
+    2. Download otherlisted.txt (NYSE + NYSE American stocks)
+    3. Parse each file to extract tickers
+    4. Combine and clean
+    5. Add our protected indices and sector ETFs
+    6. Return deduplicated sorted list
 
     Returns:
-        Sorted list of unique tickers
+        Sorted list of ~4,000 clean US stock tickers
+        (before Stage 1 volume/price filter)
     """
-    sp500   = get_sp500_tickers()
-    nasdaq  = get_nasdaq100_tickers()
-    indices = UNIVERSE_CFG["indices"]
-    sectors = UNIVERSE_CFG["sectors"]
+    logger.info("Building full US stock universe from NASDAQ FTP")
 
-    universe = list(set(sp500 + nasdaq + indices + sectors))
-    universe.sort()
+    # ── Download both files ───────────────────────────────────────────────────
+    nasdaq_df = _download_ftp_file(NASDAQ_FILE)
+    other_df  = _download_ftp_file(OTHER_FILE)
 
-    logger.info(f"Full universe: {len(universe)} unique tickers")
-    return universe
+    # ── Parse each file ───────────────────────────────────────────────────────
+    nasdaq_tickers = _parse_nasdaq_listed(nasdaq_df)
+    other_tickers  = _parse_other_listed(other_df)
+
+    # ── Combine + clean ───────────────────────────────────────────────────────
+    all_tickers = nasdaq_tickers + other_tickers
+    cleaned     = _clean_tickers(all_tickers)
+
+    logger.info(
+        f"Universe built | "
+        f"NASDAQ: {len(nasdaq_tickers)} | "
+        f"Other exchanges: {len(other_tickers)} | "
+        f"After cleaning: {len(cleaned)}"
+    )
+
+    return cleaned
 
 
 # =============================================================================
-# SINGLE TICKER FETCH
+# STEP 2 — SINGLE TICKER OHLCV FETCH
 # =============================================================================
 
 @retry(
-    attempts=RETRY_ATTEMPTS,
-    delay_seconds=RETRY_DELAY,
-    exceptions=(DataFetchError, Exception),
+    attempts      = RETRY_ATTEMPTS,
+    delay_seconds = RETRY_DELAY,
+    exceptions    = (DataFetchError, Exception),
 )
 def fetch_single_ticker(
-    ticker: str,
-    start_date: str,
-    end_date: str,
+    ticker     : str,
+    start_date : str,
+    end_date   : str,
 ) -> Optional[pd.DataFrame]:
     """
     Fetch OHLCV data for a single ticker via yfinance.
 
+    FLOW:
+    1. Download via yf.download()
+    2. Flatten MultiIndex columns if present
+    3. Standardise column names to lowercase
+    4. Add ticker and date columns
+    5. Validate (not empty, has required columns, enough rows)
+    6. Drop null and zero-price rows
+    7. Return clean DataFrame
+
     Args:
-        ticker:     Ticker symbol
-        start_date: Start date string YYYY-MM-DD
-        end_date:   End date string YYYY-MM-DD
+        ticker    : Ticker symbol
+        start_date: Start date YYYY-MM-DD
+        end_date  : End date YYYY-MM-DD
 
     Returns:
-        Cleaned DataFrame or None if fetch/validation fails
+        Clean OHLCV DataFrame or None if fetch/validation fails
     """
     try:
         raw = yf.download(
             ticker,
-            start=start_date,
-            end=end_date,
-            auto_adjust=True,   # Adjust for splits and dividends
-            progress=False,
-            threads=False,      # We handle threading ourselves
+            start      = start_date,
+            end        = end_date,
+            auto_adjust= True,      # Adjust for splits and dividends
+            progress   = False,
+            threads    = False,     # We handle threading ourselves
         )
 
         if raw.empty:
-            logger.warning(f"{ticker} | yfinance returned empty DataFrame")
+            logger.warning(f"{ticker} | Empty DataFrame from yfinance")
             return None
 
-        # Flatten MultiIndex columns if present
+        # ── Flatten MultiIndex columns ────────────────────────────────────────
         if isinstance(raw.columns, pd.MultiIndex):
             raw.columns = raw.columns.get_level_values(0)
 
-        # Standardise column names to lowercase
+        # ── Standardise column names ──────────────────────────────────────────
         raw.columns = [c.lower() for c in raw.columns]
-        raw = raw.rename(columns={"adj close": "close"}) if "adj close" in raw.columns else raw
 
-        # Keep only OHLCV
-        raw = raw[["open", "high", "low", "close", "volume"]].copy()
-
-        # Add ticker column
-        raw["ticker"] = ticker
-        raw["date"]   = raw.index.strftime("%Y-%m-%d")
-        raw = raw.reset_index(drop=True)
-
-        # Validate
+        # ── Keep only OHLCV columns ───────────────────────────────────────────
         required = ["open", "high", "low", "close", "volume"]
         if not validate_dataframe(raw, ticker, required):
             return None
 
-        # Drop rows with null OHLCV
-        raw = raw.dropna(subset=required)
+        raw          = raw[required].copy()
+        raw["ticker"]= ticker
+        raw["date"]  = raw.index.strftime("%Y-%m-%d")
+        raw          = raw.reset_index(drop=True)
 
-        # Drop rows with zero or negative prices
+        # ── Drop bad rows ─────────────────────────────────────────────────────
+        raw = raw.dropna(subset=required)
         raw = raw[(raw["close"] > 0) & (raw["volume"] >= 0)]
 
-        logger.debug(f"{ticker} | {len(raw)} rows fetched from {start_date} to {end_date}")
+        logger.debug(f"{ticker} | {len(raw)} rows fetched")
         return raw
 
     except Exception as e:
@@ -205,24 +414,30 @@ def fetch_single_ticker(
 
 
 # =============================================================================
-# BATCH PARALLEL FETCH
+# STEP 3 — BATCH PARALLEL FETCH
 # =============================================================================
 
 def fetch_batch(
-    tickers: list[str],
-    start_date: str,
-    end_date: str,
+    tickers    : list[str],
+    start_date : str,
+    end_date   : str,
 ) -> pd.DataFrame:
     """
-    Fetch OHLCV data for a batch of tickers in parallel.
+    Fetch OHLCV for a batch of tickers in parallel using ThreadPoolExecutor.
+
+    FLOW:
+    1. Submit all tickers to thread pool simultaneously
+    2. Collect results as each future completes
+    3. Track failed tickers for logging
+    4. Concatenate successful results
 
     Args:
-        tickers:    List of ticker symbols
-        start_date: Start date string YYYY-MM-DD
-        end_date:   End date string YYYY-MM-DD
+        tickers   : List of ticker symbols for this batch
+        start_date: Start date YYYY-MM-DD
+        end_date  : End date YYYY-MM-DD
 
     Returns:
-        Combined DataFrame for all tickers in batch
+        Combined DataFrame for all successful tickers in batch
     """
     results = []
     failed  = []
@@ -242,92 +457,98 @@ def fetch_batch(
                 else:
                     failed.append(ticker)
             except Exception as e:
-                logger.warning(f"{ticker} | Batch fetch failed: {e}")
+                logger.warning(f"{ticker} | Batch fetch error: {e}")
                 failed.append(ticker)
 
     if failed:
-        logger.warning(f"Batch: {len(failed)} tickers failed: {failed}")
+        logger.warning(f"Batch: {len(failed)} tickers failed: {failed[:10]}...")
 
     if not results:
-        logger.warning("Batch returned no data")
         return pd.DataFrame()
 
     return pd.concat(results, ignore_index=True)
 
 
-# =============================================================================
-# FULL UNIVERSE FETCH — orchestrates batching
-# =============================================================================
-
 def fetch_universe(
-    tickers: list[str],
-    start_date: str,
-    end_date: str,
+    tickers    : list[str],
+    start_date : str,
+    end_date   : str,
 ) -> pd.DataFrame:
     """
-    Fetch OHLCV data for the entire universe in batches.
+    Fetch OHLCV for the entire universe in sequential batches.
+
+    FLOW:
+    1. Split tickers into batches of BATCH_SIZE (50)
+    2. Process each batch in parallel
+    3. Collect and combine all results
+    4. Log summary statistics
 
     Args:
-        tickers:    Full list of tickers
-        start_date: Start date string YYYY-MM-DD
-        end_date:   End date string YYYY-MM-DD
+        tickers   : Full list of tickers to fetch
+        start_date: Start date YYYY-MM-DD
+        end_date  : End date YYYY-MM-DD
 
     Returns:
         Combined DataFrame for all tickers
     """
-    total    = len(tickers)
-    batches  = [tickers[i:i + BATCH_SIZE] for i in range(0, total, BATCH_SIZE)]
-    all_data = []
+    total   = len(tickers)
+    batches = [tickers[i:i + BATCH_SIZE] for i in range(0, total, BATCH_SIZE)]
+    all_data= []
 
     logger.info(
-        f"Fetching {total} tickers in {len(batches)} batches of {BATCH_SIZE} | "
-        f"Period: {start_date} to {end_date}"
+        f"Fetching {total} tickers | "
+        f"{len(batches)} batches of {BATCH_SIZE} | "
+        f"{start_date} to {end_date}"
     )
 
     for i, batch in enumerate(batches, 1):
-        logger.info(f"Processing batch {i}/{len(batches)} ({len(batch)} tickers)")
+        logger.info(f"Batch {i}/{len(batches)} | {len(batch)} tickers")
         batch_df = fetch_batch(batch, start_date, end_date)
-
         if not batch_df.empty:
             all_data.append(batch_df)
 
     if not all_data:
-        logger.error("fetch_universe: No data returned for any ticker")
+        logger.error("fetch_universe: No data returned")
         return pd.DataFrame()
 
     combined = pd.concat(all_data, ignore_index=True)
     logger.info(
-        f"fetch_universe complete | "
-        f"Total rows: {len(combined)} | "
+        f"Fetch complete | "
+        f"Rows: {len(combined)} | "
         f"Tickers with data: {combined['ticker'].nunique()}"
     )
     return combined
 
 
 # =============================================================================
-# SMART FETCH — decides full vs incremental per ticker
+# STEP 3B — SMART FETCH (full vs incremental per ticker)
 # =============================================================================
 
 def smart_fetch(tickers: list[str]) -> pd.DataFrame:
     """
-    Intelligently decide whether to do a full historical fetch
-    or incremental fetch per ticker based on what's already in SQLite.
+    Decide full historical vs incremental fetch per ticker.
 
-    - Ticker not in DB → full 365-day fetch
-    - Ticker in DB     → incremental (last 5 days to fill any gaps)
+    LOGIC:
+    - Ticker NOT in database → full 365-day fetch
+    - Ticker already in database → incremental last 5 days only
+
+    This means on first run everything is fetched from scratch.
+    On every subsequent daily run only the latest candles are added.
+    Much faster daily runs after the first.
 
     Args:
         tickers: Full universe ticker list
 
     Returns:
-        Combined DataFrame of all new data fetched
+        Combined DataFrame of all newly fetched data
     """
-    today      = datetime.today()
-    end_date   = today.strftime("%Y-%m-%d")
+    today    = datetime.today()
+    end_date = today.strftime("%Y-%m-%d")
 
     full_tickers        = []
     incremental_tickers = []
 
+    # ── Categorise each ticker ────────────────────────────────────────────────
     for ticker in tickers:
         last_date = get_last_fetch_date(ticker)
         if last_date is None:
@@ -336,25 +557,24 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
             incremental_tickers.append(ticker)
 
     logger.info(
-        f"smart_fetch | Full fetch: {len(full_tickers)} tickers | "
-        f"Incremental: {len(incremental_tickers)} tickers"
+        f"Smart fetch | "
+        f"Full: {len(full_tickers)} | "
+        f"Incremental: {len(incremental_tickers)}"
     )
 
     all_data = []
 
-    # Full historical fetch
+    # ── Full historical fetch ─────────────────────────────────────────────────
     if full_tickers:
         start_full = (today - timedelta(days=HISTORICAL_DAYS)).strftime("%Y-%m-%d")
-        logger.info(f"Full fetch: {start_full} to {end_date}")
-        df_full = fetch_universe(full_tickers, start_full, end_date)
+        df_full    = fetch_universe(full_tickers, start_full, end_date)
         if not df_full.empty:
             all_data.append(df_full)
 
-    # Incremental fetch
+    # ── Incremental fetch ─────────────────────────────────────────────────────
     if incremental_tickers:
         start_incr = (today - timedelta(days=INCREMENTAL_DAYS)).strftime("%Y-%m-%d")
-        logger.info(f"Incremental fetch: {start_incr} to {end_date}")
-        df_incr = fetch_universe(incremental_tickers, start_incr, end_date)
+        df_incr    = fetch_universe(incremental_tickers, start_incr, end_date)
         if not df_incr.empty:
             all_data.append(df_incr)
 
@@ -368,65 +588,66 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
 
 
 # =============================================================================
-# STAGE 1 FILTER — price > $10 and avg volume > 500K
+# STEP 4 — STAGE 1 FILTER
 # =============================================================================
 
 def apply_stage1_filter(
-    df: pd.DataFrame,
-    scan_date: str,
+    df        : pd.DataFrame,
+    scan_date : str,
 ) -> pd.DataFrame:
     """
-    Apply Stage 1 universe filter:
-    - Last close price > $10
-    - 20-day average volume > 500,000
+    Filter universe to actionable stocks only.
 
-    Excludes indices and sector ETFs from filtering
-    (they always pass through).
+    CRITERIA:
+    - Last close price >= $10  (no penny stocks)
+    - 20-day average volume >= 500,000  (adequate liquidity)
+
+    Protected tickers (indices + sector ETFs) always pass through
+    regardless of price or volume — we always need them for the
+    market and sector health checks.
 
     Args:
-        df:        Full OHLCV DataFrame for all tickers
-        scan_date: Today's date string YYYY-MM-DD
+        df       : Full OHLCV DataFrame for all tickers
+        scan_date: Today's date YYYY-MM-DD
 
     Returns:
-        DataFrame of tickers that passed Stage 1 with
-        columns [ticker, avg_volume, last_close]
+        DataFrame with columns [ticker, avg_volume, last_close]
+        for all tickers that passed Stage 1
     """
     protected = set(UNIVERSE_CFG["indices"] + UNIVERSE_CFG["sectors"])
-
-    results = []
+    results   = []
 
     for ticker, group in df.groupby("ticker"):
-        group = group.sort_values("date")
-
+        group      = group.sort_values("date")
         last_close = group["close"].iloc[-1]
         avg_volume = group["volume"].tail(20).mean()
 
         # Always pass indices and sector ETFs through
         if ticker in protected:
             results.append({
-                "ticker":     ticker,
+                "ticker"    : ticker,
                 "avg_volume": avg_volume,
                 "last_close": last_close,
-                "protected":  True,
+                "protected" : True,
             })
             continue
 
-        # Apply filters
+        # Apply Stage 1 filter to regular stocks
         if last_close >= MIN_PRICE and avg_volume >= MIN_AVG_VOLUME:
             results.append({
-                "ticker":     ticker,
+                "ticker"    : ticker,
                 "avg_volume": avg_volume,
                 "last_close": last_close,
-                "protected":  False,
+                "protected" : False,
             })
 
     filtered_df = pd.DataFrame(results)
-    passed      = len(filtered_df)
     total       = df["ticker"].nunique()
+    passed      = len(filtered_df)
 
     logger.info(
         f"Stage 1 filter | "
-        f"Input: {total} tickers | "
+        f"Input: {total} | "
         f"Passed: {passed} | "
         f"Filtered out: {total - passed}"
     )
@@ -435,36 +656,161 @@ def apply_stage1_filter(
 
 
 # =============================================================================
+# STEP 5 — DYNAMIC SECTOR METADATA FETCH
+# =============================================================================
+
+@graceful(default_return=None, exceptions=(Exception,), log_level="warning")
+def _fetch_ticker_sector(ticker: str) -> Optional[dict]:
+    """
+    Fetch sector information for a single ticker from yfinance.
+
+    FLOW:
+    1. Fetch ticker.info dictionary from yfinance
+    2. Extract 'sector' field (plain English e.g. 'Technology')
+    3. Map sector name to sector ETF using SECTOR_NAME_TO_ETF
+    4. Return dict with ticker, sector_name, sector_etf
+    5. If sector unavailable → tag as 'Unclassified'
+
+    Args:
+        ticker: Ticker symbol
+
+    Returns:
+        Dict with ticker, sector_name, sector_etf or None on failure
+    """
+    protected = set(UNIVERSE_CFG["indices"] + UNIVERSE_CFG["sectors"])
+
+    # Protected tickers don't need sector lookup
+    if ticker in protected:
+        return {
+            "ticker"     : ticker,
+            "sector_name": "Index/ETF",
+            "sector_etf" : ticker,   # Maps to itself
+        }
+
+    tk          = yf.Ticker(ticker)
+    info        = tk.info
+    sector_name = info.get("sector", None)
+
+    if sector_name:
+        sector_etf = SECTOR_NAME_TO_ETF.get(sector_name, None)
+    else:
+        sector_name = "Unclassified"
+        sector_etf  = None
+
+    if sector_etf is None and sector_name != "Unclassified":
+        # Sector name exists but not in our map — still flag it
+        logger.warning(
+            f"{ticker} | Unmapped sector: '{sector_name}' "
+            f"— tagging as Unclassified"
+        )
+        sector_name = "Unclassified"
+
+    logger.debug(
+        f"{ticker} | Sector: {sector_name} | ETF: {sector_etf}"
+    )
+
+    return {
+        "ticker"     : ticker,
+        "sector_name": sector_name,
+        "sector_etf" : sector_etf,
+    }
+
+
+def fetch_sector_metadata(tickers: list[str]) -> pd.DataFrame:
+    """
+    Fetch sector metadata for all tickers in parallel.
+
+    FLOW:
+    1. Submit all tickers to ThreadPoolExecutor
+    2. Collect results — None results replaced with Unclassified
+    3. Return DataFrame for write to ticker_metadata table
+
+    Args:
+        tickers: List of tickers that passed Stage 1
+
+    Returns:
+        DataFrame with columns [ticker, sector_name, sector_etf]
+    """
+    logger.info(f"Fetching sector metadata for {len(tickers)} tickers")
+
+    results         = []
+    unclassified    = 0
+
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        future_to_ticker = {
+            executor.submit(_fetch_ticker_sector, ticker): ticker
+            for ticker in tickers
+        }
+
+        for future in as_completed(future_to_ticker):
+            ticker = future_to_ticker[future]
+            try:
+                result = future.result()
+                if result is None:
+                    # Graceful decorator returned None — tag as unclassified
+                    result = {
+                        "ticker"     : ticker,
+                        "sector_name": "Unclassified",
+                        "sector_etf" : None,
+                    }
+                    unclassified += 1
+                elif result["sector_name"] == "Unclassified":
+                    unclassified += 1
+
+                results.append(result)
+
+            except Exception as e:
+                logger.warning(f"{ticker} | Sector fetch failed: {e}")
+                results.append({
+                    "ticker"     : ticker,
+                    "sector_name": "Unclassified",
+                    "sector_etf" : None,
+                })
+                unclassified += 1
+
+    logger.info(
+        f"Sector metadata complete | "
+        f"Total: {len(results)} | "
+        f"Unclassified: {unclassified}"
+    )
+
+    return pd.DataFrame(results)
+
+
+# =============================================================================
 # MAIN PIPELINE ENTRY POINT
+# Called by Airflow DAG Tasks 1 and 2
 # =============================================================================
 
 def run_data_pipeline() -> dict:
     """
-    Main entry point called by Airflow DAG Task 1 and Task 2.
+    Main entry point for the full data pipeline.
 
-    Steps:
-    1. Get full universe
-    2. Smart fetch (full or incremental per ticker)
+    FLOW:
+    1. Get full universe from NASDAQ FTP (~4,000 tickers)
+    2. Smart fetch OHLCV data (full or incremental per ticker)
     3. Write raw prices to SQLite
-    4. Apply Stage 1 filter
+    4. Apply Stage 1 filter (~1,500 tickers pass)
     5. Write filtered universe to SQLite
+    6. Fetch sector metadata for filtered tickers
+    7. Write sector metadata to SQLite
 
     Returns:
-        Summary dict with counts for logging/monitoring
+        Summary dict with counts for Airflow monitoring
     """
     logger.info("=" * 60)
     logger.info("DATA PIPELINE STARTED")
     logger.info("=" * 60)
 
-    today     = datetime.today().strftime("%Y-%m-%d")
-    summary   = {}
+    today   = datetime.today().strftime("%Y-%m-%d")
+    summary = {}
 
     try:
-        # Step 1: Get universe
+        # ── Step 1: Get universe ──────────────────────────────────────────────
         tickers = get_full_universe()
         summary["universe_size"] = len(tickers)
 
-        # Step 2: Smart fetch
+        # ── Step 2: Smart fetch OHLCV ─────────────────────────────────────────
         df = smart_fetch(tickers)
         summary["rows_fetched"] = len(df)
 
@@ -472,19 +818,27 @@ def run_data_pipeline() -> dict:
             logger.error("Data pipeline: No data fetched. Aborting.")
             return summary
 
-        # Step 3: Write raw prices
+        # ── Step 3: Write raw prices ──────────────────────────────────────────
         rows_written = write_raw_prices(df)
         summary["rows_written"] = rows_written
 
-        # Step 4: Stage 1 filter
+        # ── Step 4: Stage 1 filter ────────────────────────────────────────────
         filtered_df = apply_stage1_filter(df, today)
         summary["tickers_passed_filter"] = len(filtered_df)
 
-        # Step 5: Write filtered universe
+        # ── Step 5: Write filtered universe ───────────────────────────────────
         write_filtered_universe(filtered_df, today)
 
+        # ── Step 6: Fetch sector metadata ─────────────────────────────────────
+        filtered_tickers = filtered_df["ticker"].tolist()
+        sector_df        = fetch_sector_metadata(filtered_tickers)
+        summary["sector_metadata_fetched"] = len(sector_df)
+
+        # ── Step 7: Write sector metadata ─────────────────────────────────────
+        write_ticker_metadata(sector_df)
+
         logger.info("=" * 60)
-        logger.info(f"DATA PIPELINE COMPLETE | Summary: {summary}")
+        logger.info(f"DATA PIPELINE COMPLETE | {summary}")
         logger.info("=" * 60)
 
         return summary

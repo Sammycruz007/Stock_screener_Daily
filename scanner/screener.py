@@ -83,99 +83,54 @@ SHORT_SD_MAX = SCANNER_CFG["short_entry_sd_max"]   # +3 (upper boundary)
 
 
 # =============================================================================
-# SECTOR MAP
-# Maps each stock's sector ETF so we can check sector health.
-# Source: S&P 500 GICS sector classifications.
-# Stocks not in this map default to None (sector check skipped).
+# SECTOR LOOKUP — dynamic from database
+# Replaces the old hardcoded SECTOR_MAP.
+# Loaded once per scanner run from the ticker_metadata SQLite table.
 # =============================================================================
 
-SECTOR_MAP = {
-    # Technology
-    "XLK": "XLK",
-    "AAPL": "XLK", "MSFT": "XLK", "NVDA": "XLK", "AMD": "XLK",
-    "AVGO": "XLK", "ORCL": "XLK", "CRM": "XLK", "ADBE": "XLK",
-    "QCOM": "XLK", "TXN": "XLK", "INTC": "XLK", "MU": "XLK",
-    "AMAT": "XLK", "LRCX": "XLK", "KLAC": "XLK", "SNPS": "XLK",
-    "CDNS": "XLK", "MRVL": "XLK", "FTNT": "XLK", "PANW": "XLK",
+def _load_sector_lookup() -> tuple[dict, dict]:
+    """
+    Load sector mappings from the ticker_metadata table in SQLite.
 
-    # Communication Services
-    "XLC": "XLC",
-    "META": "XLC", "GOOGL": "XLC", "GOOG": "XLC", "NFLX": "XLC",
-    "DIS": "XLC",  "CMCSA": "XLC", "T": "XLC",    "VZ": "XLC",
-    "TMUS": "XLC", "CHTR": "XLC",  "EA": "XLC",   "TTWO": "XLC",
+    FLOW:
+    1. Read ticker_metadata table
+    2. Build two lookup dicts:
+       - ticker_to_etf  : {"AAPL": "XLK", "JPM": "XLF", ...}
+       - ticker_to_name : {"AAPL": "Technology", "JPM": "Financials", ...}
+    3. Unclassified tickers have etf = None, name = "Unclassified"
 
-    # Consumer Discretionary
-    "XLY": "XLY",
-    "AMZN": "XLY", "TSLA": "XLY", "HD": "XLY",   "MCD": "XLY",
-    "NKE": "XLY",  "SBUX": "XLY", "TJX": "XLY",  "BKNG": "XLY",
-    "LOW": "XLY",  "GM": "XLY",   "F": "XLY",    "EBAY": "XLY",
+    Returns:
+        Tuple of (ticker_to_etf dict, ticker_to_name dict)
+    """
+    from data.database import read_sector_metadata
 
-    # Consumer Staples
-    "XLP": "XLP",
-    "WMT": "XLP",  "PG": "XLP",   "KO": "XLP",   "PEP": "XLP",
-    "COST": "XLP", "PM": "XLP",   "MO": "XLP",   "CL": "XLP",
-    "MDLZ": "XLP", "GIS": "XLP",  "KHC": "XLP",  "SYY": "XLP",
+    df = read_sector_metadata()
 
-    # Healthcare
-    "XLV": "XLV",
-    "LLY": "XLV",  "UNH": "XLV",  "JNJ": "XLV",  "ABBV": "XLV",
-    "MRK": "XLV",  "TMO": "XLV",  "ABT": "XLV",  "DHR": "XLV",
-    "PFE": "XLV",  "AMGN": "XLV", "ISRG": "XLV", "GILD": "XLV",
-    "VRTX": "XLV", "REGN": "XLV", "CVS": "XLV",  "CI": "XLV",
+    if df.empty:
+        logger.warning(
+            "Sector metadata table is empty — "
+            "run data pipeline first to populate it"
+        )
+        return {}, {}
 
-    # Financials
-    "XLF": "XLF",
-    "BRK-B": "XLF","JPM": "XLF",  "V": "XLF",    "MA": "XLF",
-    "BAC": "XLF",  "WFC": "XLF",  "GS": "XLF",   "MS": "XLF",
-    "BLK": "XLF",  "SCHW": "XLF", "AXP": "XLF",  "C": "XLF",
-    "CB": "XLF",   "PGR": "XLF",  "MMC": "XLF",  "AON": "XLF",
+    ticker_to_etf  = {}
+    ticker_to_name = {}
 
-    # Industrials
-    "XLI": "XLI",
-    "CAT": "XLI",  "RTX": "XLI",  "HON": "XLI",  "UNP": "XLI",
-    "GE": "XLI",   "LMT": "XLI",  "BA": "XLI",   "DE": "XLI",
-    "MMM": "XLI",  "UPS": "XLI",  "FDX": "XLI",  "ETN": "XLI",
-    "EMR": "XLI",  "PH": "XLI",   "ITW": "XLI",  "GD": "XLI",
+    for _, row in df.iterrows():
+        ticker = row["ticker"]
+        ticker_to_etf[ticker]  = row["sector_etf"]    # May be None
+        ticker_to_name[ticker] = row["sector_name"]   # May be 'Unclassified'
 
-    # Energy
-    "XLE": "XLE",
-    "XOM": "XLE",  "CVX": "XLE",  "COP": "XLE",  "EOG": "XLE",
-    "SLB": "XLE",  "MPC": "XLE",  "PSX": "XLE",  "VLO": "XLE",
-    "PXD": "XLE",  "OXY": "XLE",  "DVN": "XLE",  "HAL": "XLE",
+    classified   = sum(1 for v in ticker_to_etf.values() if v is not None)
+    unclassified = sum(1 for v in ticker_to_etf.values() if v is None)
 
-    # Materials
-    "XLB": "XLB",
-    "LIN": "XLB",  "APD": "XLB",  "SHW": "XLB",  "FCX": "XLB",
-    "NEM": "XLB",  "NUE": "XLB",  "CTVA": "XLB", "DOW": "XLB",
-    "DD": "XLB",   "PPG": "XLB",  "ALB": "XLB",  "CF": "XLB",
+    logger.info(
+        f"Sector lookup loaded | "
+        f"Classified: {classified} | "
+        f"Unclassified: {unclassified}"
+    )
 
-    # Utilities
-    "XLU": "XLU",
-    "NEE": "XLU",  "DUK": "XLU",  "SO": "XLU",   "D": "XLU",
-    "AEP": "XLU",  "EXC": "XLU",  "SRE": "XLU",  "XEL": "XLU",
-    "PEG": "XLU",  "WEC": "XLU",  "ES": "XLU",   "ETR": "XLU",
-
-    # Real Estate
-    "XLRE": "XLRE",
-    "PLD": "XLRE", "AMT": "XLRE", "EQIX": "XLRE","CCI": "XLRE",
-    "SPG": "XLRE", "O": "XLRE",   "WELL": "XLRE","DLR": "XLRE",
-    "PSA": "XLRE", "EQR": "XLRE", "AVB": "XLRE", "WY": "XLRE",
-}
-
-# Human-readable sector names for dashboard display
-SECTOR_NAMES = {
-    "XLK" : "Technology",
-    "XLC" : "Communication Services",
-    "XLY" : "Consumer Discretionary",
-    "XLP" : "Consumer Staples",
-    "XLV" : "Healthcare",
-    "XLF" : "Financials",
-    "XLI" : "Industrials",
-    "XLE" : "Energy",
-    "XLB" : "Materials",
-    "XLU" : "Utilities",
-    "XLRE": "Real Estate",
-}
+    return ticker_to_etf, ticker_to_name
 
 
 # =============================================================================
@@ -310,23 +265,11 @@ def _check_sector_health(indicator_df: pd.DataFrame) -> dict:
 def _is_long_candidate(
     row            : pd.Series,
     sector_health  : dict,
+    ticker_to_etf  : dict,          # ← new parameter
 ) -> bool:
     """
     Check if a stock qualifies as a LONG candidate.
-
-    ALL conditions must be True:
-    1. LinReg sloping UP (stock is in an uptrend)
-    2. No CHoCH on the stock (uptrend structure intact)
-    3. Price SD position between -1 and -3 (in the buy zone)
-    4. Volume signal = 'accumulation' (smart money buying)
-    5. Stock's sector is 'bullish' (sector confirms the trade)
-
-    Args:
-        row           : Single row from indicator_results for this stock
-        sector_health : Dict of sector ETF → health status
-
-    Returns:
-        True if all conditions pass, False otherwise
+    Now uses dynamic sector lookup from database instead of hardcoded map.
     """
     ticker = row["ticker"]
 
@@ -340,7 +283,6 @@ def _is_long_candidate(
 
     # ── Condition 3: Price in buy zone (-1 to -3 SD) ─────────────────────────
     sd_pos = float(row["price_sd_position"])
-    # sd_pos must be negative (below LinReg) and between -1 and -3
     if not (LONG_SD_MAX <= sd_pos <= LONG_SD_MIN):
         return False
 
@@ -348,11 +290,16 @@ def _is_long_candidate(
     if row["volume_signal"] != "accumulation":
         return False
 
-    # ── Condition 5: Sector health ────────────────────────────────────────────
-    sector_etf = SECTOR_MAP.get(ticker)
-    if sector_etf:
+    # ── Condition 5: Sector health (dynamic lookup) ───────────────────────────
+    sector_etf = ticker_to_etf.get(ticker)
+
+    if sector_etf is not None:
+        # Sector found — apply the health check
         if sector_health.get(sector_etf) != "bullish":
             return False
+    else:
+        # Sector is Unclassified — stock passes but will be flagged on dashboard
+        logger.debug(f"{ticker} | Unclassified sector — passing without sector check")
 
     return True
 
@@ -360,49 +307,34 @@ def _is_long_candidate(
 def _is_short_candidate(
     row           : pd.Series,
     sector_health : dict,
+    ticker_to_etf : dict,           # ← new parameter
 ) -> bool:
     """
     Check if a stock qualifies as a SHORT candidate.
     Mirror of _is_long_candidate with reversed conditions.
-
-    ALL conditions must be True:
-    1. LinReg sloping DOWN
-    2. No CHoCH on the stock
-    3. Price SD position between +1 and +3 (in the sell zone)
-    4. Volume signal = 'distribution'
-    5. Stock's sector is 'bearish'
-
-    Args:
-        row           : Single row from indicator_results for this stock
-        sector_health : Dict of sector ETF → health status
-
-    Returns:
-        True if all conditions pass, False otherwise
     """
     ticker = row["ticker"]
 
-    # ── Condition 1: Downtrend ────────────────────────────────────────────────
     if int(row["linreg_slope_up"]) != 0:
         return False
 
-    # ── Condition 2: No CHoCH ─────────────────────────────────────────────────
     if int(row["choch_detected"]) != 0:
         return False
 
-    # ── Condition 3: Price in sell zone (+1 to +3 SD) ────────────────────────
     sd_pos = float(row["price_sd_position"])
     if not (SHORT_SD_MIN <= sd_pos <= SHORT_SD_MAX):
         return False
 
-    # ── Condition 4: Distribution volume ─────────────────────────────────────
     if row["volume_signal"] != "distribution":
         return False
 
-    # ── Condition 5: Sector health ────────────────────────────────────────────
-    sector_etf = SECTOR_MAP.get(ticker)
-    if sector_etf:
+    sector_etf = ticker_to_etf.get(ticker)
+
+    if sector_etf is not None:
         if sector_health.get(sector_etf) != "bearish":
             return False
+    else:
+        logger.debug(f"{ticker} | Unclassified sector — passing without sector check")
 
     return True
 
@@ -413,31 +345,27 @@ def _is_short_candidate(
 # =============================================================================
 
 def _build_candidate_row(
-    row           : pd.Series,
-    direction     : str,
-    sector_health : dict,
-    sentiment_df  : pd.DataFrame,
+    row            : pd.Series,
+    direction      : str,
+    sector_health  : dict,
+    sentiment_df   : pd.DataFrame,
+    ticker_to_etf  : dict,
+    ticker_to_name : dict,
 ) -> dict:
     """
-    Build a complete candidate row ready for the scan_results table.
-
-    Joins indicator data with sentiment data for this ticker.
-    ML score is set to 0.0 here — Phase 5 will fill it in.
-
-    Args:
-        row           : Indicator results row for this ticker
-        direction     : 'long' or 'short'
-        sector_health : Sector health dict
-        sentiment_df  : Sentiment DataFrame for put/call + short interest
-
-    Returns:
-        Dict with all candidate data
+    Build a complete candidate row.
+    Now uses dynamic sector lookup from database.
+    Unclassified stocks are flagged with ⚠️ in sector name.
     """
-    ticker     = row["ticker"]
-    sector_etf = SECTOR_MAP.get(ticker)
-    sector_name = SECTOR_NAMES.get(sector_etf, "Unknown") if sector_etf else "Unknown"
+    ticker      = row["ticker"]
+    sector_etf  = ticker_to_etf.get(ticker)
+    sector_name = ticker_to_name.get(ticker, "Unclassified")
 
-    # ── Attach sentiment data ─────────────────────────────────────────────────
+    # Flag unclassified stocks for dashboard warning
+    if sector_etf is None:
+        sector_name = f"⚠️ {sector_name}"
+
+    # Attach sentiment data
     sentiment_row = sentiment_df[sentiment_df["ticker"] == ticker]
 
     if not sentiment_row.empty:
@@ -455,10 +383,9 @@ def _build_candidate_row(
         "volume_signal"     : row["volume_signal"],
         "put_call_ratio"    : put_call_ratio,
         "short_interest_pct": short_interest_pct,
-        "ml_score"          : 0.0,   # Placeholder — filled by ML in Phase 5
-        "ml_rank"           : 0,     # Placeholder — filled after ML scoring
+        "ml_score"          : 0.0,
+        "ml_rank"           : 0,
     }
-
 
 # =============================================================================
 # MAIN SCANNER WATERFALL
@@ -471,46 +398,24 @@ def run_scanner(
 ) -> pd.DataFrame:
     """
     Run the full top-down scanner waterfall.
-
-    FLOW:
-    1. Level 1: Check market health (SPY, QQQ, DIA)
-    2. Level 2: Check all sector health
-    3. Level 3: For each stock in filtered universe:
-       - Skip indices and sector ETFs
-       - Check long conditions if market is bullish/mixed
-       - Check short conditions if market is bearish/mixed
-       - Build candidate row if conditions pass
-    4. Combine long and short candidates
-    5. Sort by SD position proximity to LinReg
-       (price closer to -1 SD = closer to mean reversion = higher priority)
-    6. Assign preliminary rank
-    7. Return combined DataFrame
-
-    Args:
-        indicator_df : DataFrame with all indicator results for today
-        sentiment_df : DataFrame with sentiment data for today
-        date         : Today's date string YYYY-MM-DD
-
-    Returns:
-        DataFrame with all long and short candidates
-        Sorted by direction then sd_position
+    Now loads sector lookup dynamically from database.
     """
     logger.info("=" * 60)
     logger.info("SCANNER WATERFALL STARTING")
     logger.info("=" * 60)
 
-    # Tickers to exclude from stock scanning
-    # (indices and sectors are used for filtering only)
     excluded = set(
         config["universe"]["indices"] +
         config["universe"]["sectors"]
     )
 
+    # ── Load sector lookup from database ─────────────────────────────────────
+    ticker_to_etf, ticker_to_name = _load_sector_lookup()
+
     # ── Level 1: Market health ────────────────────────────────────────────────
     market_health = _check_market_health(indicator_df)
     market_bias   = market_health["market_bias"]
 
-    # Determine which directions to scan based on market bias
     scan_long  = market_bias in ["bullish", "mixed"]
     scan_short = market_bias in ["bearish", "mixed"]
 
@@ -526,37 +431,32 @@ def run_scanner(
     long_candidates  = []
     short_candidates = []
 
-    # Only scan actual stocks — not indices or sector ETFs
     stock_rows = indicator_df[~indicator_df["ticker"].isin(excluded)]
-
     logger.info(f"Scanning {len(stock_rows)} stocks...")
 
     for _, row in stock_rows.iterrows():
         ticker = row["ticker"]
 
-        # ── Check long conditions ─────────────────────────────────────────────
-        if scan_long and _is_long_candidate(row, sector_health):
+        if scan_long and _is_long_candidate(row, sector_health, ticker_to_etf):
             candidate = _build_candidate_row(
-                row, "long", sector_health, sentiment_df
+                row, "long", sector_health,
+                sentiment_df, ticker_to_etf, ticker_to_name
             )
             long_candidates.append(candidate)
-            logger.debug(f"LONG candidate: {ticker} | SD: {row['price_sd_position']}")
 
-        # ── Check short conditions ────────────────────────────────────────────
-        if scan_short and _is_short_candidate(row, sector_health):
+        if scan_short and _is_short_candidate(row, sector_health, ticker_to_etf):
             candidate = _build_candidate_row(
-                row, "short", sector_health, sentiment_df
+                row, "short", sector_health,
+                sentiment_df, ticker_to_etf, ticker_to_name
             )
             short_candidates.append(candidate)
-            logger.debug(f"SHORT candidate: {ticker} | SD: {row['price_sd_position']}")
 
     logger.info(
         f"Scanner complete | "
-        f"Long candidates: {len(long_candidates)} | "
-        f"Short candidates: {len(short_candidates)}"
+        f"Long: {len(long_candidates)} | "
+        f"Short: {len(short_candidates)}"
     )
 
-    # ── Combine and sort ──────────────────────────────────────────────────────
     all_candidates = long_candidates + short_candidates
 
     if not all_candidates:
@@ -565,17 +465,9 @@ def run_scanner(
 
     df = pd.DataFrame(all_candidates)
 
-    # Sort longs by sd_position descending (closest to -1 first = nearest mean)
-    # Sort shorts by sd_position ascending (closest to +1 first = nearest mean)
-    longs  = df[df["direction"] == "long"].sort_values(
-        "sd_position", ascending=False
-    )
-    shorts = df[df["direction"] == "short"].sort_values(
-        "sd_position", ascending=True
-    )
+    longs  = df[df["direction"] == "long"].sort_values("sd_position", ascending=False)
+    shorts = df[df["direction"] == "short"].sort_values("sd_position", ascending=True)
 
-    # Assign preliminary rank within each direction
-    # ML Phase will re-rank by ml_score
     longs  = longs.reset_index(drop=True)
     shorts = shorts.reset_index(drop=True)
     longs["ml_rank"]  = longs.index + 1
@@ -583,13 +475,7 @@ def run_scanner(
 
     result = pd.concat([longs, shorts], ignore_index=True)
 
-    logger.info(
-        f"Final candidates | "
-        f"Longs: {len(longs)} | "
-        f"Shorts: {len(shorts)} | "
-        f"Total: {len(result)}"
-    )
-
+    logger.info(f"Final candidates | Total: {len(result)}")
     return result
 
 

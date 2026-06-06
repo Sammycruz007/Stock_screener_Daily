@@ -258,6 +258,19 @@ def initialise_database() -> None:
             UNIQUE(model_name, train_date)
         )
         """,
+        # ── Table 7: Ticker metadata (sector info) ─────────────────────────────
+        # Stores sector classification per ticker fetched dynamically from yfinance.
+        # sector_etf = None means stock is Unclassified — shown with ⚠️ on dashboard.
+        """
+        CREATE TABLE IF NOT EXISTS ticker_metadata (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            ticker       TEXT    NOT NULL UNIQUE,
+            sector_name  TEXT,               -- e.g. 'Technology', 'Unclassified'
+            sector_etf   TEXT,               -- e.g. 'XLK', NULL if unclassified
+            last_updated TEXT    DEFAULT (datetime('now'))
+        )
+        """,
+"CREATE INDEX IF NOT EXISTS idx_ticker_metadata_ticker ON ticker_metadata(ticker)",
 
         # ── Indexes for query performance ──────────────────────────────────
         # Without indexes, querying 365 days × 2000 tickers = slow full scans.
@@ -742,3 +755,126 @@ def get_last_fetch_date(ticker: str) -> Optional[str]:
     except DatabaseError as e:
         logger.error(f"get_last_fetch_date failed for {ticker}: {e}")
         return None
+    
+
+    
+def write_ticker_metadata(df: pd.DataFrame) -> int:
+    """
+    Write sector metadata for all tickers.
+    Uses INSERT OR REPLACE so sector updates on re-runs.
+
+    Args:
+        df: DataFrame with columns [ticker, sector_name, sector_etf]
+
+    Returns:
+        Number of rows written
+    """
+    if df.empty:
+        logger.warning("write_ticker_metadata: Empty DataFrame")
+        return 0
+
+    try:
+        with get_connection() as conn:
+            df[["ticker", "sector_name", "sector_etf"]].to_sql(
+                "ticker_metadata_staging", conn, if_exists="replace", index=False
+            )
+            cursor = conn.execute("""
+                INSERT OR REPLACE INTO ticker_metadata
+                    (ticker, sector_name, sector_etf)
+                SELECT ticker, sector_name, sector_etf
+                FROM ticker_metadata_staging
+            """)
+            rows_written = cursor.rowcount
+            conn.execute("DROP TABLE IF EXISTS ticker_metadata_staging")
+
+        logger.info(f"write_ticker_metadata: {rows_written} rows written")
+        return rows_written
+
+    except DatabaseError as e:
+        logger.error(f"write_ticker_metadata failed: {e}")
+        raise
+
+
+def read_ticker_metadata() -> pd.DataFrame:
+    """
+    Read all ticker sector metadata.
+    Used by the scanner to look up each stock's sector ETF.
+
+    Returns:
+        DataFrame with columns [ticker, sector_name, sector_etf]
+    """
+    try:
+        with get_connection() as conn:
+            df = pd.read_sql("SELECT * FROM ticker_metadata", conn)
+        logger.info(f"read_ticker_metadata: {len(df)} tickers loaded")
+        return df
+    except DatabaseError as e:
+        logger.error(f"read_ticker_metadata failed: {e}")
+        return pd.DataFrame()
+    
+
+def write_sector_metadata(df: pd.DataFrame, fetch_date: str) -> int:
+    """
+    Write or update sector metadata for all tickers.
+
+    Uses INSERT OR REPLACE so re-running always gives fresh data.
+    Each ticker has exactly one row — updated in place on each fetch.
+
+    Args:
+        df        : DataFrame with columns [ticker, sector_name, sector_etf]
+        fetch_date: Date string YYYY-MM-DD
+
+    Returns:
+        Number of rows written
+    """
+    if df.empty:
+        logger.warning("write_sector_metadata: Empty DataFrame")
+        return 0
+
+    df = df.copy()
+    df["last_updated"] = fetch_date
+
+    try:
+        with get_connection() as conn:
+            df[["ticker", "sector_name", "sector_etf", "last_updated"]].to_sql(
+                "sector_metadata_staging", conn, if_exists="replace", index=False
+            )
+            cursor = conn.execute("""
+                INSERT OR REPLACE INTO ticker_metadata
+                    (ticker, sector_name, sector_etf, last_updated)
+                SELECT ticker, sector_name, sector_etf, last_updated
+                FROM sector_metadata_staging
+            """)
+            rows_written = cursor.rowcount
+            conn.execute("DROP TABLE IF EXISTS sector_metadata_staging")
+
+        logger.info(f"write_sector_metadata: {rows_written} tickers written")
+        return rows_written
+
+    except DatabaseError as e:
+        logger.error(f"write_sector_metadata failed: {e}")
+        raise
+
+
+def read_sector_metadata() -> pd.DataFrame:
+    """
+    Read all ticker sector classifications from the database.
+
+    Used by screener.py to look up each stock's sector ETF
+    without making any yfinance calls at scan time.
+
+    Returns:
+        DataFrame with columns [ticker, sector_name, sector_etf, last_updated]
+    """
+    try:
+        with get_connection() as conn:
+            df = pd.read_sql(
+                "SELECT * FROM ticker_metadata ORDER BY ticker",
+                conn
+            )
+        logger.info(f"read_sector_metadata: {len(df)} tickers loaded")
+        return df
+
+    except DatabaseError as e:
+        logger.error(f"read_sector_metadata failed: {e}")
+        return pd.DataFrame()
