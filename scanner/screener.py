@@ -82,6 +82,8 @@ SHORT_SD_MIN = SCANNER_CFG["short_entry_sd_min"]   # +1 (lower boundary)
 SHORT_SD_MAX = SCANNER_CFG["short_entry_sd_max"]   # +3 (upper boundary)
 
 
+
+
 # =============================================================================
 # SECTOR LOOKUP — dynamic from database
 # Replaces the old hardcoded SECTOR_MAP.
@@ -131,6 +133,26 @@ def _load_sector_lookup() -> tuple[dict, dict]:
     )
 
     return ticker_to_etf, ticker_to_name
+
+# =============================================================================
+# SECTOR ETF DISPLAY NAMES
+# Fixed set of 11 — not the per-stock map removed earlier, just display labels
+# for the sector grid on the dashboard.
+# =============================================================================
+
+SECTOR_ETF_NAMES = {
+    "XLK" : "Technology",
+    "XLF" : "Financials",
+    "XLE" : "Energy",
+    "XLV" : "Healthcare",
+    "XLI" : "Industrials",
+    "XLY" : "Consumer Discretionary",
+    "XLP" : "Consumer Staples",
+    "XLU" : "Utilities",
+    "XLB" : "Materials",
+    "XLRE": "Real Estate",
+    "XLC" : "Communication Services",
+}
 
 
 # =============================================================================
@@ -251,9 +273,9 @@ def _check_sector_health(indicator_df: pd.DataFrame) -> dict:
             result[sector] = "broken"
 
         logger.info(
-            f"Sector | {sector} ({SECTOR_NAMES.get(sector, sector)}): "
-            f"{result[sector].upper()}"
+            f"Sector | {sector}: {result[sector].upper()}"
         )
+        
 
     return result
 
@@ -293,6 +315,10 @@ def _is_long_candidate(
     # ── Condition 5: Sector health (dynamic lookup) ───────────────────────────
     sector_etf = ticker_to_etf.get(ticker)
 
+    # ── Condition 6: Valid demand zone (BOS + engulfing in SD band) ───────────
+    if int(row.get("has_valid_zone", 0)) != 1:
+        return False
+
     if sector_etf is not None:
         # Sector found — apply the health check
         if sector_health.get(sector_etf) != "bullish":
@@ -329,6 +355,10 @@ def _is_short_candidate(
         return False
 
     sector_etf = ticker_to_etf.get(ticker)
+
+    # ── Condition 6: Valid supply zone (BOS + engulfing in SD band) ───────────
+    if int(row.get("has_valid_zone", 0)) != 1:
+        return False
 
     if sector_etf is not None:
         if sector_health.get(sector_etf) != "bearish":
@@ -509,7 +539,7 @@ def get_market_sector_status(indicator_df: pd.DataFrame) -> dict:
     sector_health_named = {
         etf: {
             "status": status,
-            "name"  : SECTOR_NAMES.get(etf, etf),
+            "name"  : SECTOR_ETF_NAMES.get(etf, etf),
         }
         for etf, status in sector_health.items()
     }

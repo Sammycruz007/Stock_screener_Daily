@@ -45,6 +45,7 @@ from pathlib import Path
 from contextlib import contextmanager
 from typing import Optional
 import yaml
+from datetime import datetime, timedelta
 
 from utils.logging import get_database_logger
 from utils.error_handler import DatabaseError, handle_critical_error
@@ -201,6 +202,7 @@ def initialise_database() -> None:
             smc_structure     TEXT,
             choch_detected    INTEGER,
             volume_signal     TEXT,
+            has_valid_zone    INTEGER,            -- 1 = valid demand/supply zone found,
             created_at        TEXT DEFAULT (datetime('now')),
             UNIQUE(ticker, date)
         )
@@ -403,43 +405,37 @@ def write_indicator_results(df: pd.DataFrame) -> int:
     Returns:
         Number of rows written
     """
-    if df.empty:
-        logger.warning("write_indicator_results: Empty DataFrame")
-        return 0
+    def write_indicator_results(df: pd.DataFrame) -> int:
+        if df.empty:
+            logger.warning("write_indicator_results: Empty DataFrame")
+            return 0
 
-    try:
-        with get_connection() as conn:
-            df.to_sql("indicator_staging", conn, if_exists="replace", index=False)
-            cursor = conn.execute("""
-                INSERT OR REPLACE INTO indicator_results (
-                    ticker, date,
-                    linreg_value, linreg_slope, linreg_slope_up,
-                    sd1_upper, sd1_lower,
-                    sd2_upper, sd2_lower,
-                    sd3_upper, sd3_lower,
-                    price_sd_position,
-                    smc_structure, choch_detected, volume_signal
-                )
-                SELECT
-                    ticker, date,
-                    linreg_value, linreg_slope, linreg_slope_up,
-                    sd1_upper, sd1_lower,
-                    sd2_upper, sd2_lower,
-                    sd3_upper, sd3_lower,
-                    price_sd_position,
-                    smc_structure, choch_detected, volume_signal
-                FROM indicator_staging
-            """)
-            rows_written = cursor.rowcount
-            conn.execute("DROP TABLE IF EXISTS indicator_staging")
+        try:
+            with get_connection() as conn:
+                df.to_sql("indicator_staging", conn, if_exists="replace", index=False)
+                cursor = conn.execute("""
+                    INSERT OR REPLACE INTO indicator_results (
+                        ticker, date, linreg_value, linreg_slope, linreg_slope_up,
+                        sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
+                        price_sd_position, smc_structure, choch_detected, volume_signal,
+                        has_valid_zone
+                    )
+                    SELECT
+                        ticker, date, linreg_value, linreg_slope, linreg_slope_up,
+                        sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
+                        price_sd_position, smc_structure, choch_detected, volume_signal,
+                        has_valid_zone
+                    FROM indicator_staging
+                """)
+                rows_written = cursor.rowcount
+                conn.execute("DROP TABLE IF EXISTS indicator_staging")
 
-        logger.info(f"write_indicator_results: {rows_written} rows written")
-        return rows_written
+            logger.info(f"write_indicator_results: {rows_written} rows written")
+            return rows_written
 
-    except DatabaseError as e:
-        logger.error(f"write_indicator_results failed: {e}")
-        raise
-
+        except DatabaseError as e:
+            logger.error(f"write_indicator_results failed: {e}")
+            raise
 
 def write_sentiment_data(df: pd.DataFrame) -> int:
     """
@@ -878,3 +874,32 @@ def read_sector_metadata() -> pd.DataFrame:
     except DatabaseError as e:
         logger.error(f"read_sector_metadata failed: {e}")
         return pd.DataFrame()
+    
+
+def read_latest_indicator_results() -> pd.DataFrame:
+    """
+    Read indicator_results for the most recent date, all tickers.
+    Used by the Streamlit dashboard for market/sector health and charts.
+    """
+    try:
+        with get_connection() as conn:
+            df = pd.read_sql("""
+                SELECT * FROM indicator_results
+                WHERE date = (SELECT MAX(date) FROM indicator_results)
+            """, conn)
+        logger.info(f"read_latest_indicator_results: {len(df)} tickers for latest date")
+        return df
+    except DatabaseError as e:
+        logger.error(f"read_latest_indicator_results failed: {e}")
+        return pd.DataFrame()
+    
+
+# Cleanup function
+def prune_old_prices(max_days: int = 65) -> int:
+    """Delete raw_prices rows older than max_days to keep DB size bounded."""
+    cutoff = (datetime.today() - timedelta(days=max_days)).strftime("%Y-%m-%d %H:%M:%S")
+    with get_connection() as conn:
+        cursor = conn.execute("DELETE FROM raw_prices WHERE date < ?", (cutoff,))
+        deleted = cursor.rowcount
+    logger.info(f"prune_old_prices: {deleted} rows deleted (older than {max_days} days)")
+    return deleted

@@ -1,46 +1,56 @@
 database:
   path: /app/data/scanner.db
+
 fetcher:
   batch_size: 50
-  historical_days: 365
+  historical_days: 58
   incremental_days: 5
-  max_workers: 10
-  retry_attempts: 3
+  max_workers: 5
+  retry_attempts: 8
   retry_delay_seconds: 5
+
 filters:
-  min_avg_volume: 500000
+  min_avg_volume: 1000000
   min_price: 10.0
+
 linreg:
-  period: 200
+  period: 380
   std_devs:
   - 1
   - 2
   - 3
+
 logging:
   backup_count: 5
   level: INFO
   log_dir: logs
   max_file_size_mb: 10
+
 ml:
   high_probability_threshold: 0.7
-  label_forward_days: 15
+  label_forward_days: 26
   min_training_samples: 500
   model_retrain_days: 7
+  backfill_stride: 4
+
 scanner:
   long_entry_sd_max: -3
   long_entry_sd_min: -1
   short_entry_sd_max: 3
   short_entry_sd_min: 1
+
 scheduler:
-  run_time: '16:30'
-  timezone: America/New_York
+  run_time: "06:00"
+  timezone: "Africa/Lagos"    # GMT+1, no DST
+
 sentiment:
   put_call_bearish_threshold: 1.2
   put_call_bullish_threshold: 0.7
   short_interest_high_threshold: 15.0
+
 smc:
   choch_confirmation: close
-  min_pivot_candles: 5
+  min_pivot_candles: 78 # 3 trading days of 15m candles
 universe:
   indices:
   - SPY
@@ -60,4 +70,4 @@ universe:
   - XLC
 volume:
   avg_volume_period: 20
-  lookback_days: 10
+  lookback_days: 26

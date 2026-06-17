@@ -5,42 +5,32 @@ Feature engineering for both ML models.
 
 LOGICAL FLOW:
 ─────────────
-This module takes raw indicator outputs, sentiment data and
-labelled observations and assembles them into clean feature
-vectors ready for model training and inference.
+Both models share a common feature set but with different focuses:
 
-FEATURES FOR SIGNAL RANKER:
-   Group 1 — LinReg features:
-   - sd_position       : Where price sits relative to LinReg (-1.8, -2.3 etc)
-   - linreg_slope      : Steepness of LinReg slope (normalised)
-   - distance_to_mean  : How far price needs to travel to reach LinReg
+VOLUME CLASSIFIER FEATURES:
+   Focused purely on volume behaviour patterns.
+   These are the raw ingredients the model uses to learn
+   what true accumulation/distribution looks like.
 
-   Group 2 — Volume features:
-   - vol_classifier_score : Output of Volume Classifier (probability)
-   - volume_signal_enc    : Encoded volume signal (accumulation=1, neutral=0, distribution=-1)
+SIGNAL RANKER FEATURES:
+   Broader set covering the full setup quality:
+   - Price position (which SD band, how close to mean)
+   - LinReg trend strength (slope steepness)
+   - Volume classifier output (reuses volume model score)
+   - Sentiment (Put/Call Ratio, Short Interest)
+   - Market context (how strong is the overall market)
+   - Sector context (how strong is the sector)
 
-   Group 3 — Sentiment features:
-   - put_call_ratio     : Options market sentiment
-   - short_interest_pct : Short interest % of float
-
-   Group 4 — Market/Sector context:
-   - market_slope_mean  : Average LinReg slope across SPY, QQQ, DIA
-   - sector_slope       : LinReg slope of the stock's sector ETF
-   - market_bullish     : 1 if all 3 indices bullish, 0 otherwise
-
-   Group 5 — Stock momentum:
-   - rsi_14             : 14-period RSI at time of signal
-
-FEATURES FOR VOLUME CLASSIFIER:
-   - cond1 through cond4 : Boolean accumulation conditions
-   - dist1, dist2        : Boolean distribution conditions
-   - sd_position         : Where price is relative to LinReg
-   - avg_volume          : Baseline volume level
-
-MISSING VALUE HANDLING:
-   Put/Call Ratio and Short Interest may be None for some tickers.
-   We impute with the median of available values.
-   This is safer than dropping rows (would lose valid setups).
+FEATURE ENGINEERING PRINCIPLES:
+   1. All features are normalised where needed
+      (volume ratios instead of raw volumes —
+       allows comparison across different stocks)
+   2. Missing values are median-imputed
+      (some tickers lack options/sentiment data)
+   3. No lookahead bias — we only use data available
+      on the signal date, never future data
+   4. Features are computed fresh for each prediction —
+      the model sees exactly what was available that day
 """
 
 import pandas as pd
@@ -64,438 +54,512 @@ def _load_config() -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
-config = _load_config()
+config     = _load_config()
+VOLUME_CFG = config["volume"]
+
+LOOKBACK_DAYS     = VOLUME_CFG["lookback_days"]       # 10
+AVG_VOLUME_PERIOD = VOLUME_CFG["avg_volume_period"]   # 20
 
 
 # =============================================================================
-# RSI CALCULATOR
-# Needed as a momentum feature — not importing from engine
-# to keep feature engineering self-contained.
+# VOLUME FEATURES
+# Used by Volume Classifier
+# These capture the volume behaviour patterns we defined in volume.py
 # =============================================================================
 
-def _compute_rsi(closes: np.ndarray, period: int = 14) -> float:
+def compute_volume_features(
+    df         : pd.DataFrame,
+    signal_date: str,
+) -> Optional[dict]:
     """
-    Compute RSI for the most recent candle.
+    Compute volume-based features for a single ticker on a signal date.
 
-    FORMULA:
-    RSI = 100 - (100 / (1 + RS))
-    RS  = Average Gain / Average Loss over last N periods
+    FEATURES COMPUTED:
+    1.  vol_slope_down_days    : Slope of volume on red candles (negative = declining)
+    2.  vol_slope_up_days      : Slope of volume on green candles (positive = rising)
+    3.  avg_vol_ratio          : Today's volume vs 20-day average (normalised)
+    4.  green_red_vol_ratio    : Average green day volume / average red day volume
+    5.  max_down_vol_ratio     : Highest single down day volume vs average
+    6.  dryup_candle_present   : 1 if any candle < 0.5x average volume in lookback
+    7.  n_red_candles          : Count of red candles in lookback window
+    8.  n_green_candles        : Count of green candles in lookback window
+    9.  vol_consistency        : Std dev of volume / mean volume (lower = more consistent)
+    10. price_recovery_ratio   : On high vol down days, how much did price recover?
+
+    All ratios are used instead of raw volumes so features are
+    comparable across different stocks with very different trading volumes.
 
     Args:
-        closes: numpy array of closing prices
-        period: RSI lookback period (default 14)
+        df         : Full OHLCV DataFrame for one ticker, sorted date ascending
+        signal_date: The date of the signal YYYY-MM-DD
 
     Returns:
-        RSI value between 0 and 100
+        Dict of feature name → value, or None if insufficient data
     """
-    if len(closes) < period + 1:
-        return 50.0  # Return neutral RSI if insufficient data
+    # Get data up to and including signal date (no lookahead)
+    data = df[df["date"] <= signal_date].tail(AVG_VOLUME_PERIOD + LOOKBACK_DAYS)
 
-    # Compute price changes
-    deltas = np.diff(closes[-period - 1:])
-    gains  = np.where(deltas > 0, deltas, 0)
-    losses = np.where(deltas < 0, -deltas, 0)
+    if len(data) < AVG_VOLUME_PERIOD:
+        return None
 
-    avg_gain = np.mean(gains)
-    avg_loss = np.mean(losses)
+    # ── Baseline average volume ───────────────────────────────────────────────
+    avg_volume = data["volume"].tail(AVG_VOLUME_PERIOD).mean()
+    if avg_volume == 0:
+        return None
 
-    if avg_loss == 0:
-        return 100.0   # All gains — max RSI
+    recent = data.tail(LOOKBACK_DAYS)
 
-    rs  = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
+    # ── Separate green and red candles ────────────────────────────────────────
+    green = recent[recent["close"] >= recent["open"]]
+    red   = recent[recent["close"] <  recent["open"]]
 
-    return round(float(rsi), 2)
-
-
-# =============================================================================
-# VOLUME SIGNAL ENCODER
-# Converts categorical volume signal to numeric for the model
-# =============================================================================
-
-VOLUME_SIGNAL_ENCODING = {
-    "accumulation": 1,
-    "neutral"     : 0,
-    "distribution": -1,
-}
-
-def _encode_volume_signal(signal: str) -> int:
-    """Convert volume signal string to integer for model input."""
-    return VOLUME_SIGNAL_ENCODING.get(signal, 0)
-
-
-# =============================================================================
-# FEATURE BUILDER — SIGNAL RANKER
-# Builds one feature vector per scanner candidate
-# =============================================================================
-
-def build_signal_ranker_features(
-    indicator_row  : pd.Series,
-    sentiment_row  : Optional[pd.Series],
-    market_health  : dict,
-    sector_health  : dict,
-    closes         : np.ndarray,
-    vol_score      : float = 0.5,
-) -> dict:
-    """
-    Build a feature vector for the Signal Ranker model.
-
-    Called for each stock candidate after the scanner waterfall.
-    Assembles all available signals into a flat feature dict.
-
-    Args:
-        indicator_row : Row from indicator_results for this ticker
-        sentiment_row : Row from sentiment_data (may be None)
-        market_health : Dict of SPY/QQQ/DIA health statuses
-        sector_health : Dict of sector ETF health statuses
-        closes        : Recent closing prices for RSI calculation
-        vol_score     : Volume Classifier probability output (0-1)
-
-    Returns:
-        Dict of feature name → feature value
-        All values are numeric (floats or ints)
-    """
-
-    # ── Group 1: LinReg features ──────────────────────────────────────────────
-    sd_position      = float(indicator_row["price_sd_position"])
-    linreg_value     = float(indicator_row["linreg_value"])
-    linreg_slope     = float(indicator_row["linreg_slope"])
-    current_close    = closes[-1] if len(closes) > 0 else linreg_value
-
-    # Distance to mean = how far price needs to travel to reach LinReg
-    # Expressed as a percentage of current price
-    distance_to_mean = abs(current_close - linreg_value) / current_close * 100
-
-    # ── Group 2: Volume features ──────────────────────────────────────────────
-    volume_signal     = str(indicator_row.get("volume_signal", "neutral"))
-    volume_signal_enc = _encode_volume_signal(volume_signal)
-
-    # ── Group 3: Sentiment features ───────────────────────────────────────────
-    # Use None as placeholder — imputed at the DataFrame level later
-    if sentiment_row is not None and not sentiment_row.empty:
-        put_call_ratio     = sentiment_row.get("put_call_ratio", None)
-        short_interest_pct = sentiment_row.get("short_interest_pct", None)
+    # ── Feature 1: Volume slope on red candles ────────────────────────────────
+    if len(red) >= 2:
+        x = np.arange(len(red))
+        slope_red, _ = np.polyfit(x, red["volume"].values, 1)
+        # Normalise by avg_volume so it's comparable across stocks
+        vol_slope_down = slope_red / avg_volume
     else:
-        put_call_ratio     = None
-        short_interest_pct = None
+        vol_slope_down = 0.0
 
-    # Convert to float safely
-    put_call_ratio     = float(put_call_ratio)     if put_call_ratio     is not None else np.nan
-    short_interest_pct = float(short_interest_pct) if short_interest_pct is not None else np.nan
+    # ── Feature 2: Volume slope on green candles ──────────────────────────────
+    if len(green) >= 2:
+        x = np.arange(len(green))
+        slope_green, _ = np.polyfit(x, green["volume"].values, 1)
+        vol_slope_up = slope_green / avg_volume
+    else:
+        vol_slope_up = 0.0
 
-    # ── Group 4: Market/Sector context ───────────────────────────────────────
-    # Average slope across the 3 indices
-    # 1 = all bullish, 0 = mixed, -1 = all bearish
-    index_statuses   = [
-        market_health.get("SPY", "broken"),
-        market_health.get("QQQ", "broken"),
-        market_health.get("DIA", "broken"),
+    # ── Feature 3: Today's volume vs average ──────────────────────────────────
+    today_vol      = data.iloc[-1]["volume"]
+    avg_vol_ratio  = today_vol / avg_volume
+
+    # ── Feature 4: Green vs red average volume ratio ──────────────────────────
+    avg_green_vol  = green["volume"].mean() if len(green) > 0 else avg_volume
+    avg_red_vol    = red["volume"].mean()   if len(red)   > 0 else avg_volume
+    green_red_ratio = avg_green_vol / avg_red_vol if avg_red_vol > 0 else 1.0
+
+    # ── Feature 5: Max down day volume ratio ──────────────────────────────────
+    max_down_vol       = red["volume"].max() if len(red) > 0 else avg_volume
+    max_down_vol_ratio = max_down_vol / avg_volume
+
+    # ── Feature 6: Volume dry-up present ──────────────────────────────────────
+    dryup_threshold    = avg_volume * 0.5
+    dryup_present      = int((recent["volume"] < dryup_threshold).any())
+
+    # ── Feature 7 & 8: Count of red and green candles ─────────────────────────
+    n_red_candles   = len(red)
+    n_green_candles = len(green)
+
+    # ── Feature 9: Volume consistency ─────────────────────────────────────────
+    # Lower = more consistent volume = more orderly market behaviour
+    vol_std         = recent["volume"].std()
+    vol_mean        = recent["volume"].mean()
+    vol_consistency = vol_std / vol_mean if vol_mean > 0 else 1.0
+
+    # ── Feature 10: Price recovery on high volume down days ───────────────────
+    # Measures how much price recovered intraday on the biggest down volume day
+    # High recovery = buyers absorbed the selling = bullish
+    high_vol_down = red[red["volume"] > avg_volume * 1.5]
+    if len(high_vol_down) > 0:
+        # Recovery = (close - low) / (high - low) for the highest vol down day
+        row           = high_vol_down.loc[high_vol_down["volume"].idxmax()]
+        candle_range  = row["high"] - row["low"]
+        recovery      = (row["close"] - row["low"]) / candle_range if candle_range > 0 else 0.5
+    else:
+        recovery = 0.5  # Neutral default when no high volume down days
+
+    return {
+        "vol_slope_down_days"  : round(vol_slope_down,   6),
+        "vol_slope_up_days"    : round(vol_slope_up,     6),
+        "avg_vol_ratio"        : round(avg_vol_ratio,    4),
+        "green_red_vol_ratio"  : round(green_red_ratio,  4),
+        "max_down_vol_ratio"   : round(max_down_vol_ratio, 4),
+        "dryup_candle_present" : dryup_present,
+        "n_red_candles"        : n_red_candles,
+        "n_green_candles"      : n_green_candles,
+        "vol_consistency"      : round(vol_consistency,  4),
+        "price_recovery_ratio" : round(recovery,         4),
+    }
+
+
+# =============================================================================
+# SIGNAL RANKER FEATURES
+# Broader feature set covering the full setup quality
+# =============================================================================
+
+def compute_signal_features(
+    ticker         : str,
+    signal_date    : str,
+    direction      : str,
+    prices_df      : pd.DataFrame,
+    indicators_df  : pd.DataFrame,
+    sentiment_df   : pd.DataFrame,
+    market_ind_df  : pd.DataFrame,
+    vol_clf_score  : Optional[float] = None,
+) -> Optional[dict]:
+    """
+    Compute all features for the Signal Ranker for a single ticker/date.
+
+    FEATURE GROUPS:
+
+    GROUP 1 — Price position (3 features):
+    - sd_position       : How deep in the band (-1.8 = 1.8 SDs below mean)
+    - dist_to_mean      : Distance from current price to LinReg mean (normalised)
+    - band_penetration  : How far through the band is price? (0 = at ±1SD, 1 = at ±3SD)
+
+    GROUP 2 — Trend strength (2 features):
+    - linreg_slope      : Steepness of LinReg slope (normalised by price)
+    - days_in_trend     : How many consecutive days has slope been in same direction?
+
+    GROUP 3 — Volume (from volume features):
+    - All 10 volume features from compute_volume_features()
+    - vol_clf_score     : Output of Volume Classifier (0-1 probability)
+
+    GROUP 4 — Sentiment (2 features):
+    - put_call_ratio    : Options sentiment (None → median imputed)
+    - short_interest    : Float short % (None → median imputed)
+
+    GROUP 5 — Market context (2 features):
+    - market_slope_avg  : Average LinReg slope of SPY + QQQ + DIA
+    - market_choch_count: Number of indices with CHoCH (0, 1, 2, or 3)
+
+    Args:
+        ticker        : Ticker symbol
+        signal_date   : Date of signal YYYY-MM-DD
+        direction     : 'long' or 'short'
+        prices_df     : Full OHLCV data for this ticker
+        indicators_df : Full indicator results (all tickers)
+        sentiment_df  : Sentiment data (all tickers)
+        market_ind_df : Indicator results for SPY, QQQ, DIA only
+        vol_clf_score : Output of Volume Classifier model (optional)
+
+    Returns:
+        Dict of all features or None if insufficient data
+    """
+
+    # ── Get indicator row for this ticker on signal date ──────────────────────
+    ind_row = indicators_df[
+        (indicators_df["ticker"] == ticker) &
+        (indicators_df["date"]   == signal_date)
     ]
-    bullish_count    = sum(1 for s in index_statuses if s == "bullish")
-    bearish_count    = sum(1 for s in index_statuses if s == "bearish")
-    market_bullish   = 1 if bullish_count == 3 else (0 if bullish_count >= 2 else -1)
 
-    # Sector health encoding
-    ticker          = str(indicator_row["ticker"])
-    sector_etf      = indicator_row.get("sector_etf", None)
-    sector_status   = sector_health.get(sector_etf, "broken") if sector_etf else "broken"
-    sector_bullish  = 1 if sector_status == "bullish" else (0 if sector_status == "bearish" else -1)
+    if ind_row.empty:
+        return None
 
-    # ── Group 5: Momentum ─────────────────────────────────────────────────────
-    rsi_14 = _compute_rsi(closes, period=14)
+    ind = ind_row.iloc[0]
 
-    # ── Assemble feature vector ───────────────────────────────────────────────
+    # ── Get price data up to signal date ─────────────────────────────────────
+    px = prices_df[
+        (prices_df["ticker"] == ticker) &
+        (prices_df["date"]   <= signal_date)
+    ].sort_values("date")
+
+    if len(px) < AVG_VOLUME_PERIOD:
+        return None
+
+    # ── GROUP 1: Price position features ────────────────────────────────────
+    sd_position  = float(ind["price_sd_position"])
+    linreg_val   = float(ind["linreg_value"])
+    current_close = px.iloc[-1]["close"]
+
+    # Distance from price to LinReg, normalised by price level
+    dist_to_mean = abs(current_close - linreg_val) / current_close
+
+    # How far through the band is price?
+    # 0 = just entered the ±1 SD band, 1 = at the ±3 SD extreme
+    abs_sd = abs(sd_position)
+    band_penetration = np.clip((abs_sd - 1.0) / 2.0, 0.0, 1.0)
+
+    # ── GROUP 2: Trend strength features ────────────────────────────────────
+    linreg_slope = float(ind["linreg_slope"])
+
+    # Count consecutive days with same slope direction
+    ticker_ind = indicators_df[
+        indicators_df["ticker"] == ticker
+    ].sort_values("date")
+
+    slope_up_col    = ticker_ind["linreg_slope_up"].values
+    current_slope   = int(ind["linreg_slope_up"])
+    days_in_trend   = 0
+
+    # Count backwards from signal date
+    for val in reversed(slope_up_col[slope_up_col != current_slope].tolist()):
+        if val == current_slope:
+            days_in_trend += 1
+        else:
+            break
+
+    # Simpler approach — count from end
+    days_in_trend = 0
+    for val in reversed(ticker_ind["linreg_slope_up"].tolist()):
+        if val == current_slope:
+            days_in_trend += 1
+        else:
+            break
+
+    # ── GROUP 3: Volume features ─────────────────────────────────────────────
+    vol_features = compute_volume_features(px, signal_date)
+    if vol_features is None:
+        vol_features = {k: 0.0 for k in [
+            "vol_slope_down_days", "vol_slope_up_days", "avg_vol_ratio",
+            "green_red_vol_ratio", "max_down_vol_ratio", "dryup_candle_present",
+            "n_red_candles", "n_green_candles", "vol_consistency",
+            "price_recovery_ratio",
+        ]}
+
+    # ── GROUP 4: Sentiment features ──────────────────────────────────────────
+    sent_row = sentiment_df[
+        (sentiment_df["ticker"] == ticker) &
+        (sentiment_df["date"]   == signal_date)
+    ]
+
+    if not sent_row.empty:
+        put_call_ratio = sent_row.iloc[0]["put_call_ratio"]
+        short_interest = sent_row.iloc[0]["short_interest_pct"]
+    else:
+        put_call_ratio = np.nan   # Will be imputed at training time
+        short_interest = np.nan
+
+    # ── GROUP 5: Market context features ────────────────────────────────────
+    mkt = market_ind_df[market_ind_df["date"] == signal_date]
+
+    if not mkt.empty:
+        market_slope_avg   = mkt["linreg_slope"].mean()
+        market_choch_count = int(mkt["choch_detected"].sum())
+    else:
+        market_slope_avg   = 0.0
+        market_choch_count = 0
+
+    # ── Direction encoding ────────────────────────────────────────────────────
+    # 1 = long setup, 0 = short setup
+    direction_flag = 1 if direction == "long" else 0
+
+    # ── Assemble all features ─────────────────────────────────────────────────
     features = {
-        # LinReg
-        "sd_position"       : sd_position,
-        "linreg_slope"      : linreg_slope,
-        "distance_to_mean"  : round(distance_to_mean, 4),
+        # Identifiers (not used in training — dropped before fit)
+        "ticker"             : ticker,
+        "date"               : signal_date,
+        "direction"          : direction,
 
-        # Volume
-        "vol_classifier_score" : vol_score,
-        "volume_signal_enc"    : volume_signal_enc,
+        # Group 1: Price position
+        "sd_position"        : round(sd_position,     4),
+        "dist_to_mean"       : round(dist_to_mean,    6),
+        "band_penetration"   : round(band_penetration, 4),
 
-        # Sentiment
-        "put_call_ratio"       : put_call_ratio,
-        "short_interest_pct"   : short_interest_pct,
+        # Group 2: Trend strength
+        "linreg_slope"       : round(linreg_slope,    6),
+        "days_in_trend"      : days_in_trend,
 
-        # Market/Sector context
-        "market_bullish"       : market_bullish,
-        "sector_bullish"       : sector_bullish,
+        # Group 3: Volume
+        **vol_features,
+        "vol_clf_score"      : vol_clf_score if vol_clf_score is not None else np.nan,
 
-        # Momentum
-        "rsi_14"               : rsi_14,
+        # Group 4: Sentiment
+        "put_call_ratio"     : put_call_ratio,
+        "short_interest"     : short_interest,
+
+        # Group 5: Market context
+        "market_slope_avg"   : round(market_slope_avg,   6),
+        "market_choch_count" : market_choch_count,
+
+        # Direction
+        "direction_flag"     : direction_flag,
     }
 
     return features
 
 
 # =============================================================================
-# FEATURE BUILDER — VOLUME CLASSIFIER
-# Builds feature vector from volume condition booleans
+# FEATURE MATRIX BUILDER
+# Builds the full feature matrix for model training
 # =============================================================================
 
-def build_volume_classifier_features(
-    labelled_row : pd.Series,
-) -> dict:
-    """
-    Build a feature vector for the Volume Classifier model.
-
-    The volume classifier features are simpler than the signal ranker —
-    they are the raw boolean condition outputs from the volume engine
-    plus the SD position and average volume context.
-
-    Args:
-        labelled_row: Row from volume labeller output
-
-    Returns:
-        Dict of feature name → feature value
-    """
-    return {
-        "cond1"       : int(labelled_row["cond1"]),   # Volume declining on down days
-        "cond2"       : int(labelled_row["cond2"]),   # Shakeout present
-        "cond3"       : int(labelled_row["cond3"]),   # Volume expanding on green days
-        "cond4"       : int(labelled_row["cond4"]),   # Volume dry-up present
-        "dist1"       : int(labelled_row["dist1"]),   # Volume rising on up days
-        "dist2"       : int(labelled_row["dist2"]),   # Volume expanding on red days
-        "sd_position" : float(labelled_row["sd_position"]),
-        "avg_volume"  : float(labelled_row["avg_volume"]),
-    }
-
-
-# =============================================================================
-# FULL FEATURE MATRIX BUILDERS
-# Converts labelled DataFrames into X (features) and y (labels)
-# ready for model training.
-# =============================================================================
-
-def build_signal_ranker_matrix(
-    labelled_df    : pd.DataFrame,
-    indicator_df   : pd.DataFrame,
-    sentiment_df   : pd.DataFrame,
-    market_health  : dict,
-    sector_health  : dict,
-    tickers_data   : dict[str, pd.DataFrame],
-    vol_scores     : Optional[dict] = None,
-) -> tuple[pd.DataFrame, pd.Series]:
-    """
-    Build the full feature matrix for Signal Ranker training.
-
-    FLOW:
-    1. Iterate over each labelled observation
-    2. Look up indicator data for that ticker + date
-    3. Look up sentiment data for that ticker + date
-    4. Compute RSI from raw OHLCV
-    5. Build feature vector
-    6. Collect all vectors into X matrix
-    7. Extract labels into y Series
-    8. Impute missing values (Put/Call, Short Interest)
-
-    Args:
-        labelled_df  : Output from run_labeller()
-        indicator_df : Historical indicator results from SQLite
-        sentiment_df : Historical sentiment data from SQLite
-        market_health: Market health dict for context features
-        sector_health: Sector health dict for context features
-        tickers_data : Dict of ticker → OHLCV DataFrame
-        vol_scores   : Optional dict of ticker+date → vol classifier score
-
-    Returns:
-        Tuple of (X DataFrame, y Series)
-    """
-    if labelled_df.empty:
-        logger.warning("build_signal_ranker_matrix: Empty labelled DataFrame")
-        return pd.DataFrame(), pd.Series()
-
-    feature_rows = []
-    labels       = []
-
-    for _, row in labelled_df.iterrows():
-        ticker = row["ticker"]
-        date   = row["date"]
-
-        # ── Look up indicator data ────────────────────────────────────────────
-        ind_rows = indicator_df[
-            (indicator_df["ticker"] == ticker) &
-            (indicator_df["date"]   == date)
-        ]
-        if ind_rows.empty:
-            continue
-        ind_row = ind_rows.iloc[0]
-
-        # ── Look up sentiment data ────────────────────────────────────────────
-        sent_rows = sentiment_df[
-            (sentiment_df["ticker"] == ticker) &
-            (sentiment_df["date"]   == date)
-        ]
-        sent_row = sent_rows.iloc[0] if not sent_rows.empty else None
-
-        # ── Get closes for RSI ────────────────────────────────────────────────
-        df_ticker = tickers_data.get(ticker, pd.DataFrame())
-        if df_ticker.empty:
-            continue
-
-        # Get closes up to and including this date
-        df_up_to_date = df_ticker[df_ticker["date"] <= date]
-        closes        = df_up_to_date["close"].values[-50:]  # Last 50 for RSI
-
-        # ── Get volume classifier score ───────────────────────────────────────
-        vol_score = 0.5   # Default neutral score
-        if vol_scores:
-            vol_score = vol_scores.get(f"{ticker}_{date}", 0.5)
-
-        # ── Build feature vector ──────────────────────────────────────────────
-        features = build_signal_ranker_features(
-            indicator_row = ind_row,
-            sentiment_row = sent_row,
-            market_health = market_health,
-            sector_health = sector_health,
-            closes        = closes,
-            vol_score     = vol_score,
-        )
-
-        feature_rows.append(features)
-        labels.append(int(row["label"]))
-
-    if not feature_rows:
-        logger.warning("build_signal_ranker_matrix: No feature rows built")
-        return pd.DataFrame(), pd.Series()
-
-    X = pd.DataFrame(feature_rows)
-    y = pd.Series(labels, name="label")
-
-    # ── Impute missing sentiment values with column median ────────────────────
-    # Safe imputation: median is robust to outliers
-    for col in ["put_call_ratio", "short_interest_pct"]:
-        if col in X.columns:
-            median_val = X[col].median()
-            X[col]     = X[col].fillna(median_val)
-
-    logger.info(
-        f"Signal Ranker feature matrix | "
-        f"Shape: {X.shape} | "
-        f"Label balance: {y.mean():.2%} positive"
-    )
-
-    return X, y
-
-
-def build_volume_classifier_matrix(
-    labelled_df : pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.Series]:
+def build_volume_feature_matrix(
+    prices_df    : pd.DataFrame,
+    indicators_df: pd.DataFrame,
+    labels_df    : pd.DataFrame,
+) -> pd.DataFrame:
     """
     Build the full feature matrix for Volume Classifier training.
 
-    Much simpler than the Signal Ranker matrix —
-    all features are already in the labelled DataFrame.
+    FLOW:
+    1. For each labelled example (ticker, date, direction, label)
+    2. Compute volume features for that ticker on that date
+    3. Attach the label
+    4. Return combined matrix ready for model training
 
     Args:
-        labelled_df: Output from run_volume_labeller()
+        prices_df    : Full OHLCV data
+        indicators_df: Full indicator results
+        labels_df    : Labels from label_volume_patterns()
 
     Returns:
-        Tuple of (X DataFrame, y Series)
+        DataFrame with feature columns + 'label' column
+        Ready for sklearn/XGBoost training
     """
-    if labelled_df.empty:
-        logger.warning("build_volume_classifier_matrix: Empty DataFrame")
-        return pd.DataFrame(), pd.Series()
-
-    feature_cols = ["cond1", "cond2", "cond3", "cond4",
-                    "dist1", "dist2", "sd_position", "avg_volume"]
-
-    X = labelled_df[feature_cols].copy().astype(float)
-    y = labelled_df["label"].astype(int)
-
     logger.info(
-        f"Volume Classifier feature matrix | "
-        f"Shape: {X.shape} | "
-        f"Label balance: {y.mean():.2%} positive"
+        f"Building Volume Classifier feature matrix | "
+        f"{len(labels_df)} labelled examples"
     )
 
-    return X, y
+    rows   = []
+    failed = 0
+
+    for _, label_row in labels_df.iterrows():
+        ticker = label_row["ticker"]
+        date   = label_row["date"]
+        label  = label_row["label"]
+
+        # Get price data for this ticker
+        px = prices_df[prices_df["ticker"] == ticker].sort_values("date")
+
+        if px.empty:
+            failed += 1
+            continue
+
+        # Compute volume features
+        vol_features = compute_volume_features(px, date)
+
+        if vol_features is None:
+            failed += 1
+            continue
+
+        vol_features["label"] = label
+        rows.append(vol_features)
+
+    result = pd.DataFrame(rows)
+
+    logger.info(
+        f"Volume feature matrix built | "
+        f"Rows: {len(result)} | "
+        f"Failed: {failed} | "
+        f"Features: {len(result.columns) - 1}"
+    )
+
+    return result
 
 
-# =============================================================================
-# INFERENCE FEATURE BUILDER
-# Used at scan time (not training time) to build features
-# for today's candidates to score them with the trained model.
-# =============================================================================
-
-def build_inference_features(
-    candidates_df  : pd.DataFrame,
-    indicator_df   : pd.DataFrame,
-    sentiment_df   : pd.DataFrame,
-    market_health  : dict,
-    sector_health  : dict,
-    tickers_data   : dict[str, pd.DataFrame],
-    vol_scores     : dict,
+def build_signal_feature_matrix(
+    prices_df    : pd.DataFrame,
+    indicators_df: pd.DataFrame,
+    sentiment_df : pd.DataFrame,
+    market_ind_df: pd.DataFrame,
+    labels_df    : pd.DataFrame,
+    vol_scores   : Optional[dict] = None,
 ) -> pd.DataFrame:
     """
-    Build feature vectors for today's scanner candidates.
-    These are fed into the trained model to generate ML scores.
-
-    Same feature engineering as training time — critical for
-    avoiding train/inference mismatch.
+    Build the full feature matrix for Signal Ranker training.
 
     Args:
-        candidates_df : Today's scanner candidates from screener.py
-        indicator_df  : Today's indicator results
-        sentiment_df  : Today's sentiment data
-        market_health : Today's market health
-        sector_health : Today's sector health
-        tickers_data  : Dict of ticker → OHLCV DataFrame
-        vol_scores    : Dict of ticker → vol classifier probability
+        prices_df    : Full OHLCV data
+        indicators_df: Full indicator results (all tickers)
+        sentiment_df : Sentiment data (all tickers)
+        market_ind_df: Indicator results for SPY, QQQ, DIA only
+        labels_df    : Labels from label_scanner_hits()
+        vol_scores   : Optional dict of (ticker, date) → vol_clf_score
 
     Returns:
-        DataFrame of features — one row per candidate
-        Same columns as training feature matrix
+        DataFrame with all feature columns + 'label' column
     """
-    feature_rows = []
-    tickers      = []
+    logger.info(
+        f"Building Signal Ranker feature matrix | "
+        f"{len(labels_df)} labelled examples"
+    )
 
-    for _, row in candidates_df.iterrows():
-        ticker = row["ticker"]
+    rows   = []
+    failed = 0
 
-        # ── Look up indicator data ────────────────────────────────────────────
-        ind_rows = indicator_df[indicator_df["ticker"] == ticker]
-        if ind_rows.empty:
+    for _, label_row in labels_df.iterrows():
+        ticker    = label_row["ticker"]
+        date      = label_row["date"]
+        direction = label_row["direction"]
+        label     = label_row["label"]
+
+        # Get volume classifier score for this ticker/date if available
+        vol_score = None
+        if vol_scores:
+            vol_score = vol_scores.get((ticker, date))
+
+        # Get price data for this ticker
+        px = prices_df[prices_df["ticker"] == ticker].sort_values("date")
+
+        if px.empty:
+            failed += 1
             continue
-        ind_row = ind_rows.iloc[0]
 
-        # ── Look up sentiment data ────────────────────────────────────────────
-        sent_rows = sentiment_df[sentiment_df["ticker"] == ticker]
-        sent_row  = sent_rows.iloc[0] if not sent_rows.empty else None
-
-        # ── Get closes for RSI ────────────────────────────────────────────────
-        df_ticker = tickers_data.get(ticker, pd.DataFrame())
-        closes    = df_ticker["close"].values[-50:] if not df_ticker.empty else np.array([])
-
-        # ── Get volume classifier score ───────────────────────────────────────
-        vol_score = vol_scores.get(ticker, 0.5)
-
-        # ── Build feature vector ──────────────────────────────────────────────
-        features = build_signal_ranker_features(
-            indicator_row = ind_row,
-            sentiment_row = sent_row,
-            market_health = market_health,
-            sector_health = sector_health,
-            closes        = closes,
-            vol_score     = vol_score,
+        features = compute_signal_features(
+            ticker        = ticker,
+            signal_date   = date,
+            direction     = direction,
+            prices_df     = px,
+            indicators_df = indicators_df,
+            sentiment_df  = sentiment_df,
+            market_ind_df = market_ind_df,
+            vol_clf_score = vol_score,
         )
 
-        feature_rows.append(features)
-        tickers.append(ticker)
+        if features is None:
+            failed += 1
+            continue
 
-    if not feature_rows:
-        logger.warning("build_inference_features: No features built")
-        return pd.DataFrame()
+        features["label"] = label
+        rows.append(features)
 
-    X            = pd.DataFrame(feature_rows)
-    X["ticker"]  = tickers
+    result = pd.DataFrame(rows)
 
-    # ── Impute missing sentiment values ───────────────────────────────────────
-    for col in ["put_call_ratio", "short_interest_pct"]:
-        if col in X.columns:
-            X[col] = X[col].fillna(X[col].median())
+    logger.info(
+        f"Signal feature matrix built | "
+        f"Rows: {len(result)} | "
+        f"Failed: {failed}"
+    )
 
-    logger.info(f"Inference features built | {len(X)} candidates | {X.shape[1]} features")
-    return X
+    return result
+
+
+# =============================================================================
+# FEATURE COLUMNS — used by both models at train and inference time
+# =============================================================================
+
+VOLUME_FEATURE_COLS = [
+    "vol_slope_down_days",
+    "vol_slope_up_days",
+    "avg_vol_ratio",
+    "green_red_vol_ratio",
+    "max_down_vol_ratio",
+    "dryup_candle_present",
+    "n_red_candles",
+    "n_green_candles",
+    "vol_consistency",
+    "price_recovery_ratio",
+]
+
+SIGNAL_FEATURE_COLS = [
+    # Price position
+    "sd_position",
+    "dist_to_mean",
+    "band_penetration",
+    # Trend
+    "linreg_slope",
+    "days_in_trend",
+    # Volume
+    "vol_slope_down_days",
+    "vol_slope_up_days",
+    "avg_vol_ratio",
+    "green_red_vol_ratio",
+    "max_down_vol_ratio",
+    "dryup_candle_present",
+    "n_red_candles",
+    "n_green_candles",
+    "vol_consistency",
+    "price_recovery_ratio",
+    "vol_clf_score",
+    # Sentiment
+    "put_call_ratio",
+    "short_interest",
+    # Market context
+    "market_slope_avg",
+    "market_choch_count",
+    # Direction
+    "direction_flag",
+]

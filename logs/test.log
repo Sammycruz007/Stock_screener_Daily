@@ -1,4 +1,0 @@
-2026-06-06 10:37:24 | INFO     | test_module               | Logger initialised → logs\test.log
-2026-06-06 10:37:24 | INFO     | test_module               | Test INFO message
-2026-06-06 10:37:24 | WARNING  | test_module               | Test WARNING message
-2026-06-06 10:37:24 | ERROR    | test_module               | Test ERROR message

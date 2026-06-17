@@ -1,60 +1,62 @@
 """
 ml/signal_ranker.py
--------------------
+--------------------
 Signal Ranker ML model for the Stock Scanner pipeline.
 
 LOGICAL FLOW:
 ─────────────
-This model answers ONE question:
-"Given this setup, what is the probability that price reaches
-the LinReg mean within 15 days?"
+This model takes every stock that passed the scanner waterfall
+and assigns it a probability score: how likely is this setup
+to succeed (price reaching the LinReg mean within N days)?
 
-It is a BINARY CLASSIFIER used as a PROBABILITY ESTIMATOR:
-- Output is a float between 0 and 1
-- Higher score = higher probability of mean reversion
-- Used to RANK candidates, not just classify them
+It is the final ranking layer before the dashboard display.
 
-WHY THIS IS MORE USEFUL THAN PURE CLASSIFICATION:
-   A binary "yes/no" output would give us:
-   "AAPL: yes, TSLA: yes, NVDA: yes"
-   We can't prioritise from that.
+TRAINING FLOW:
+1. Load labelled scanner hits from labeller.py
+2. Build full feature matrix from features.py
+   (includes volume features + vol_clf_score + sentiment + market)
+3. Handle class imbalance
+4. Train XGBoost with cross-validation
+5. Evaluate (Precision + AUC-ROC)
+6. Save model to disk
+7. Write metrics to SQLite
 
-   A probability output gives us:
-   "AAPL: 0.81, NVDA: 0.73, TSLA: 0.54"
-   We know exactly which to focus on first.
+INFERENCE FLOW (daily):
+1. Scanner waterfall returns N candidates
+2. For each candidate, compute full feature vector
+3. Run predict_proba() → probability of success
+4. Sort candidates by probability descending
+5. Assign ml_rank (1 = highest probability)
+6. Write ranked results to SQLite scan_results table
+7. Dashboard reads and displays
 
-MODEL: XGBoost Classifier with predict_proba()
-   Same model family as Volume Classifier for consistency.
-   The probability calibration is naturally reasonable for XGBoost
-   without additional calibration steps.
-
-KEY DIFFERENCE FROM VOLUME CLASSIFIER:
-   The Signal Ranker uses MORE features:
-   - All volume features PLUS the Volume Classifier score
-   - Sentiment (Put/Call, Short Interest)
-   - Market and sector context
-   - RSI momentum
-   The Volume Classifier feeds INTO the Signal Ranker as a feature.
-   This is a two-stage ML pipeline (stacking pattern).
-
-TRAINING SCHEDULE:
-   Same as Volume Classifier — every 7 days.
-   Trained AFTER Volume Classifier so vol_classifier scores
-   are available as features.
+RELATIONSHIP TO VOLUME CLASSIFIER:
+The Signal Ranker uses the Volume Classifier's output score
+(vol_clf_score) as ONE of its features. This creates a
+two-stage model pipeline:
+   Volume Classifier → scores volume pattern quality
+   Signal Ranker     → combines all features including vol score
+                       to rank overall setup probability
 """
 
+import pickle
 import numpy as np
 import pandas as pd
-import pickle
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, Tuple
 import yaml
 
 from xgboost import XGBClassifier
-from sklearn.model_selection import StratifiedKFold, cross_validate
+from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import precision_score, roc_auc_score
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 
+from ml.features import (
+    SIGNAL_FEATURE_COLS,
+    compute_signal_features,
+)
 from utils.logging import get_ml_logger
 from utils.error_handler import MLError
 
@@ -70,50 +72,53 @@ def _load_config() -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
-config    = _load_config()
-ML_CFG    = config["ml"]
-MODEL_DIR = Path("models")
-MODEL_DIR.mkdir(exist_ok=True)
+config = _load_config()
+ML_CFG = config["ml"]
 
-MODEL_PATH  = MODEL_DIR / "signal_ranker.pkl"
-MIN_SAMPLES = ML_CFG["min_training_samples"]    # 500
-HIGH_PROB   = ML_CFG["high_probability_threshold"]  # 0.70
+MIN_SAMPLES  = ML_CFG["min_training_samples"]
+HIGH_PROB_THRESHOLD = ML_CFG["high_probability_threshold"]   # 0.70
+MODEL_DIR    = Path(__file__).resolve().parents[1] / "models"
+MODEL_PATH   = MODEL_DIR / "signal_ranker.pkl"
 
 
 # =============================================================================
-# MODEL DEFINITION
+# MODEL BUILDER
 # =============================================================================
 
-def _build_model(n_positive: int, n_negative: int) -> XGBClassifier:
+def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     """
-    Build Signal Ranker XGBoost model.
+    Build the sklearn Pipeline for the Signal Ranker.
 
-    Slightly deeper than Volume Classifier (max_depth=5 vs 4)
-    because it has more features and more complex interactions
-    to learn (market context, sentiment, momentum all combined).
+    Slightly deeper than the Volume Classifier (max_depth=5)
+    because the Signal Ranker has more features and more complex
+    interactions to learn (sentiment × market × volume).
 
     Args:
-        n_positive: Positive sample count for class weighting
-        n_negative: Negative sample count for class weighting
+        scale_pos_weight: Ratio of negative to positive samples
 
     Returns:
-        Configured XGBClassifier
+        sklearn Pipeline
     """
-    scale_pos_weight = n_negative / n_positive if n_positive > 0 else 1.0
-
-    return XGBClassifier(
-        n_estimators      = 300,        # More trees than vol classifier
-        max_depth         = 5,          # Slightly deeper — more features
-        learning_rate     = 0.05,
-        subsample         = 0.8,
-        colsample_bytree  = 0.8,
-        min_child_weight  = 5,          # Prevent overfitting on small groups
-        scale_pos_weight  = scale_pos_weight,
-        use_label_encoder = False,
-        eval_metric       = "logloss",
-        random_state      = 42,
-        n_jobs            = -1,
+    model = XGBClassifier(
+        n_estimators       = 400,
+        max_depth          = 5,
+        learning_rate      = 0.05,
+        subsample          = 0.8,
+        colsample_bytree   = 0.8,
+        min_child_weight   = 5,    # Prevents overfitting on small groups
+        scale_pos_weight   = scale_pos_weight,
+        use_label_encoder  = False,
+        eval_metric        = "logloss",
+        random_state       = 42,
+        n_jobs             = -1,
     )
+
+    pipeline = Pipeline([
+        ("imputer", SimpleImputer(strategy="median")),
+        ("model",   model),
+    ])
+
+    return pipeline
 
 
 # =============================================================================
@@ -121,305 +126,270 @@ def _build_model(n_positive: int, n_negative: int) -> XGBClassifier:
 # =============================================================================
 
 def train_signal_ranker(
-    X : pd.DataFrame,
-    y : pd.Series,
-) -> Tuple[XGBClassifier, float, float]:
+    feature_matrix: pd.DataFrame,
+) -> Tuple[Pipeline, dict]:
     """
-    Train the Signal Ranker on labelled scanner hit data.
+    Train the Signal Ranker on the labelled feature matrix.
 
     FLOW:
     1. Validate minimum sample count
-    2. Compute class balance
-    3. Build model
-    4. 5-fold stratified cross-validation for honest evaluation
-    5. Train final model on all data
-    6. Log feature importances (useful for understanding the model)
-    7. Save model to disk
-    8. Return model + metrics
+    2. Separate features (X) from labels (y)
+    3. Drop identifier columns (ticker, date, direction)
+       — these are not features, just row identifiers
+    4. Compute class imbalance ratio
+    5. Build pipeline
+    6. 5-fold stratified cross-validation
+    7. Train final model on all data
+    8. Compute final metrics
+    9. Save model to disk
 
     Args:
-        X: Feature matrix from build_signal_ranker_matrix()
-        y: Labels (1 = price reached LinReg in 15 days, 0 = didn't)
+        feature_matrix: Output of build_signal_feature_matrix()
+                        Must contain SIGNAL_FEATURE_COLS + 'label'
 
     Returns:
-        Tuple of (trained model, precision, auc_roc)
+        Tuple of (trained Pipeline, metrics dict)
     """
-    if len(X) < MIN_SAMPLES:
+    logger.info("=" * 60)
+    logger.info("SIGNAL RANKER TRAINING STARTING")
+    logger.info("=" * 60)
+
+    # ── Step 1: Validate sample count ────────────────────────────────────────
+    if len(feature_matrix) < MIN_SAMPLES:
         raise MLError(
-            f"Insufficient samples for Signal Ranker: "
-            f"{len(X)} < {MIN_SAMPLES} minimum"
+            f"Insufficient training samples: {len(feature_matrix)} "
+            f"(need {MIN_SAMPLES})"
         )
 
-    logger.info(
-        f"Training Signal Ranker | "
-        f"Samples: {len(X)} | "
-        f"Features: {X.shape[1]} | "
-        f"Positive rate: {y.mean():.2%}"
-    )
-
-    n_positive = int(y.sum())
-    n_negative = len(y) - n_positive
-
-    model = _build_model(n_positive, n_negative)
-
-    # ── 5-fold stratified cross-validation ───────────────────────────────────
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-
-    cv_results = cross_validate(
-        model, X, y,
-        cv      = cv,
-        scoring = ["precision", "roc_auc"],
-    )
-
-    precision = float(np.mean(cv_results["test_precision"]))
-    auc_roc   = float(np.mean(cv_results["test_roc_auc"]))
+    # ── Step 2 & 3: Separate features and labels ──────────────────────────────
+    # Drop identifier columns — they are not predictive features
+    drop_cols = ["ticker", "date", "direction", "label"]
+    X = feature_matrix[SIGNAL_FEATURE_COLS].copy()
+    y = feature_matrix["label"].values
 
     logger.info(
-        f"Signal Ranker CV results | "
+        f"Training data | Samples: {len(X)} | "
+        f"Features: {len(SIGNAL_FEATURE_COLS)} | "
+        f"Positive: {y.sum()} | Negative: {(y==0).sum()}"
+    )
+
+    # ── Step 4: Class imbalance ratio ─────────────────────────────────────────
+    n_negative       = (y == 0).sum()
+    n_positive       = (y == 1).sum()
+    scale_pos_weight = n_negative / n_positive if n_positive > 0 else 1.0
+
+    logger.info(f"Class balance | scale_pos_weight: {scale_pos_weight:.2f}")
+
+    # ── Step 5: Build pipeline ────────────────────────────────────────────────
+    pipeline = _build_pipeline(scale_pos_weight)
+
+    # ── Step 6: Cross-validation ──────────────────────────────────────────────
+    cv         = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    cv_auc_roc = cross_val_score(
+        pipeline, X, y, cv=cv, scoring="roc_auc", n_jobs=-1
+    )
+
+    logger.info(
+        f"Cross-validation AUC-ROC | "
+        f"Mean: {cv_auc_roc.mean():.4f} | "
+        f"Std: {cv_auc_roc.std():.4f}"
+    )
+
+    # ── Step 7: Train final model ─────────────────────────────────────────────
+    logger.info("Training final model on full dataset...")
+    pipeline.fit(X, y)
+
+    # ── Step 8: Final metrics ─────────────────────────────────────────────────
+    y_pred_proba = pipeline.predict_proba(X)[:, 1]
+    y_pred       = (y_pred_proba >= 0.5).astype(int)
+
+    precision = precision_score(y, y_pred, zero_division=0)
+    auc_roc   = roc_auc_score(y, y_pred_proba)
+
+    metrics = {
+        "model_name"     : "signal_ranker",
+        "train_date"     : datetime.today().strftime("%Y-%m-%d"),
+        "precision_score": round(precision, 4),
+        "auc_roc_score"  : round(auc_roc, 4),
+        "cv_auc_mean"    : round(cv_auc_roc.mean(), 4),
+        "cv_auc_std"     : round(cv_auc_roc.std(), 4),
+        "n_samples"      : len(X),
+        "n_features"     : len(SIGNAL_FEATURE_COLS),
+    }
+
+    logger.info(
+        f"Final metrics | "
         f"Precision: {precision:.4f} | "
         f"AUC-ROC: {auc_roc:.4f}"
     )
 
-    # ── Train final model on ALL data ─────────────────────────────────────────
-    model.fit(X, y)
-
-    # ── Log top feature importances ───────────────────────────────────────────
-    # This tells us which features the model finds most predictive
-    importances = pd.Series(
-        model.feature_importances_,
-        index=X.columns
-    ).sort_values(ascending=False)
-
-    logger.info(
-        f"Top 5 features:\n"
-        f"{importances.head(5).to_string()}"
-    )
-
-    # ── Save model ────────────────────────────────────────────────────────────
+    # ── Step 9: Save model to disk ────────────────────────────────────────────
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
     with open(MODEL_PATH, "wb") as f:
-        pickle.dump(model, f)
+        pickle.dump(pipeline, f)
 
     logger.info(f"Signal Ranker saved to {MODEL_PATH}")
-    return model, precision, auc_roc
+    logger.info("=" * 60)
+    logger.info("SIGNAL RANKER TRAINING COMPLETE")
+    logger.info("=" * 60)
+
+    return pipeline, metrics
 
 
 # =============================================================================
 # INFERENCE
 # =============================================================================
 
-def load_signal_ranker() -> Optional[XGBClassifier]:
+def load_signal_ranker() -> Optional[Pipeline]:
     """
-    Load trained Signal Ranker from disk.
+    Load the trained Signal Ranker from disk.
 
     Returns:
-        Loaded model or None if not yet trained
+        Trained Pipeline or None if model not found
     """
     if not MODEL_PATH.exists():
         logger.warning(
-            "Signal Ranker model not found — "
-            "will train on first run with sufficient data"
+            f"Signal Ranker model not found at {MODEL_PATH}. "
+            f"Train the model first."
         )
         return None
 
     with open(MODEL_PATH, "rb") as f:
-        model = pickle.load(f)
+        pipeline = pickle.load(f)
 
-    logger.info("Signal Ranker loaded from disk")
-    return model
-
-
-def predict_signal_ranker(
-    model : XGBClassifier,
-    X     : pd.DataFrame,
-) -> np.ndarray:
-    """
-    Generate probability scores for scanner candidates.
-
-    Returns probability of price reaching LinReg mean within 15 days.
-    This IS the ML Score shown on the Streamlit dashboard.
-
-    Args:
-        model: Trained Signal Ranker
-        X    : Inference feature matrix
-
-    Returns:
-        Array of probabilities (0-1) — one per candidate
-    """
-    probabilities = model.predict_proba(X)[:, 1]
-    return probabilities
+    logger.info(f"Signal Ranker loaded from {MODEL_PATH}")
+    return pipeline
 
 
-def should_retrain(last_train_date: Optional[str]) -> bool:
-    """
-    Check if Signal Ranker needs retraining.
-    Same logic as Volume Classifier.
-
-    Args:
-        last_train_date: Date of last training or None
-
-    Returns:
-        True if retraining needed
-    """
-    retrain_days = ML_CFG["model_retrain_days"]
-
-    if last_train_date is None:
-        return True
-
-    last_date = datetime.strptime(last_train_date, "%Y-%m-%d")
-    days_ago  = (datetime.today() - last_date).days
-
-    needs_retrain = days_ago >= retrain_days
-    logger.info(
-        f"Signal Ranker: trained {days_ago} days ago | "
-        f"Retrain: {needs_retrain}"
-    )
-    return needs_retrain
-
-
-# =============================================================================
-# RESULTS RANKER
-# Takes probability scores and attaches them to the candidates DataFrame
-# Re-ranks everything by ML score descending
-# =============================================================================
-
-def rank_candidates(
-    candidates_df : pd.DataFrame,
-    scores        : np.ndarray,
-    tickers       : list[str],
-) -> pd.DataFrame:
-    """
-    Attach ML scores to candidates and re-rank by probability.
-
-    FLOW:
-    1. Map scores to tickers
-    2. Attach ml_score to each candidate row
-    3. Sort by ml_score descending within each direction
-    4. Re-assign ml_rank (1 = highest probability)
-    5. Flag high probability candidates (score >= threshold)
-
-    Args:
-        candidates_df: Scanner results DataFrame
-        scores       : Probability array from predict_signal_ranker()
-        tickers      : List of tickers corresponding to scores
-
-    Returns:
-        Updated candidates DataFrame with ml_score and ml_rank
-    """
-    if len(scores) != len(tickers):
-        logger.error(
-            f"Score/ticker mismatch: "
-            f"{len(scores)} scores vs {len(tickers)} tickers"
-        )
-        return candidates_df
-
-    # ── Build score lookup ────────────────────────────────────────────────────
-    score_map = dict(zip(tickers, scores))
-
-    # ── Attach scores ─────────────────────────────────────────────────────────
-    candidates_df = candidates_df.copy()
-    candidates_df["ml_score"] = candidates_df["ticker"].map(score_map).fillna(0.0)
-    candidates_df["ml_score"] = candidates_df["ml_score"].round(4)
-
-    # ── Flag high probability setups ──────────────────────────────────────────
-    candidates_df["high_probability"] = candidates_df["ml_score"] >= HIGH_PROB
-
-    # ── Sort and re-rank within each direction ────────────────────────────────
-    ranked_parts = []
-
-    for direction in ["long", "short"]:
-        part = candidates_df[candidates_df["direction"] == direction].copy()
-        part = part.sort_values("ml_score", ascending=False).reset_index(drop=True)
-        part["ml_rank"] = part.index + 1
-        ranked_parts.append(part)
-
-    if not ranked_parts:
-        return candidates_df
-
-    result = pd.concat(ranked_parts, ignore_index=True)
-
-    high_prob_count = result["high_probability"].sum()
-    logger.info(
-        f"Candidates ranked | "
-        f"Total: {len(result)} | "
-        f"High probability (≥{HIGH_PROB}): {high_prob_count}"
-    )
-
-    return result
-
-
-# =============================================================================
-# MAIN ENTRY POINT
-# Called by Airflow DAG Task 8 (after Volume Classifier)
-# =============================================================================
-
-def run_signal_ranker_pipeline(
-    X              : pd.DataFrame,
-    y              : pd.Series,
-    last_train_date: Optional[str],
+def score_candidates(
     candidates_df  : pd.DataFrame,
-    inference_X    : pd.DataFrame,
+    prices_df      : pd.DataFrame,
+    indicators_df  : pd.DataFrame,
+    sentiment_df   : pd.DataFrame,
+    market_ind_df  : pd.DataFrame,
+    vol_scores     : dict,
+    signal_date    : str,
+    pipeline       : Optional[Pipeline] = None,
 ) -> pd.DataFrame:
     """
-    Full Signal Ranker pipeline: retrain if needed + rank candidates.
+    Score all scanner candidates and rank them by probability.
 
     FLOW:
-    1. Retrain if schedule requires it
-    2. Load model
-    3. Score today's candidates
-    4. Rank by score
-    5. Return ranked candidates ready for database write
+    1. Load model if not provided
+    2. For each candidate (ticker + direction):
+       a. Compute full signal feature vector
+       b. Run predict_proba() → success probability
+       c. Tag as high/normal probability
+    3. Sort by ml_score descending
+    4. Assign ml_rank (1 = best)
+    5. Return updated candidates DataFrame
+
+    If model is not available yet (first run before training):
+    - All candidates get ml_score = 0.5 (neutral)
+    - Ranked by SD position instead
 
     Args:
-        X              : Training features
-        y              : Training labels
-        last_train_date: Last training date from SQLite
-        candidates_df  : Today's scanner candidates
-        inference_X    : Feature matrix for today's candidates
+        candidates_df : Output of run_scanner() — unranked candidates
+        prices_df     : Full OHLCV data
+        indicators_df : Full indicator results
+        sentiment_df  : Sentiment data
+        market_ind_df : Indicator results for SPY, QQQ, DIA
+        vol_scores    : Output of score_volume_signals()
+        signal_date   : Today's date YYYY-MM-DD
+        pipeline      : Optional pre-loaded model
 
     Returns:
-        Ranked candidates DataFrame with ml_score and ml_rank filled in
+        candidates_df with ml_score and ml_rank columns filled
     """
-    from data.database import write_model_metrics
+    if pipeline is None:
+        pipeline = load_signal_ranker()
 
-    today     = datetime.today().strftime("%Y-%m-%d")
-    retrained = False
-
-    # ── Step 1: Retrain if needed ─────────────────────────────────────────────
-    if should_retrain(last_train_date) and len(X) >= MIN_SAMPLES:
-        try:
-            model, precision, auc_roc = train_signal_ranker(X, y)
-            write_model_metrics(
-                "signal_ranker", today,
-                precision, auc_roc, len(X)
-            )
-            retrained = True
-            logger.info(f"Signal Ranker retrained | Precision: {precision:.4f}")
-        except MLError as e:
-            logger.warning(f"Signal Ranker training failed: {e}")
-
-    # ── Step 2: Load model ────────────────────────────────────────────────────
-    model = load_signal_ranker()
-
-    # ── Step 3: Score and rank candidates ────────────────────────────────────
-    if model is None or inference_X.empty or candidates_df.empty:
+    if pipeline is None:
         logger.warning(
-            "Signal Ranker: Cannot score — "
-            "model not available or no candidates"
+            "Signal Ranker not available — "
+            "using SD position as preliminary ranking"
         )
+        # Fallback: rank by how close price is to the mean
+        candidates_df = candidates_df.copy()
+        candidates_df["ml_score"] = 0.5
+        candidates_df = candidates_df.sort_values(
+            "sd_position",
+            key=lambda x: x.abs(),
+            ascending=True
+        )
+        candidates_df["ml_rank"] = range(1, len(candidates_df) + 1)
         return candidates_df
 
-    # Drop ticker column before inference
-    feature_cols = [c for c in inference_X.columns if c != "ticker"]
-    tickers      = inference_X["ticker"].tolist()
-    scores       = predict_signal_ranker(model, inference_X[feature_cols])
+    results = []
 
-    # ── Step 4: Attach scores and rank ────────────────────────────────────────
-    ranked = rank_candidates(candidates_df, scores, tickers)
+    for _, row in candidates_df.iterrows():
+        ticker    = row["ticker"]
+        direction = row["direction"]
 
+        # Get volume classifier score for this ticker
+        vol_score = vol_scores.get(ticker, 0.5)
+
+        # Get price data for this ticker
+        px = prices_df[
+            prices_df["ticker"] == ticker
+        ].sort_values("date")
+
+        try:
+            features = compute_signal_features(
+                ticker        = ticker,
+                signal_date   = signal_date,
+                direction     = direction,
+                prices_df     = px,
+                indicators_df = indicators_df,
+                sentiment_df  = sentiment_df,
+                market_ind_df = market_ind_df,
+                vol_clf_score = vol_score,
+            )
+
+            if features is None:
+                ml_score = 0.5
+            else:
+                # Build single-row feature DataFrame
+                X        = pd.DataFrame([features])[SIGNAL_FEATURE_COLS]
+                ml_score = float(pipeline.predict_proba(X)[0][1])
+
+        except Exception as e:
+            logger.warning(f"{ticker} | Signal scoring failed: {e}")
+            ml_score = 0.5
+
+        result_row = row.to_dict()
+        result_row["ml_score"] = round(ml_score, 4)
+        results.append(result_row)
+
+    result_df = pd.DataFrame(results)
+
+    # ── Sort by ml_score descending within each direction ─────────────────────
+    longs  = result_df[result_df["direction"] == "long"].sort_values(
+        "ml_score", ascending=False
+    ).reset_index(drop=True)
+
+    shorts = result_df[result_df["direction"] == "short"].sort_values(
+        "ml_score", ascending=False
+    ).reset_index(drop=True)
+
+    # ── Assign rank within each direction ────────────────────────────────────
+    longs["ml_rank"]  = longs.index + 1
+    shorts["ml_rank"] = shorts.index + 1
+
+    final = pd.concat([longs, shorts], ignore_index=True)
+
+    # ── Log high probability candidates ──────────────────────────────────────
+    high_prob = final[final["ml_score"] >= HIGH_PROB_THRESHOLD]
     logger.info(
-        f"Signal Ranker pipeline complete | "
-        f"Retrained: {retrained} | "
-        f"Candidates ranked: {len(ranked)}"
+        f"Signal Ranker scoring complete | "
+        f"Total candidates: {len(final)} | "
+        f"High probability (≥{HIGH_PROB_THRESHOLD}): {len(high_prob)}"
     )
 
-    return ranked
+    if not high_prob.empty:
+        logger.info(
+            f"Top candidates:\n"
+            f"{high_prob[['ticker','direction','ml_score','ml_rank']].to_string(index=False)}"
+        )
+
+    return final

@@ -5,46 +5,44 @@ Programmatic label generation for both ML models.
 
 LOGICAL FLOW:
 ─────────────
-We never manually label data. Instead we let historical price
-action tell us whether a setup succeeded or failed.
+We never manually label data. Instead we let historical
+price action tell us the answer by looking FORWARD in time.
 
-THE LABELLING LOGIC:
+LABEL 1 — Volume Classifier labels:
+   For every historical instance where price was in the
+   accumulation/distribution zone (between ±1 and ±3 SD),
+   we look forward N days and ask:
 
-For LONG setups:
-   At time T, price is between -1 and -3 SD below LinReg.
-   We look forward 15 days from T.
-   If price CLOSES ABOVE the LinReg line at any point in those 15 days:
-   → Label = 1 (success — price mean reverted as expected)
-   If price never reaches the LinReg line within 15 days:
-   → Label = 0 (failure — setup didn't play out)
+   "Did price reverse toward the LinReg mean?"
 
-For SHORT setups:
-   At time T, price is between +1 and +3 SD above LinReg.
-   We look forward 15 days from T.
-   If price CLOSES BELOW the LinReg line at any point in those 15 days:
-   → Label = 1 (success)
-   If price never drops to LinReg within 15 days:
-   → Label = 0 (failure)
+   If price was below LinReg (potential long) and moved UP
+   toward the mean → label = 1 (true accumulation)
+   If price continued DOWN away from the mean → label = 0
 
-WHY 15 DAYS:
-   15 trading days = 3 calendar weeks.
-   Long enough for a genuine mean reversion to play out.
-   Short enough to avoid labelling setups that "eventually" worked
-   but were actually failures in practice (too slow = not useful).
-   Changed from 10 to give setups more room to develop.
+   If price was above LinReg (potential short) and moved DOWN
+   toward the mean → label = 1 (true distribution)
+   If price continued UP away from the mean → label = 0
 
-VOLUME CLASSIFIER LABELS:
-   Same logic applied specifically to volume patterns.
-   We label a volume pattern as ACCUMULATION if the stock
-   rallied to the LinReg mean within 15 days.
-   We label it DISTRIBUTION if the stock dropped to LinReg
-   from above within 15 days.
+LABEL 2 — Signal Ranker labels:
+   For every historical scanner hit (stock that met ALL
+   scanner criteria on a given day), we look forward N days
+   and ask:
 
-DATA REQUIREMENT:
-   We need at least 200 candles of history for LinReg calculation
-   PLUS 15 forward days for labelling.
-   So minimum data per ticker = 215 candles.
-   With 365 days of history we have plenty.
+   "Did price reach the LinReg mean within N days?"
+
+   Yes → label = 1 (successful setup)
+   No  → label = 0 (failed setup)
+
+   This is what the Signal Ranker learns to predict —
+   given all the features of a setup, what is the
+   probability it succeeds?
+
+WHY PROGRAMMATIC LABELLING WORKS:
+   We have years of daily data for ~1,500 stocks.
+   Each stock has hundreds of trading days.
+   Many of those days had price in the SD zones.
+   That gives us tens of thousands of labelled examples
+   without any manual annotation.
 """
 
 import pandas as pd
@@ -71,394 +69,235 @@ def _load_config() -> dict:
 config = _load_config()
 ML_CFG = config["ml"]
 
-FORWARD_DAYS  = ML_CFG["label_forward_days"]    # 15 days
-LINREG_PERIOD = config["linreg"]["period"]       # 200 candles
-LONG_SD_MIN   = config["scanner"]["long_entry_sd_min"]   # -1
-LONG_SD_MAX   = config["scanner"]["long_entry_sd_max"]   # -3
-SHORT_SD_MIN  = config["scanner"]["short_entry_sd_min"]  # +1
-SHORT_SD_MAX  = config["scanner"]["short_entry_sd_max"]  # +3
+FORWARD_DAYS    = ML_CFG["label_forward_days"]   # 26 days forward to check
+SCANNER_CFG     = config["scanner"]
+LONG_SD_MIN     = SCANNER_CFG["long_entry_sd_min"]   # -1
+LONG_SD_MAX     = SCANNER_CFG["long_entry_sd_max"]   # -3
+SHORT_SD_MIN    = SCANNER_CFG["short_entry_sd_min"]  # +1
+SHORT_SD_MAX    = SCANNER_CFG["short_entry_sd_max"]  # +3
 
 
 # =============================================================================
-# LINREG HELPER
-# We recompute LinReg values inline here for labelling purposes.
-# This avoids importing the full engine and keeps the labeller self-contained.
+# VOLUME CLASSIFIER LABELLER
+# Labels historical volume patterns as true accumulation or distribution
 # =============================================================================
 
-def _compute_linreg_value(closes: np.ndarray) -> float:
-    """
-    Compute the LinReg value for the last candle in a price series.
-    Used to check if forward prices crossed the LinReg line.
-
-    Args:
-        closes: numpy array of closing prices
-
-    Returns:
-        LinReg value at the last candle
-    """
-    n           = len(closes)
-    x           = np.arange(n)
-    slope, intercept = np.polyfit(x, closes, 1)
-    return slope * (n - 1) + intercept
-
-
-# =============================================================================
-# CORE LABELLING FUNCTION — PER TICKER
-# =============================================================================
-
-@graceful(default_return=pd.DataFrame(), exceptions=(Exception,), log_level="warning")
-def label_ticker(
-    ticker    : str,
-    df        : pd.DataFrame,
-    direction : str = "long",
+def label_volume_patterns(
+    prices_df    : pd.DataFrame,
+    indicators_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Generate historical labels for a single ticker.
+    Generate labels for the Volume Classifier.
 
     FLOW:
-    1. Ensure enough data exists (LINREG_PERIOD + FORWARD_DAYS minimum)
-    2. Slide a window across all valid historical candles
-    3. At each candle T:
-       a. Compute LinReg value using last 200 closes up to T
-       b. Compute SD position of price at T
-       c. Check if price is in the entry zone (long or short)
-       d. If yes → look forward 15 days
-       e. Check if price crossed the LinReg line in those 15 days
-       f. Label = 1 if crossed, 0 if not
-    4. Return DataFrame of all labelled observations
+    1. For each ticker, get its full price and indicator history
+    2. Find all dates where price was in the entry zone (±1 to ±3 SD)
+    3. For each such date, look forward FORWARD_DAYS candles
+    4. Check if price moved toward the LinReg mean
+    5. Assign label 1 (moved toward mean) or 0 (moved away)
+    6. Return DataFrame of (ticker, date, label, direction)
+
+    WHAT "MOVED TOWARD MEAN" MEANS:
+    For a long zone (price below LinReg):
+    - We measure price distance from LinReg on entry day
+    - We measure price distance from LinReg N days later
+    - If distance DECREASED → price moved toward mean → label = 1
+
+    For a short zone (price above LinReg):
+    - Same logic but price should move DOWN toward mean
+    - If distance DECREASED → label = 1
 
     Args:
-        ticker   : Ticker symbol
-        df       : Full OHLCV DataFrame sorted date ascending
-        direction: 'long' or 'short'
+        prices_df    : Full OHLCV DataFrame with columns
+                       [ticker, date, open, high, low, close, volume]
+        indicators_df: Full indicator results DataFrame with columns
+                       [ticker, date, linreg_value, price_sd_position, ...]
 
     Returns:
-        DataFrame with columns:
-        [ticker, date, direction, sd_position, volume_signal, label]
-        One row per valid historical setup found
+        DataFrame with columns [ticker, date, direction, label]
     """
-    min_required = LINREG_PERIOD + FORWARD_DAYS
-    if len(df) < min_required:
-        logger.debug(
-            f"{ticker} | Insufficient data for labelling: "
-            f"{len(df)} rows, need {min_required}"
-        )
-        return pd.DataFrame()
+    logger.info("Generating Volume Classifier labels...")
 
-    closes  = df["close"].values
-    dates   = df["date"].values
-    n       = len(closes)
-    labels  = []
+    all_labels = []
 
-    # ── Slide window across all valid positions ───────────────────────────────
-    # Start at LINREG_PERIOD (need 200 candles to compute LinReg)
-    # Stop at n - FORWARD_DAYS (need 15 forward candles for labelling)
-    for t in range(LINREG_PERIOD, n - FORWARD_DAYS):
+    for ticker in indicators_df["ticker"].unique():
 
-        # ── Step 1: Compute LinReg value at time T ────────────────────────────
-        window_closes  = closes[t - LINREG_PERIOD : t]
-        linreg_value   = _compute_linreg_value(window_closes)
+        # ── Get this ticker's indicator and price history ──────────────────
+        ind = indicators_df[indicators_df["ticker"] == ticker].sort_values("date")
+        px  = prices_df[prices_df["ticker"] == ticker].sort_values("date")
 
-        # ── Step 2: Compute standard deviation of residuals ───────────────────
-        x              = np.arange(LINREG_PERIOD)
-        slope, intcpt  = np.polyfit(x, window_closes, 1)
-        fitted         = slope * x + intcpt
-        residuals      = window_closes - fitted
-        std_dev        = np.std(residuals, ddof=1)
-
-        if std_dev == 0:
+        if len(ind) < FORWARD_DAYS + 1:
             continue
 
-        # ── Step 3: Compute SD position at time T ─────────────────────────────
-        current_close  = closes[t]
-        sd_position    = (current_close - linreg_value) / std_dev
+        # ── Merge price and indicator data on date ────────────────────────
+        merged = pd.merge(
+            ind[["date", "linreg_value", "price_sd_position"]],
+            px[["date", "close"]],
+            on="date",
+            how="inner"
+        ).sort_values("date").reset_index(drop=True)
 
-        # ── Step 4: Check if price is in the entry zone ───────────────────────
-        if direction == "long":
-            # Long zone: between -1 and -3 SD (price below LinReg)
-            in_zone = LONG_SD_MAX <= sd_position <= LONG_SD_MIN
+        if len(merged) < FORWARD_DAYS + 1:
+            continue
 
-        else:  # short
-            # Short zone: between +1 and +3 SD (price above LinReg)
-            in_zone = SHORT_SD_MIN <= sd_position <= SHORT_SD_MAX
+        # ── Find all dates where price was in a valid entry zone ──────────
+        for i in range(len(merged) - FORWARD_DAYS):
+            row        = merged.iloc[i]
+            sd_pos     = row["price_sd_position"]
+            linreg_val = row["linreg_value"]
+            close      = row["close"]
+            date       = row["date"]
 
-        if not in_zone:
-            continue   # Price not in entry zone at time T — skip
+            # Determine if this is a long or short zone
+            in_long_zone  = LONG_SD_MAX  <= sd_pos <= LONG_SD_MIN   # -3 to -1
+            in_short_zone = SHORT_SD_MIN <= sd_pos <= SHORT_SD_MAX  # +1 to +3
 
-        # ── Step 5: Look forward 15 days ──────────────────────────────────────
-        forward_closes = closes[t + 1 : t + 1 + FORWARD_DAYS]
+            if not in_long_zone and not in_short_zone:
+                continue
 
-        if direction == "long":
-            # Success: price closes ABOVE LinReg at any point in 15 days
-            # We use the LinReg value at time T as the target
-            # (slightly conservative — LinReg will have moved forward
-            #  but this keeps labelling consistent and leakage-free)
-            label = int(np.any(forward_closes >= linreg_value))
+            direction = "long" if in_long_zone else "short"
 
-        else:  # short
-            # Success: price closes BELOW LinReg at any point in 15 days
-            label = int(np.any(forward_closes <= linreg_value))
+            # ── Measure distance from LinReg on entry day ─────────────────
+            entry_distance = abs(close - linreg_val)
 
-        # ── Step 6: Store the labelled observation ────────────────────────────
-        labels.append({
-            "ticker"     : ticker,
-            "date"       : dates[t],
-            "direction"  : direction,
-            "sd_position": round(sd_position, 4),
-            "label"      : label,
-        })
+            # ── Look forward FORWARD_DAYS candles ─────────────────────────
+            future_rows    = merged.iloc[i + 1 : i + FORWARD_DAYS + 1]
+            future_closes  = future_rows["close"].values
+            future_linregs = future_rows["linreg_value"].values
 
-    if not labels:
-        logger.debug(f"{ticker} | No valid setups found for labelling")
-        return pd.DataFrame()
+            # ── Measure minimum distance from LinReg in forward window ─────
+            # Min distance = best case price got closest to mean
+            future_distances = np.abs(future_closes - future_linregs)
+            min_future_dist  = future_distances.min()
 
-    result = pd.DataFrame(labels)
+            # ── Label: did price move closer to LinReg? ───────────────────
+            # Label 1 = price moved toward mean (true accumulation/distribution)
+            # Label 0 = price moved further away (false signal)
+            label = 1 if min_future_dist < entry_distance else 0
 
-    success_rate = result["label"].mean() * 100
-    logger.debug(
-        f"{ticker} | {direction.upper()} | "
-        f"Labelled: {len(result)} | "
-        f"Success rate: {success_rate:.1f}%"
+            all_labels.append({
+                "ticker"    : ticker,
+                "date"      : date,
+                "direction" : direction,
+                "label"     : label,
+            })
+
+    result = pd.DataFrame(all_labels)
+
+    if result.empty:
+        logger.warning("Volume Classifier labeller: No labels generated")
+        return result
+
+    # Log label balance
+    pos = (result["label"] == 1).sum()
+    neg = (result["label"] == 0).sum()
+    logger.info(
+        f"Volume Classifier labels generated | "
+        f"Total: {len(result)} | "
+        f"Positive (1): {pos} ({pos/len(result)*100:.1f}%) | "
+        f"Negative (0): {neg} ({neg/len(result)*100:.1f}%)"
     )
 
     return result
 
 
 # =============================================================================
-# VOLUME PATTERN LABELLER
-# Specifically for the Volume Classifier model.
-# Labels each historical volume pattern as accumulation or distribution
-# based on whether price subsequently mean reverted.
+# SIGNAL RANKER LABELLER
+# Labels historical scanner hits as successful or failed setups
 # =============================================================================
 
-@graceful(default_return=pd.DataFrame(), exceptions=(Exception,), log_level="warning")
-def label_volume_patterns(
-    ticker : str,
-    df     : pd.DataFrame,
+def label_scanner_hits(
+    prices_df    : pd.DataFrame,
+    indicators_df: pd.DataFrame,
+    scan_hits_df : pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Generate volume pattern labels for the Volume Classifier.
-
-    LOGIC:
-    At each candle T where price is in either the long or short zone:
-    1. Extract volume features over the lookback window
-    2. Look forward 15 days
-    3. If price reached LinReg mean → label = 'accumulation' (for longs)
-       or 'distribution' (for shorts)
-    4. Otherwise → label = 'neutral'
-
-    This gives the Volume Classifier a ground truth to learn from:
-    "Which volume patterns actually preceded successful mean reversions?"
-
-    Args:
-        ticker: Ticker symbol
-        df    : Full OHLCV DataFrame sorted date ascending
-
-    Returns:
-        DataFrame with volume features and labels
-        [ticker, date, direction, vol_slope, vol_ratio,
-         green_red_ratio, label]
-    """
-    from engines.volume import (
-        _is_volume_declining_on_down_days,
-        _is_shakeout_present,
-        _is_volume_expanding_on_green_days,
-        _is_volume_dryup_present,
-        _is_volume_rising_on_up_days,
-        _is_volume_expanding_on_red_days,
-    )
-
-    AVG_VOL_PERIOD = config["volume"]["avg_volume_period"]   # 20
-    LOOKBACK       = config["volume"]["lookback_days"]        # 10
-    min_required   = LINREG_PERIOD + FORWARD_DAYS + AVG_VOL_PERIOD
-
-    if len(df) < min_required:
-        return pd.DataFrame()
-
-    closes = df["close"].values
-    n      = len(df)
-    labels = []
-
-    for t in range(LINREG_PERIOD, n - FORWARD_DAYS):
-
-        # ── Compute LinReg at T ───────────────────────────────────────────────
-        window_closes = closes[t - LINREG_PERIOD : t]
-        linreg_value  = _compute_linreg_value(window_closes)
-
-        x             = np.arange(LINREG_PERIOD)
-        slope, intcpt = np.polyfit(x, window_closes, 1)
-        fitted        = slope * x + intcpt
-        residuals     = window_closes - fitted
-        std_dev       = np.std(residuals, ddof=1)
-
-        if std_dev == 0:
-            continue
-
-        current_close = closes[t]
-        sd_position   = (current_close - linreg_value) / std_dev
-
-        # ── Determine direction ───────────────────────────────────────────────
-        in_long_zone  = LONG_SD_MAX  <= sd_position <= LONG_SD_MIN
-        in_short_zone = SHORT_SD_MIN <= sd_position <= SHORT_SD_MAX
-
-        if not (in_long_zone or in_short_zone):
-            continue
-
-        direction = "long" if in_long_zone else "short"
-
-        # ── Extract volume features at T ──────────────────────────────────────
-        # Use a slice of the DataFrame up to time T
-        df_slice   = df.iloc[max(0, t - AVG_VOL_PERIOD - LOOKBACK) : t].copy()
-        avg_volume = df_slice["volume"].tail(AVG_VOL_PERIOD).mean()
-
-        if avg_volume == 0:
-            continue
-
-        # Compute all volume condition booleans
-        cond1 = _is_volume_declining_on_down_days(df_slice, avg_volume)
-        cond2 = _is_shakeout_present(df_slice, avg_volume)
-        cond3 = _is_volume_expanding_on_green_days(df_slice, avg_volume)
-        cond4 = _is_volume_dryup_present(df_slice, avg_volume)
-        dist1 = _is_volume_rising_on_up_days(df_slice, avg_volume)
-        dist2 = _is_volume_expanding_on_red_days(df_slice, avg_volume)
-
-        # ── Label based on forward price action ───────────────────────────────
-        forward_closes = closes[t + 1 : t + 1 + FORWARD_DAYS]
-
-        if direction == "long":
-            label = int(np.any(forward_closes >= linreg_value))
-        else:
-            label = int(np.any(forward_closes <= linreg_value))
-
-        labels.append({
-            "ticker"    : ticker,
-            "date"      : df["date"].values[t],
-            "direction" : direction,
-            "sd_position": round(sd_position, 4),
-            "cond1"     : int(cond1),
-            "cond2"     : int(cond2),
-            "cond3"     : int(cond3),
-            "cond4"     : int(cond4),
-            "dist1"     : int(dist1),
-            "dist2"     : int(dist2),
-            "avg_volume": round(avg_volume, 0),
-            "label"     : label,
-        })
-
-    if not labels:
-        return pd.DataFrame()
-
-    return pd.DataFrame(labels)
-
-
-# =============================================================================
-# BATCH LABELLER
-# Runs labelling across all tickers and combines results
-# =============================================================================
-
-def run_labeller(
-    tickers_data : dict[str, pd.DataFrame],
-    direction    : str = "both",
-) -> pd.DataFrame:
-    """
-    Run labelling for all tickers and combine results.
+    Generate labels for the Signal Ranker.
 
     FLOW:
-    1. Iterate over all tickers
-    2. Run label_ticker() for long and/or short direction
-    3. Collect all labelled observations
-    4. Check minimum sample threshold
-    5. Return combined DataFrame
+    1. For each historical scanner hit (ticker + date + direction)
+    2. Get the LinReg value on that date
+    3. Look forward FORWARD_DAYS candles
+    4. For longs: check if any candle's HIGH reached the LinReg value
+       For shorts: check if any candle's LOW reached the LinReg value
+    5. Label 1 = price reached LinReg mean, Label 0 = did not reach
+
+    WHY HIGH/LOW INSTEAD OF CLOSE:
+    We use high for longs because price reaching the LinReg on an
+    intraday basis counts as the target being hit — even if it
+    closed below. This is realistic for a take-profit scenario.
 
     Args:
-        tickers_data: Dict mapping ticker → OHLCV DataFrame
-        direction   : 'long', 'short', or 'both'
+        prices_df    : Full OHLCV DataFrame
+        indicators_df: Full indicator results DataFrame
+        scan_hits_df : Historical scanner results with columns
+                       [ticker, date, direction]
+                       (from scan_results table in SQLite)
 
     Returns:
-        Combined labelled DataFrame ready for feature engineering
+        DataFrame with columns [ticker, date, direction, label]
     """
-    logger.info(
-        f"Labeller starting | "
-        f"{len(tickers_data)} tickers | "
-        f"Direction: {direction} | "
-        f"Forward days: {FORWARD_DAYS}"
-    )
-
-    all_labels  = []
-    directions  = ["long", "short"] if direction == "both" else [direction]
-
-    for ticker, df in tickers_data.items():
-        for d in directions:
-            result = label_ticker(ticker, df, d)
-            if not result.empty:
-                all_labels.append(result)
-
-    if not all_labels:
-        logger.warning("Labeller: No labels generated")
-        return pd.DataFrame()
-
-    combined     = pd.concat(all_labels, ignore_index=True)
-    total        = len(combined)
-    success_rate = combined["label"].mean() * 100
-    min_samples  = ML_CFG["min_training_samples"]   # 500
-
-    logger.info(
-        f"Labeller complete | "
-        f"Total observations: {total} | "
-        f"Overall success rate: {success_rate:.1f}% | "
-        f"Min required: {min_samples}"
-    )
-
-    if total < min_samples:
-        logger.warning(
-            f"Labeller: Only {total} samples — "
-            f"below minimum of {min_samples}. "
-            f"Models will not train until more data is accumulated."
-        )
-
-    return combined
-
-
-# =============================================================================
-# VOLUME PATTERN BATCH LABELLER
-# =============================================================================
-
-def run_volume_labeller(
-    tickers_data : dict[str, pd.DataFrame],
-) -> pd.DataFrame:
-    """
-    Run volume pattern labelling for all tickers.
-
-    Args:
-        tickers_data: Dict mapping ticker → OHLCV DataFrame
-
-    Returns:
-        Combined volume pattern labelled DataFrame
-    """
-    logger.info(
-        f"Volume labeller starting | "
-        f"{len(tickers_data)} tickers | "
-        f"Forward days: {FORWARD_DAYS}"
-    )
+    logger.info("Generating Signal Ranker labels...")
 
     all_labels = []
 
-    for ticker, df in tickers_data.items():
-        result = label_volume_patterns(ticker, df)
-        if not result.empty:
-            all_labels.append(result)
+    for _, hit in scan_hits_df.iterrows():
+        ticker    = hit["ticker"]
+        date      = hit["date"] if "date" in hit else hit["scan_date"]
+        direction = hit["direction"]
 
-    if not all_labels:
-        logger.warning("Volume labeller: No labels generated")
-        return pd.DataFrame()
+        # ── Get LinReg value on the signal date ───────────────────────────
+        ind_row = indicators_df[
+            (indicators_df["ticker"] == ticker) &
+            (indicators_df["date"]   == date)
+        ]
 
-    combined     = pd.concat(all_labels, ignore_index=True)
-    success_rate = combined["label"].mean() * 100
+        if ind_row.empty:
+            continue
 
+        linreg_val = ind_row.iloc[0]["linreg_value"]
+
+        # ── Get price data from signal date forward ────────────────────────
+        px = prices_df[
+            (prices_df["ticker"] == ticker) &
+            (prices_df["date"]   >  date)
+        ].sort_values("date").head(FORWARD_DAYS)
+
+        if len(px) < 1:
+            continue
+
+        # ── Check if price reached LinReg within forward window ───────────
+        if direction == "long":
+            # For longs: price needs to move UP to reach LinReg
+            # Check if any candle's HIGH reached or exceeded LinReg value
+            reached = bool((px["high"] >= linreg_val).any())
+        else:
+            # For shorts: price needs to move DOWN to reach LinReg
+            # Check if any candle's LOW reached or went below LinReg value
+            reached = bool((px["low"] <= linreg_val).any())
+
+        label = 1 if reached else 0
+
+        all_labels.append({
+            "ticker"    : ticker,
+            "date"      : date,
+            "direction" : direction,
+            "label"     : label,
+        })
+
+    result = pd.DataFrame(all_labels)
+
+    if result.empty:
+        logger.warning("Signal Ranker labeller: No labels generated")
+        return result
+
+    pos = (result["label"] == 1).sum()
+    neg = (result["label"] == 0).sum()
     logger.info(
-        f"Volume labeller complete | "
-        f"Total: {len(combined)} | "
-        f"Success rate: {success_rate:.1f}%"
+        f"Signal Ranker labels generated | "
+        f"Total: {len(result)} | "
+        f"Positive (1): {pos} ({pos/len(result)*100:.1f}%) | "
+        f"Negative (0): {neg} ({neg/len(result)*100:.1f}%)"
     )
 
-    return combined
+    return result

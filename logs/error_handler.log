@@ -1,19 +1,1067 @@
-2026-06-06 10:38:13 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 10:39:16 | WARNING  | error_handler             | [RETRY] flaky_function | Attempt 1/3 failed | DataFetchError: Simulated fetch failure
-2026-06-06 10:39:16 | INFO     | error_handler             | [RETRY] Waiting 0.1s before retry...
-2026-06-06 10:39:16 | WARNING  | error_handler             | [RETRY] flaky_function | Attempt 2/3 failed | DataFetchError: Simulated fetch failure
-2026-06-06 10:39:16 | INFO     | error_handler             | [RETRY] Waiting 0.2s before retry...
-2026-06-06 10:39:16 | WARNING  | error_handler             | [RETRY] always_fails | Attempt 1/2 failed | DataFetchError: Always fails
-2026-06-06 10:39:16 | INFO     | error_handler             | [RETRY] Waiting 0.1s before retry...
-2026-06-06 10:39:16 | WARNING  | error_handler             | [RETRY] always_fails | Attempt 2/2 failed | DataFetchError: Always fails
-2026-06-06 10:39:16 | ERROR    | error_handler             | [RETRY] always_fails | All 2 attempts exhausted | Final error: DataFetchError: Always fails
-2026-06-06 10:39:16 | WARNING  | error_handler             | [GRACEFUL] broken_engine failed | EngineError: Engine exploded | Returning default: fallback
-2026-06-06 10:39:17 | WARNING  | error_handler             | [VALIDATION] AAPL | Empty or None DataFrame
-2026-06-06 10:39:17 | WARNING  | error_handler             | [VALIDATION] AAPL | Missing column: 'volume'
-2026-06-06 10:39:17 | WARNING  | error_handler             | [VALIDATION] AAPL | Only 100 rows — need 200+ for LinReg
-2026-06-06 10:39:46 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 10:42:44 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 10:46:20 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 10:49:30 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 10:50:02 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
-2026-06-06 11:12:02 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 17:52:32 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 17:57:48 | WARNING  | error_handler             | [VALIDATION] COLAR | Only 107 rows — need 200+ for LinReg
+2026-06-17 17:57:49 | WARNING  | error_handler             | [VALIDATION] COLAU | Only 10 rows — need 200+ for LinReg
+2026-06-17 17:57:52 | WARNING  | error_handler             | [VALIDATION] COPL | Only 73 rows — need 200+ for LinReg
+2026-06-17 17:57:55 | WARNING  | error_handler             | [VALIDATION] CPBI | Only 96 rows — need 200+ for LinReg
+2026-06-17 17:57:57 | WARNING  | error_handler             | [VALIDATION] CPHC | Only 90 rows — need 200+ for LinReg
+2026-06-17 17:57:59 | WARNING  | error_handler             | [VALIDATION] CRACW | Only 1 rows — need 200+ for LinReg
+2026-06-17 17:57:59 | WARNING  | error_handler             | [VALIDATION] CRACU | Only 12 rows — need 200+ for LinReg
+2026-06-17 17:57:59 | WARNING  | error_handler             | [VALIDATION] CRAC | Only 57 rows — need 200+ for LinReg
+2026-06-17 17:57:59 | WARNING  | error_handler             | [VALIDATION] CRACR | Only 75 rows — need 200+ for LinReg
+2026-06-17 17:58:00 | WARNING  | error_handler             | [VALIDATION] CRANU | Only 45 rows — need 200+ for LinReg
+2026-06-17 17:58:00 | WARNING  | error_handler             | [VALIDATION] CRAQR | Only 24 rows — need 200+ for LinReg
+2026-06-17 17:58:00 | WARNING  | error_handler             | [VALIDATION] CRAQU | Only 1 rows — need 200+ for LinReg
+2026-06-17 17:58:00 | WARNING  | error_handler             | [VALIDATION] CRAQ | Only 22 rows — need 200+ for LinReg
+2026-06-17 17:58:01 | WARNING  | error_handler             | [VALIDATION] CRAN | Only 60 rows — need 200+ for LinReg
+2026-06-17 17:58:03 | WARNING  | error_handler             | [VALIDATION] CRANR | Only 113 rows — need 200+ for LinReg
+2026-06-17 17:58:10 | WARNING  | error_handler             | [VALIDATION] CSHRW | Only 113 rows — need 200+ for LinReg
+2026-06-17 17:58:11 | WARNING  | error_handler             | [VALIDATION] CTAAU | Only 15 rows — need 200+ for LinReg
+2026-06-17 17:58:13 | WARNING  | error_handler             | [VALIDATION] CTAA | Only 80 rows — need 200+ for LinReg
+2026-06-17 17:58:16 | WARNING  | error_handler             | [VALIDATION] CTAAR | Only 150 rows — need 200+ for LinReg
+2026-06-17 17:58:18 | WARNING  | error_handler             | [VALIDATION] CUBB | Only 123 rows — need 200+ for LinReg
+2026-06-17 17:58:18 | WARNING  | error_handler             | [VALIDATION] CUBWU | Only 13 rows — need 200+ for LinReg
+2026-06-17 17:58:18 | WARNING  | error_handler             | [VALIDATION] CUB | Only 170 rows — need 200+ for LinReg
+2026-06-17 17:58:26 | WARNING  | error_handler             | [VALIDATION] CVR | Only 172 rows — need 200+ for LinReg
+2026-06-17 17:58:29 | WARNING  | error_handler             | [VALIDATION] CXIIU | Only 151 rows — need 200+ for LinReg
+2026-06-17 17:58:30 | WARNING  | error_handler             | [VALIDATION] CZFS | Only 130 rows — need 200+ for LinReg
+2026-06-17 17:58:31 | WARNING  | error_handler             | [VALIDATION] DAAQW | Only 46 rows — need 200+ for LinReg
+2026-06-17 17:58:32 | WARNING  | error_handler             | [VALIDATION] DAAQ | Only 162 rows — need 200+ for LinReg
+2026-06-17 17:58:32 | WARNING  | error_handler             | [VALIDATION] DAAQU | Only 14 rows — need 200+ for LinReg
+2026-06-17 17:58:37 | WARNING  | error_handler             | [VALIDATION] DBCAW | Only 123 rows — need 200+ for LinReg
+2026-06-17 17:58:37 | WARNING  | error_handler             | [VALIDATION] DBCA | Only 119 rows — need 200+ for LinReg
+2026-06-17 17:58:38 | WARNING  | error_handler             | [VALIDATION] DCBG | Only 109 rows — need 200+ for LinReg
+2026-06-17 17:58:45 | WARNING  | error_handler             | [VALIDATION] DFSCW | Only 26 rows — need 200+ for LinReg
+2026-06-17 17:58:46 | WARNING  | error_handler             | [VALIDATION] DGICB | Only 29 rows — need 200+ for LinReg
+2026-06-17 17:58:47 | WARNING  | error_handler             | [VALIDATION] DGZ | Only 176 rows — need 200+ for LinReg
+2026-06-17 17:58:50 | WARNING  | error_handler             | [VALIDATION] DIT | Only 44 rows — need 200+ for LinReg
+2026-06-17 17:58:58 | WARNING  | error_handler             | [VALIDATION] DMAA | Only 158 rows — need 200+ for LinReg
+2026-06-17 17:58:58 | WARNING  | error_handler             | [VALIDATION] DLHC | Only 178 rows — need 200+ for LinReg
+2026-06-17 17:58:59 | WARNING  | error_handler             | [VALIDATION] DMAAU | Only 31 rows — need 200+ for LinReg
+2026-06-17 17:58:59 | WARNING  | error_handler             | [VALIDATION] DMII | Only 122 rows — need 200+ for LinReg
+2026-06-17 17:58:59 | WARNING  | error_handler             | [VALIDATION] DMIIR | Only 48 rows — need 200+ for LinReg
+2026-06-17 17:58:59 | WARNING  | error_handler             | [VALIDATION] DMIIU | Only 22 rows — need 200+ for LinReg
+2026-06-17 17:59:00 | WARNING  | error_handler             | [VALIDATION] DNMXW | Only 49 rows — need 200+ for LinReg
+2026-06-17 17:59:00 | WARNING  | error_handler             | [VALIDATION] DNMXU | Only 42 rows — need 200+ for LinReg
+2026-06-17 17:59:00 | WARNING  | error_handler             | [VALIDATION] DNMX | Only 62 rows — need 200+ for LinReg
+2026-06-17 17:59:06 | WARNING  | error_handler             | [VALIDATION] DRDB | Only 130 rows — need 200+ for LinReg
+2026-06-17 17:59:06 | WARNING  | error_handler             | [VALIDATION] DRDBU | Only 7 rows — need 200+ for LinReg
+2026-06-17 17:59:08 | WARNING  | error_handler             | [VALIDATION] DSAC | Only 39 rows — need 200+ for LinReg
+2026-06-17 17:59:09 | WARNING  | error_handler             | [VALIDATION] DSACU | Only 16 rows — need 200+ for LinReg
+2026-06-17 17:59:09 | WARNING  | error_handler             | [VALIDATION] DSACW | Only 24 rows — need 200+ for LinReg
+2026-06-17 18:32:51 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 18:33:49 | WARNING  | error_handler             | [VALIDATION] AACPR | Only 45 rows — need 200+ for LinReg
+2026-06-17 18:33:49 | WARNING  | error_handler             | [VALIDATION] AACP | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:34:04 | WARNING  | error_handler             | [VALIDATION] ACGC | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:34:05 | WARNING  | error_handler             | [VALIDATION] ACGCW | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:34:33 | WARNING  | error_handler             | [VALIDATION] AESPU | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:34:53 | WARNING  | error_handler             | [VALIDATION] AIBZ | Only 155 rows — need 200+ for LinReg
+2026-06-17 18:36:41 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 18:37:07 | WARNING  | error_handler             | [VALIDATION] AACP | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:37:07 | WARNING  | error_handler             | [VALIDATION] AACPR | Only 45 rows — need 200+ for LinReg
+2026-06-17 18:37:18 | WARNING  | error_handler             | [VALIDATION] ACGC | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:37:18 | WARNING  | error_handler             | [VALIDATION] ACGCW | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:41:10 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 18:41:37 | WARNING  | error_handler             | [VALIDATION] AACBR | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:41:38 | WARNING  | error_handler             | [VALIDATION] AACBU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:41:38 | WARNING  | error_handler             | [VALIDATION] AACI | Only 74 rows — need 200+ for LinReg
+2026-06-17 18:41:38 | WARNING  | error_handler             | [VALIDATION] AACIU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:41:39 | WARNING  | error_handler             | [VALIDATION] AACIW | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:41:39 | WARNING  | error_handler             | [VALIDATION] AACO | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:41:39 | WARNING  | error_handler             | [VALIDATION] AACP | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:41:39 | WARNING  | error_handler             | [VALIDATION] AACOW | Only 64 rows — need 200+ for LinReg
+2026-06-17 18:41:39 | WARNING  | error_handler             | [VALIDATION] AACOU | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:41:40 | WARNING  | error_handler             | [VALIDATION] AACPR | Only 45 rows — need 200+ for LinReg
+2026-06-17 18:41:40 | WARNING  | error_handler             | [VALIDATION] AACPU | Only 96 rows — need 200+ for LinReg
+2026-06-17 18:41:40 | WARNING  | error_handler             | [VALIDATION] AACPW | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:41:48 | WARNING  | error_handler             | [VALIDATION] ACAA | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:41:51 | WARNING  | error_handler             | [VALIDATION] ACAAU | Only 74 rows — need 200+ for LinReg
+2026-06-17 18:41:52 | WARNING  | error_handler             | [VALIDATION] ACGC | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:41:52 | WARNING  | error_handler             | [VALIDATION] ACGCU | Only 84 rows — need 200+ for LinReg
+2026-06-17 18:41:52 | WARNING  | error_handler             | [VALIDATION] ACGCW | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:41:57 | WARNING  | error_handler             | [VALIDATION] ADAC | Only 52 rows — need 200+ for LinReg
+2026-06-17 18:41:57 | WARNING  | error_handler             | [VALIDATION] ADACU | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:41:58 | WARNING  | error_handler             | [VALIDATION] ADACW | Only 56 rows — need 200+ for LinReg
+2026-06-17 18:42:03 | WARNING  | error_handler             | [VALIDATION] ADSE | Only 121 rows — need 200+ for LinReg
+2026-06-17 18:42:05 | WARNING  | error_handler             | [VALIDATION] ADXN | Only 101 rows — need 200+ for LinReg
+2026-06-17 18:42:05 | WARNING  | error_handler             | [VALIDATION] AEAQ | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:42:05 | WARNING  | error_handler             | [VALIDATION] AEAQU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:42:05 | WARNING  | error_handler             | [VALIDATION] AEAQW | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:42:13 | WARNING  | error_handler             | [VALIDATION] AESPU | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:47:16 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 18:47:18 | WARNING  | error_handler             | [RETRY] _fetch_nasdaq_listed | Attempt 1/3 failed | DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+2026-06-17 18:47:18 | INFO     | error_handler             | [RETRY] Waiting 5.0s before retry...
+2026-06-17 18:47:23 | WARNING  | error_handler             | [RETRY] _fetch_nasdaq_listed | Attempt 2/3 failed | DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+2026-06-17 18:47:23 | INFO     | error_handler             | [RETRY] Waiting 10.0s before retry...
+2026-06-17 18:47:33 | WARNING  | error_handler             | [RETRY] _fetch_nasdaq_listed | Attempt 3/3 failed | DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+2026-06-17 18:47:33 | ERROR    | error_handler             | [RETRY] _fetch_nasdaq_listed | All 3 attempts exhausted | Final error: DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+2026-06-17 18:47:35 | CRITICAL | error_handler             | [CRITICAL] Step 2: Universe fetch | DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+Traceback:
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\util\connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python311\Lib\socket.py", line 962, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1106, in _validate_conn
+    conn.connect()
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connection.py", line 211, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\connectionpool.py", line 842, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\urllib3\util\retry.py", line 543, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\data\fetcher.py", line 195, in _fetch_nasdaq_listed
+    response = requests.get(NASDAQ_LISTED, timeout=30)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\.venv\Lib\site-packages\requests\adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\run_pipeline.py", line 75, in run_full_pipeline
+    universe = get_full_universe()
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\data\fetcher.py", line 316, in get_full_universe
+    nasdaq_tickers = _fetch_nasdaq_listed()
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\utils\error_handler.py", line 162, in wrapper
+    raise last_exception
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\utils\error_handler.py", line 133, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\data\fetcher.py", line 235, in _fetch_nasdaq_listed
+    raise DataFetchError(f"Failed to fetch NASDAQ listed tickers: {e}") from e
+utils.error_handler.DataFetchError: Failed to fetch NASDAQ listed tickers: HTTPSConnectionPool(host='www.nasdaqtrader.com', port=443): Max retries exceeded with url: /dynamic/symdir/nasdaqlisted.txt (Caused by NameResolutionError("HTTPSConnection(host='www.nasdaqtrader.com', port=443): Failed to resolve 'www.nasdaqtrader.com' ([Errno 11001] getaddrinfo failed)"))
+
+2026-06-17 18:47:44 | INFO     | error_handler             | Logger initialised → logs\error_handler.log
+2026-06-17 18:48:10 | WARNING  | error_handler             | [VALIDATION] AACBU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:48:10 | WARNING  | error_handler             | [VALIDATION] AACBR | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:48:10 | WARNING  | error_handler             | [VALIDATION] AACI | Only 74 rows — need 200+ for LinReg
+2026-06-17 18:48:10 | WARNING  | error_handler             | [VALIDATION] AACIU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:48:10 | WARNING  | error_handler             | [VALIDATION] AACIW | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACP | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACOU | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACOW | Only 64 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACPR | Only 45 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACO | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACPU | Only 96 rows — need 200+ for LinReg
+2026-06-17 18:48:11 | WARNING  | error_handler             | [VALIDATION] AACPW | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:48:17 | WARNING  | error_handler             | [VALIDATION] ACAA | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:48:18 | WARNING  | error_handler             | [VALIDATION] ACAAU | Only 74 rows — need 200+ for LinReg
+2026-06-17 18:48:19 | WARNING  | error_handler             | [VALIDATION] ACGC | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:48:19 | WARNING  | error_handler             | [VALIDATION] ACGCW | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:48:19 | WARNING  | error_handler             | [VALIDATION] ACGCU | Only 84 rows — need 200+ for LinReg
+2026-06-17 18:48:24 | WARNING  | error_handler             | [VALIDATION] ADAC | Only 52 rows — need 200+ for LinReg
+2026-06-17 18:48:25 | WARNING  | error_handler             | [VALIDATION] ADACU | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:48:25 | WARNING  | error_handler             | [VALIDATION] ADACW | Only 56 rows — need 200+ for LinReg
+2026-06-17 18:48:29 | WARNING  | error_handler             | [VALIDATION] ADSE | Only 121 rows — need 200+ for LinReg
+2026-06-17 18:48:31 | WARNING  | error_handler             | [VALIDATION] AEAQ | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:48:31 | WARNING  | error_handler             | [VALIDATION] ADXN | Only 101 rows — need 200+ for LinReg
+2026-06-17 18:48:31 | WARNING  | error_handler             | [VALIDATION] AEAQU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:48:31 | WARNING  | error_handler             | [VALIDATION] AEAQW | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:48:35 | WARNING  | error_handler             | [VALIDATION] AESPU | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:48:44 | WARNING  | error_handler             | [VALIDATION] AIBZ | Only 155 rows — need 200+ for LinReg
+2026-06-17 18:48:45 | WARNING  | error_handler             | [VALIDATION] AIIA | Only 83 rows — need 200+ for LinReg
+2026-06-17 18:48:46 | WARNING  | error_handler             | [VALIDATION] AIIR | Only 172 rows — need 200+ for LinReg
+2026-06-17 18:48:48 | WARNING  | error_handler             | [VALIDATION] AIRT | Only 53 rows — need 200+ for LinReg
+2026-06-17 18:48:48 | WARNING  | error_handler             | [VALIDATION] AIRTP | Only 88 rows — need 200+ for LinReg
+2026-06-17 18:48:53 | WARNING  | error_handler             | [VALIDATION] ALDF | Only 54 rows — need 200+ for LinReg
+2026-06-17 18:48:53 | WARNING  | error_handler             | [VALIDATION] ALDFU | Only 30 rows — need 200+ for LinReg
+2026-06-17 18:48:54 | WARNING  | error_handler             | [VALIDATION] ALF | Only 87 rows — need 200+ for LinReg
+2026-06-17 18:48:54 | WARNING  | error_handler             | [VALIDATION] ALFUU | Only 14 rows — need 200+ for LinReg
+2026-06-17 18:48:55 | WARNING  | error_handler             | [VALIDATION] ALISR | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:48:55 | WARNING  | error_handler             | [VALIDATION] ALISU | Only 21 rows — need 200+ for LinReg
+2026-06-17 18:48:58 | WARNING  | error_handler             | [VALIDATION] ALOV | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:48:58 | WARNING  | error_handler             | [VALIDATION] ALOVU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:48:58 | WARNING  | error_handler             | [VALIDATION] ALOVW | Only 37 rows — need 200+ for LinReg
+2026-06-17 18:49:01 | WARNING  | error_handler             | [VALIDATION] ALUB | Only 64 rows — need 200+ for LinReg
+2026-06-17 18:49:15 | WARNING  | error_handler             | [VALIDATION] AMUB | Only 18 rows — need 200+ for LinReg
+2026-06-17 18:49:20 | WARNING  | error_handler             | [VALIDATION] ANSC | Only 48 rows — need 200+ for LinReg
+2026-06-17 18:49:20 | WARNING  | error_handler             | [VALIDATION] ANSCU | Only 21 rows — need 200+ for LinReg
+2026-06-17 18:49:21 | WARNING  | error_handler             | [VALIDATION] ANTA | Only 118 rows — need 200+ for LinReg
+2026-06-17 18:49:25 | WARNING  | error_handler             | [VALIDATION] APACR | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:49:25 | WARNING  | error_handler             | [VALIDATION] APAC | Only 24 rows — need 200+ for LinReg
+2026-06-17 18:49:26 | WARNING  | error_handler             | [VALIDATION] APACU | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:49:28 | WARNING  | error_handler             | [VALIDATION] APLM | Only 138 rows — need 200+ for LinReg
+2026-06-17 18:49:28 | WARNING  | error_handler             | [VALIDATION] APMCU | Only 62 rows — need 200+ for LinReg
+2026-06-17 18:49:31 | WARNING  | error_handler             | [VALIDATION] APURR | Only 19 rows — need 200+ for LinReg
+2026-06-17 18:49:32 | WARNING  | error_handler             | [VALIDATION] APUR | Only 32 rows — need 200+ for LinReg
+2026-06-17 18:49:32 | WARNING  | error_handler             | [VALIDATION] APWC | Only 173 rows — need 200+ for LinReg
+2026-06-17 18:49:32 | WARNING  | error_handler             | [VALIDATION] APXT | Only 117 rows — need 200+ for LinReg
+2026-06-17 18:49:32 | WARNING  | error_handler             | [VALIDATION] APXTW | Only 83 rows — need 200+ for LinReg
+2026-06-17 18:49:32 | WARNING  | error_handler             | [VALIDATION] APXTU | Only 37 rows — need 200+ for LinReg
+2026-06-17 18:49:35 | WARNING  | error_handler             | [VALIDATION] ARCI | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:49:35 | WARNING  | error_handler             | [VALIDATION] ARCIU | Only 51 rows — need 200+ for LinReg
+2026-06-17 18:49:35 | WARNING  | error_handler             | [VALIDATION] ARCIW | Only 61 rows — need 200+ for LinReg
+2026-06-17 18:49:36 | WARNING  | error_handler             | [VALIDATION] ARCL | Only 40 rows — need 200+ for LinReg
+2026-06-17 18:49:37 | WARNING  | error_handler             | [VALIDATION] ARCLW | Only 24 rows — need 200+ for LinReg
+2026-06-17 18:49:37 | WARNING  | error_handler             | [VALIDATION] ARCLU | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:49:38 | WARNING  | error_handler             | [VALIDATION] ARCLR | Only 21 rows — need 200+ for LinReg
+2026-06-17 18:49:41 | WARNING  | error_handler             | [VALIDATION] ARKR | Only 114 rows — need 200+ for LinReg
+2026-06-17 18:49:41 | WARNING  | error_handler             | [VALIDATION] ARL | Only 194 rows — need 200+ for LinReg
+2026-06-17 18:49:44 | WARNING  | error_handler             | [VALIDATION] ARTC | Only 63 rows — need 200+ for LinReg
+2026-06-17 18:49:44 | WARNING  | error_handler             | [VALIDATION] ARTCU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:49:44 | WARNING  | error_handler             | [VALIDATION] ARTCW | Only 53 rows — need 200+ for LinReg
+2026-06-17 18:49:57 | WARNING  | error_handler             | [VALIDATION] ATGL | Only 142 rows — need 200+ for LinReg
+2026-06-17 18:49:59 | WARNING  | error_handler             | [VALIDATION] ATIIU | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:50:07 | WARNING  | error_handler             | [VALIDATION] AUBN | Only 134 rows — need 200+ for LinReg
+2026-06-17 18:50:07 | WARNING  | error_handler             | [VALIDATION] AUC | Only 82 rows — need 200+ for LinReg
+2026-06-17 18:50:11 | WARNING  | error_handler             | [VALIDATION] AVAT | Only 81 rows — need 200+ for LinReg
+2026-06-17 18:50:20 | WARNING  | error_handler             | [VALIDATION] AXINU | Only 59 rows — need 200+ for LinReg
+2026-06-17 18:50:24 | WARNING  | error_handler             | [VALIDATION] AZUL | Only 167 rows — need 200+ for LinReg
+2026-06-17 18:50:25 | WARNING  | error_handler             | [VALIDATION] BACC | Only 195 rows — need 200+ for LinReg
+2026-06-17 18:50:25 | WARNING  | error_handler             | [VALIDATION] BACCR | Only 189 rows — need 200+ for LinReg
+2026-06-17 18:50:26 | WARNING  | error_handler             | [VALIDATION] BACCU | Only 6 rows — need 200+ for LinReg
+2026-06-17 18:50:30 | WARNING  | error_handler             | [VALIDATION] BANFP | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:50:33 | WARNING  | error_handler             | [VALIDATION] BBCQU | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:50:38 | WARNING  | error_handler             | [VALIDATION] BCARU | Only 18 rows — need 200+ for LinReg
+2026-06-17 18:50:43 | WARNING  | error_handler             | [VALIDATION] BCSS | Only 152 rows — need 200+ for LinReg
+2026-06-17 18:50:43 | WARNING  | error_handler             | [VALIDATION] BCTXL | Only 11 rows — need 200+ for LinReg
+2026-06-17 18:50:44 | WARNING  | error_handler             | [VALIDATION] BDCI | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:50:44 | WARNING  | error_handler             | [VALIDATION] BDCIU | Only 28 rows — need 200+ for LinReg
+2026-06-17 18:50:45 | WARNING  | error_handler             | [VALIDATION] BDCIW | Only 28 rows — need 200+ for LinReg
+2026-06-17 18:50:45 | WARNING  | error_handler             | [VALIDATION] BDCZ | Only 77 rows — need 200+ for LinReg
+2026-06-17 18:50:45 | WARNING  | error_handler             | [VALIDATION] BDL | Only 93 rows — need 200+ for LinReg
+2026-06-17 18:50:47 | WARNING  | error_handler             | [VALIDATION] BEAG | Only 186 rows — need 200+ for LinReg
+2026-06-17 18:50:47 | WARNING  | error_handler             | [VALIDATION] BEAGR | Only 65 rows — need 200+ for LinReg
+2026-06-17 18:50:47 | WARNING  | error_handler             | [VALIDATION] BEAGU | Only 53 rows — need 200+ for LinReg
+2026-06-17 18:50:48 | WARNING  | error_handler             | [VALIDATION] BEBE | Only 22 rows — need 200+ for LinReg
+2026-06-17 18:50:59 | WARNING  | error_handler             | [VALIDATION] BGLWW | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:51:02 | WARNING  | error_handler             | [VALIDATION] BHAV | Only 83 rows — need 200+ for LinReg
+2026-06-17 18:51:02 | WARNING  | error_handler             | [VALIDATION] BHAVR | Only 67 rows — need 200+ for LinReg
+2026-06-17 18:51:02 | WARNING  | error_handler             | [VALIDATION] BHAVU | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:51:06 | WARNING  | error_handler             | [VALIDATION] BHM | Only 139 rows — need 200+ for LinReg
+2026-06-17 18:51:07 | WARNING  | error_handler             | [VALIDATION] BHV | Only 182 rows — need 200+ for LinReg
+2026-06-17 18:51:08 | WARNING  | error_handler             | [VALIDATION] BIDWU | Only 70 rows — need 200+ for LinReg
+2026-06-17 18:51:08 | WARNING  | error_handler             | [VALIDATION] BIII | Only 40 rows — need 200+ for LinReg
+2026-06-17 18:51:11 | WARNING  | error_handler             | [VALIDATION] BIVIW | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:51:12 | WARNING  | error_handler             | [VALIDATION] BIXI | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:51:12 | WARNING  | error_handler             | [VALIDATION] BIXIU | Only 30 rows — need 200+ for LinReg
+2026-06-17 18:51:12 | WARNING  | error_handler             | [VALIDATION] BIXIW | Only 49 rows — need 200+ for LinReg
+2026-06-17 18:51:18 | WARNING  | error_handler             | [VALIDATION] BLIV | Only 62 rows — need 200+ for LinReg
+2026-06-17 18:51:20 | WARNING  | error_handler             | [VALIDATION] BLRKU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:51:20 | WARNING  | error_handler             | [VALIDATION] BLRK | Only 29 rows — need 200+ for LinReg
+2026-06-17 18:51:20 | WARNING  | error_handler             | [VALIDATION] BLRKW | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:51:21 | WARNING  | error_handler             | [VALIDATION] BLUWW | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:51:21 | WARNING  | error_handler             | [VALIDATION] BLUWU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:51:21 | WARNING  | error_handler             | [VALIDATION] BLUW | Only 101 rows — need 200+ for LinReg
+2026-06-17 18:51:22 | WARNING  | error_handler             | [VALIDATION] BLZRU | Only 37 rows — need 200+ for LinReg
+2026-06-17 18:51:22 | WARNING  | error_handler             | [VALIDATION] BLZR | Only 104 rows — need 200+ for LinReg
+2026-06-17 18:51:23 | WARNING  | error_handler             | [VALIDATION] BLZRW | Only 60 rows — need 200+ for LinReg
+2026-06-17 18:51:25 | WARNING  | error_handler             | [VALIDATION] BMNP | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:51:34 | WARNING  | error_handler             | [VALIDATION] BPAC | Only 38 rows — need 200+ for LinReg
+2026-06-17 18:51:35 | WARNING  | error_handler             | [VALIDATION] BPACU | Only 23 rows — need 200+ for LinReg
+2026-06-17 18:51:35 | WARNING  | error_handler             | [VALIDATION] BPACR | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:51:35 | WARNING  | error_handler             | [VALIDATION] BPOPM | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:51:39 | WARNING  | error_handler             | [VALIDATION] BRBI | Only 55 rows — need 200+ for LinReg
+2026-06-17 18:51:40 | WARNING  | error_handler             | [VALIDATION] BREZ | Only 27 rows — need 200+ for LinReg
+2026-06-17 18:51:40 | WARNING  | error_handler             | [VALIDATION] BREZR | Only 25 rows — need 200+ for LinReg
+2026-06-17 18:51:40 | WARNING  | error_handler             | [VALIDATION] BRFH | Only 180 rows — need 200+ for LinReg
+2026-06-17 18:51:41 | WARNING  | error_handler             | [VALIDATION] BRKHU | Only 55 rows — need 200+ for LinReg
+2026-06-17 18:51:41 | WARNING  | error_handler             | [VALIDATION] BRID | Only 98 rows — need 200+ for LinReg
+2026-06-17 18:51:42 | WARNING  | error_handler             | [VALIDATION] BRKRP | Only 139 rows — need 200+ for LinReg
+2026-06-17 18:51:44 | WARNING  | error_handler             | [VALIDATION] BSAAR | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:51:45 | WARNING  | error_handler             | [VALIDATION] BSAAU | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:51:46 | WARNING  | error_handler             | [VALIDATION] BSIN | Only 182 rows — need 200+ for LinReg
+2026-06-17 18:51:53 | WARNING  | error_handler             | [VALIDATION] BTSGU | Only 183 rows — need 200+ for LinReg
+2026-06-17 18:51:57 | WARNING  | error_handler             | [VALIDATION] BVC | Only 160 rows — need 200+ for LinReg
+2026-06-17 18:51:59 | WARNING  | error_handler             | [VALIDATION] BWBBP | Only 99 rows — need 200+ for LinReg
+2026-06-17 18:52:00 | WARNING  | error_handler             | [VALIDATION] BWIV | Only 62 rows — need 200+ for LinReg
+2026-06-17 18:52:04 | WARNING  | error_handler             | [VALIDATION] BYFC | Only 124 rows — need 200+ for LinReg
+2026-06-17 18:52:10 | WARNING  | error_handler             | [VALIDATION] CAIIU | Only 176 rows — need 200+ for LinReg
+2026-06-17 18:52:12 | WARNING  | error_handler             | [VALIDATION] CAPNR | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:52:12 | WARNING  | error_handler             | [VALIDATION] CAPNU | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:52:12 | WARNING  | error_handler             | [VALIDATION] CAQ | Only 39 rows — need 200+ for LinReg
+2026-06-17 18:52:13 | WARNING  | error_handler             | [VALIDATION] CAQUU | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:52:13 | WARNING  | error_handler             | [VALIDATION] CAQUW | Only 25 rows — need 200+ for LinReg
+2026-06-17 18:52:18 | WARNING  | error_handler             | [VALIDATION] CBFV | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:52:19 | WARNING  | error_handler             | [VALIDATION] CBNA | Only 182 rows — need 200+ for LinReg
+2026-06-17 18:52:22 | WARNING  | error_handler             | [VALIDATION] CCAQ | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:52:22 | WARNING  | error_handler             | [VALIDATION] CCAQU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:52:23 | WARNING  | error_handler             | [VALIDATION] CCAQW | Only 18 rows — need 200+ for LinReg
+2026-06-17 18:52:25 | WARNING  | error_handler             | [VALIDATION] CCID | Only 118 rows — need 200+ for LinReg
+2026-06-17 18:52:25 | WARNING  | error_handler             | [VALIDATION] CCII | Only 168 rows — need 200+ for LinReg
+2026-06-17 18:52:25 | WARNING  | error_handler             | [VALIDATION] CCIIU | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:52:26 | WARNING  | error_handler             | [VALIDATION] CCIIW | Only 53 rows — need 200+ for LinReg
+2026-06-17 18:52:26 | WARNING  | error_handler             | [VALIDATION] CCIXU | Only 11 rows — need 200+ for LinReg
+2026-06-17 18:52:28 | WARNING  | error_handler             | [VALIDATION] CCNEP | Only 95 rows — need 200+ for LinReg
+2026-06-17 18:52:29 | WARNING  | error_handler             | [VALIDATION] CCXI | Only 79 rows — need 200+ for LinReg
+2026-06-17 18:52:29 | WARNING  | error_handler             | [VALIDATION] CCXIU | Only 82 rows — need 200+ for LinReg
+2026-06-17 18:52:30 | WARNING  | error_handler             | [VALIDATION] CCXIW | Only 98 rows — need 200+ for LinReg
+2026-06-17 18:52:30 | WARNING  | error_handler             | [VALIDATION] CCZ | Only 38 rows — need 200+ for LinReg
+2026-06-17 18:52:36 | WARNING  | error_handler             | [VALIDATION] CEPF | Only 180 rows — need 200+ for LinReg
+2026-06-17 18:52:38 | WARNING  | error_handler             | [VALIDATION] CEPV | Only 121 rows — need 200+ for LinReg
+2026-06-17 18:52:38 | WARNING  | error_handler             | [VALIDATION] CEPS | Only 92 rows — need 200+ for LinReg
+2026-06-17 18:52:40 | WARNING  | error_handler             | [VALIDATION] CFFI | Only 85 rows — need 200+ for LinReg
+2026-06-17 18:52:45 | WARNING  | error_handler             | [VALIDATION] CHECU | Only 5 rows — need 200+ for LinReg
+2026-06-17 18:52:45 | WARNING  | error_handler             | [VALIDATION] CHEC | Only 27 rows — need 200+ for LinReg
+2026-06-17 18:52:45 | WARNING  | error_handler             | [VALIDATION] CHECW | Only 8 rows — need 200+ for LinReg
+2026-06-17 18:52:49 | WARNING  | error_handler             | [VALIDATION] CHPG | Only 22 rows — need 200+ for LinReg
+2026-06-17 18:52:49 | WARNING  | error_handler             | [VALIDATION] CHPGR | Only 9 rows — need 200+ for LinReg
+2026-06-17 18:52:49 | WARNING  | error_handler             | [VALIDATION] CHPGU | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:52:59 | WARNING  | error_handler             | [VALIDATION] CIX | Only 152 rows — need 200+ for LinReg
+2026-06-17 18:52:59 | WARNING  | error_handler             | [VALIDATION] CKX | Only 101 rows — need 200+ for LinReg
+2026-06-17 18:53:07 | WARNING  | error_handler             | [VALIDATION] CLST | Only 142 rows — need 200+ for LinReg
+2026-06-17 18:53:10 | WARNING  | error_handler             | [VALIDATION] CMII | Only 46 rows — need 200+ for LinReg
+2026-06-17 18:53:10 | WARNING  | error_handler             | [VALIDATION] CMIIU | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:53:19 | WARNING  | error_handler             | [VALIDATION] CNOBP | Only 194 rows — need 200+ for LinReg
+2026-06-17 18:53:26 | WARNING  | error_handler             | [VALIDATION] COLAU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:53:26 | WARNING  | error_handler             | [VALIDATION] COLAR | Only 107 rows — need 200+ for LinReg
+2026-06-17 18:53:27 | WARNING  | error_handler             | [VALIDATION] COPL | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:53:29 | WARNING  | error_handler             | [VALIDATION] CPBI | Only 96 rows — need 200+ for LinReg
+2026-06-17 18:53:29 | WARNING  | error_handler             | [VALIDATION] CPHC | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:53:32 | WARNING  | error_handler             | [VALIDATION] CRAC | Only 57 rows — need 200+ for LinReg
+2026-06-17 18:53:32 | WARNING  | error_handler             | [VALIDATION] CRACW | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:53:32 | WARNING  | error_handler             | [VALIDATION] CRACU | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:53:32 | WARNING  | error_handler             | [VALIDATION] CRACR | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRAN | Only 60 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRANU | Only 45 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRANR | Only 113 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRAQ | Only 22 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRAQU | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:53:33 | WARNING  | error_handler             | [VALIDATION] CRAQR | Only 24 rows — need 200+ for LinReg
+2026-06-17 18:53:45 | WARNING  | error_handler             | [VALIDATION] CSHRW | Only 113 rows — need 200+ for LinReg
+2026-06-17 18:53:47 | WARNING  | error_handler             | [VALIDATION] CTAA | Only 80 rows — need 200+ for LinReg
+2026-06-17 18:53:47 | WARNING  | error_handler             | [VALIDATION] CTAAU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:53:48 | WARNING  | error_handler             | [VALIDATION] CTAAR | Only 150 rows — need 200+ for LinReg
+2026-06-17 18:53:51 | WARNING  | error_handler             | [VALIDATION] CUB | Only 170 rows — need 200+ for LinReg
+2026-06-17 18:53:51 | WARNING  | error_handler             | [VALIDATION] CUBB | Only 123 rows — need 200+ for LinReg
+2026-06-17 18:53:52 | WARNING  | error_handler             | [VALIDATION] CUBWU | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:53:55 | WARNING  | error_handler             | [VALIDATION] CVR | Only 172 rows — need 200+ for LinReg
+2026-06-17 18:53:59 | WARNING  | error_handler             | [VALIDATION] CXIIU | Only 151 rows — need 200+ for LinReg
+2026-06-17 18:54:01 | WARNING  | error_handler             | [VALIDATION] CZFS | Only 130 rows — need 200+ for LinReg
+2026-06-17 18:54:01 | WARNING  | error_handler             | [VALIDATION] DAAQ | Only 162 rows — need 200+ for LinReg
+2026-06-17 18:54:01 | WARNING  | error_handler             | [VALIDATION] DAAQU | Only 14 rows — need 200+ for LinReg
+2026-06-17 18:54:01 | WARNING  | error_handler             | [VALIDATION] DAAQW | Only 46 rows — need 200+ for LinReg
+2026-06-17 18:54:03 | WARNING  | error_handler             | [VALIDATION] DBCA | Only 119 rows — need 200+ for LinReg
+2026-06-17 18:54:03 | WARNING  | error_handler             | [VALIDATION] DBCAW | Only 123 rows — need 200+ for LinReg
+2026-06-17 18:54:04 | WARNING  | error_handler             | [VALIDATION] DBCAU | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:54:04 | WARNING  | error_handler             | [VALIDATION] DCBG | Only 109 rows — need 200+ for LinReg
+2026-06-17 18:54:09 | WARNING  | error_handler             | [VALIDATION] DFSCW | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:54:10 | WARNING  | error_handler             | [VALIDATION] DGICB | Only 29 rows — need 200+ for LinReg
+2026-06-17 18:54:10 | WARNING  | error_handler             | [VALIDATION] DGZ | Only 176 rows — need 200+ for LinReg
+2026-06-17 18:54:13 | WARNING  | error_handler             | [VALIDATION] DIT | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:54:15 | WARNING  | error_handler             | [VALIDATION] DLHC | Only 178 rows — need 200+ for LinReg
+2026-06-17 18:54:16 | WARNING  | error_handler             | [VALIDATION] DMAA | Only 158 rows — need 200+ for LinReg
+2026-06-17 18:54:16 | WARNING  | error_handler             | [VALIDATION] DMAAU | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:54:16 | WARNING  | error_handler             | [VALIDATION] DMII | Only 122 rows — need 200+ for LinReg
+2026-06-17 18:54:16 | WARNING  | error_handler             | [VALIDATION] DMIIR | Only 48 rows — need 200+ for LinReg
+2026-06-17 18:54:17 | WARNING  | error_handler             | [VALIDATION] DMIIU | Only 22 rows — need 200+ for LinReg
+2026-06-17 18:54:18 | WARNING  | error_handler             | [VALIDATION] DNMXU | Only 42 rows — need 200+ for LinReg
+2026-06-17 18:54:18 | WARNING  | error_handler             | [VALIDATION] DNMXW | Only 49 rows — need 200+ for LinReg
+2026-06-17 18:54:18 | WARNING  | error_handler             | [VALIDATION] DNMX | Only 62 rows — need 200+ for LinReg
+2026-06-17 18:54:22 | WARNING  | error_handler             | [VALIDATION] DRDBU | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:54:22 | WARNING  | error_handler             | [VALIDATION] DRDB | Only 130 rows — need 200+ for LinReg
+2026-06-17 18:54:24 | WARNING  | error_handler             | [VALIDATION] DSAC | Only 39 rows — need 200+ for LinReg
+2026-06-17 18:54:24 | WARNING  | error_handler             | [VALIDATION] DSACU | Only 16 rows — need 200+ for LinReg
+2026-06-17 18:54:24 | WARNING  | error_handler             | [VALIDATION] DSACW | Only 24 rows — need 200+ for LinReg
+2026-06-17 18:54:29 | WARNING  | error_handler             | [VALIDATION] DUKRW | Only 180 rows — need 200+ for LinReg
+2026-06-17 18:54:32 | WARNING  | error_handler             | [VALIDATION] DXR | Only 182 rows — need 200+ for LinReg
+2026-06-17 18:54:33 | WARNING  | error_handler             | [VALIDATION] DYNCW | Only 144 rows — need 200+ for LinReg
+2026-06-17 18:54:33 | WARNING  | error_handler             | [VALIDATION] DYNCU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:54:33 | WARNING  | error_handler             | [VALIDATION] DYOR | Only 80 rows — need 200+ for LinReg
+2026-06-17 18:54:33 | WARNING  | error_handler             | [VALIDATION] DYORU | Only 11 rows — need 200+ for LinReg
+2026-06-17 18:54:34 | WARNING  | error_handler             | [VALIDATION] DYORW | Only 23 rows — need 200+ for LinReg
+2026-06-17 18:54:39 | WARNING  | error_handler             | [VALIDATION] ECCV | Only 199 rows — need 200+ for LinReg
+2026-06-17 18:54:43 | WARNING  | error_handler             | [VALIDATION] EDTK | Only 110 rows — need 200+ for LinReg
+2026-06-17 18:54:45 | WARNING  | error_handler             | [VALIDATION] EFSCP | Only 109 rows — need 200+ for LinReg
+2026-06-17 18:54:48 | WARNING  | error_handler             | [VALIDATION] EGHAU | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:54:48 | WARNING  | error_handler             | [VALIDATION] EGHAR | Only 70 rows — need 200+ for LinReg
+2026-06-17 18:54:48 | WARNING  | error_handler             | [VALIDATION] EGHA | Only 124 rows — need 200+ for LinReg
+2026-06-17 18:54:51 | WARNING  | error_handler             | [VALIDATION] EHLD | Only 193 rows — need 200+ for LinReg
+2026-06-17 18:54:51 | WARNING  | error_handler             | [VALIDATION] EICA | Only 144 rows — need 200+ for LinReg
+2026-06-17 18:54:52 | WARNING  | error_handler             | [VALIDATION] EIIA | Only 195 rows — need 200+ for LinReg
+2026-06-17 18:54:55 | WARNING  | error_handler             | [VALIDATION] ELLA | Only 198 rows — need 200+ for LinReg
+2026-06-17 18:54:56 | WARNING  | error_handler             | [VALIDATION] ELOX | Only 116 rows — need 200+ for LinReg
+2026-06-17 18:55:03 | WARNING  | error_handler             | [VALIDATION] EMIS | Only 11 rows — need 200+ for LinReg
+2026-06-17 18:55:03 | WARNING  | error_handler             | [VALIDATION] EMISR | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:55:06 | WARNING  | error_handler             | [VALIDATION] ENJ | Only 86 rows — need 200+ for LinReg
+2026-06-17 18:55:07 | WARNING  | error_handler             | [VALIDATION] ENRD | Only 120 rows — need 200+ for LinReg
+2026-06-17 18:55:07 | WARNING  | error_handler             | [VALIDATION] ENRDW | Only 72 rows — need 200+ for LinReg
+2026-06-17 18:55:18 | WARNING  | error_handler             | [VALIDATION] EROC | Only 119 rows — need 200+ for LinReg
+2026-06-17 18:55:18 | WARNING  | error_handler             | [VALIDATION] ESBA | Only 154 rows — need 200+ for LinReg
+2026-06-17 18:55:24 | WARNING  | error_handler             | [VALIDATION] ETSS | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:55:26 | WARNING  | error_handler             | [VALIDATION] EURKR | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:55:26 | WARNING  | error_handler             | [VALIDATION] EURKU | Only 4 rows — need 200+ for LinReg
+2026-06-17 18:55:30 | WARNING  | error_handler             | [VALIDATION] EVOX | Only 57 rows — need 200+ for LinReg
+2026-06-17 18:55:30 | WARNING  | error_handler             | [VALIDATION] EVOXU | Only 42 rows — need 200+ for LinReg
+2026-06-17 18:55:30 | WARNING  | error_handler             | [VALIDATION] EVOXW | Only 27 rows — need 200+ for LinReg
+2026-06-17 18:55:35 | WARNING  | error_handler             | [VALIDATION] EXOZ | Only 177 rows — need 200+ for LinReg
+2026-06-17 18:55:37 | WARNING  | error_handler             | [VALIDATION] EXYNW | Only 170 rows — need 200+ for LinReg
+2026-06-17 18:55:38 | WARNING  | error_handler             | [VALIDATION] FAC | Only 181 rows — need 200+ for LinReg
+2026-06-17 18:55:39 | WARNING  | error_handler             | [VALIDATION] FACWW | Only 162 rows — need 200+ for LinReg
+2026-06-17 18:55:40 | WARNING  | error_handler             | [VALIDATION] FACTU | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:55:44 | WARNING  | error_handler             | [VALIDATION] FCAP | Only 116 rows — need 200+ for LinReg
+2026-06-17 18:55:51 | WARNING  | error_handler             | [VALIDATION] FEDU | Only 29 rows — need 200+ for LinReg
+2026-06-17 18:55:52 | WARNING  | error_handler             | [VALIDATION] FERA | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:55:53 | WARNING  | error_handler             | [VALIDATION] FERAR | Only 114 rows — need 200+ for LinReg
+2026-06-17 18:55:53 | WARNING  | error_handler             | [VALIDATION] FERAU | Only 4 rows — need 200+ for LinReg
+2026-06-17 18:55:56 | WARNING  | error_handler             | [VALIDATION] FGBIP | Only 140 rows — need 200+ for LinReg
+2026-06-17 18:55:57 | WARNING  | error_handler             | [VALIDATION] FGIIU | Only 36 rows — need 200+ for LinReg
+2026-06-17 18:55:57 | WARNING  | error_handler             | [VALIDATION] FGII | Only 47 rows — need 200+ for LinReg
+2026-06-17 18:55:57 | WARNING  | error_handler             | [VALIDATION] FGIIW | Only 28 rows — need 200+ for LinReg
+2026-06-17 18:56:00 | WARNING  | error_handler             | [VALIDATION] FGMCU | Only 51 rows — need 200+ for LinReg
+2026-06-17 18:56:01 | WARNING  | error_handler             | [VALIDATION] FGNXP | Only 85 rows — need 200+ for LinReg
+2026-06-17 18:56:03 | WARNING  | error_handler             | [VALIDATION] FIGX | Only 49 rows — need 200+ for LinReg
+2026-06-17 18:56:03 | WARNING  | error_handler             | [VALIDATION] FIGXU | Only 5 rows — need 200+ for LinReg
+2026-06-17 18:56:03 | WARNING  | error_handler             | [VALIDATION] FIGXW | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:56:05 | WARNING  | error_handler             | [VALIDATION] FISK | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:56:13 | WARNING  | error_handler             | [VALIDATION] FMAC | Only 58 rows — need 200+ for LinReg
+2026-06-17 18:56:13 | WARNING  | error_handler             | [VALIDATION] FLZH | Only 19 rows — need 200+ for LinReg
+2026-06-17 18:56:14 | WARNING  | error_handler             | [VALIDATION] FMACR | Only 38 rows — need 200+ for LinReg
+2026-06-17 18:56:14 | WARNING  | error_handler             | [VALIDATION] FMACU | Only 189 rows — need 200+ for LinReg
+2026-06-17 18:56:18 | WARNING  | error_handler             | [VALIDATION] FOCL | Only 165 rows — need 200+ for LinReg
+2026-06-17 18:56:20 | WARNING  | error_handler             | [VALIDATION] FORTY | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:56:24 | WARNING  | error_handler             | [VALIDATION] FRBT | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:56:25 | WARNING  | error_handler             | [VALIDATION] FRMEP | Only 58 rows — need 200+ for LinReg
+2026-06-17 18:56:28 | WARNING  | error_handler             | [VALIDATION] FRTT | Only 133 rows — need 200+ for LinReg
+2026-06-17 18:56:30 | WARNING  | error_handler             | [VALIDATION] FSHP | Only 16 rows — need 200+ for LinReg
+2026-06-17 18:56:30 | WARNING  | error_handler             | [VALIDATION] FSHPU | Only 18 rows — need 200+ for LinReg
+2026-06-17 18:56:30 | WARNING  | error_handler             | [VALIDATION] FSHPR | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:56:35 | WARNING  | error_handler             | [VALIDATION] FTHAU | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:56:35 | WARNING  | error_handler             | [VALIDATION] FTH | Only 21 rows — need 200+ for LinReg
+2026-06-17 18:56:39 | WARNING  | error_handler             | [VALIDATION] FUSB | Only 131 rows — need 200+ for LinReg
+2026-06-17 18:56:39 | WARNING  | error_handler             | [VALIDATION] FUSEW | Only 78 rows — need 200+ for LinReg
+2026-06-17 18:56:40 | WARNING  | error_handler             | [VALIDATION] FVAV | Only 35 rows — need 200+ for LinReg
+2026-06-17 18:56:40 | WARNING  | error_handler             | [VALIDATION] FVNNR | Only 5 rows — need 200+ for LinReg
+2026-06-17 18:56:40 | WARNING  | error_handler             | [VALIDATION] FVNNU | Only 25 rows — need 200+ for LinReg
+2026-06-17 18:56:42 | WARNING  | error_handler             | [VALIDATION] FXACU | Only 80 rows — need 200+ for LinReg
+2026-06-17 18:56:44 | WARNING  | error_handler             | [VALIDATION] GAINZ | Only 107 rows — need 200+ for LinReg
+2026-06-17 18:56:48 | WARNING  | error_handler             | [VALIDATION] GBLI | Only 126 rows — need 200+ for LinReg
+2026-06-17 18:56:49 | WARNING  | error_handler             | [VALIDATION] GCGRU | Only 131 rows — need 200+ for LinReg
+2026-06-17 18:56:51 | WARNING  | error_handler             | [VALIDATION] GDEV | Only 183 rows — need 200+ for LinReg
+2026-06-17 18:56:52 | WARNING  | error_handler             | [VALIDATION] GDHG | Only 148 rows — need 200+ for LinReg
+2026-06-17 18:56:54 | WARNING  | error_handler             | [VALIDATION] GECCG | Only 65 rows — need 200+ for LinReg
+2026-06-17 18:56:54 | WARNING  | error_handler             | [VALIDATION] GECCH | Only 61 rows — need 200+ for LinReg
+2026-06-17 18:56:54 | WARNING  | error_handler             | [VALIDATION] GECCI | Only 72 rows — need 200+ for LinReg
+2026-06-17 18:56:55 | WARNING  | error_handler             | [VALIDATION] GEGGL | Only 119 rows — need 200+ for LinReg
+2026-06-17 18:57:00 | WARNING  | error_handler             | [VALIDATION] GFAIW | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:57:05 | WARNING  | error_handler             | [VALIDATION] GIBOW | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:57:06 | WARNING  | error_handler             | [VALIDATION] GIGM | Only 176 rows — need 200+ for LinReg
+2026-06-17 18:57:08 | WARNING  | error_handler             | [VALIDATION] GIW | Only 86 rows — need 200+ for LinReg
+2026-06-17 18:57:08 | WARNING  | error_handler             | [VALIDATION] GIWWR | Only 95 rows — need 200+ for LinReg
+2026-06-17 18:57:08 | WARNING  | error_handler             | [VALIDATION] GIWWU | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:57:08 | WARNING  | error_handler             | [VALIDATION] GIX | Only 33 rows — need 200+ for LinReg
+2026-06-17 18:57:10 | WARNING  | error_handler             | [VALIDATION] GJO | Only 34 rows — need 200+ for LinReg
+2026-06-17 18:57:10 | WARNING  | error_handler             | [VALIDATION] GIXXU | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:57:10 | WARNING  | error_handler             | [VALIDATION] GIXXR | Only 121 rows — need 200+ for LinReg
+2026-06-17 18:57:10 | WARNING  | error_handler             | [VALIDATION] GJP | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:57:10 | WARNING  | error_handler             | [VALIDATION] GJH | Only 72 rows — need 200+ for LinReg
+2026-06-17 18:57:11 | WARNING  | error_handler             | [VALIDATION] GJR | Only 14 rows — need 200+ for LinReg
+2026-06-17 18:57:11 | WARNING  | error_handler             | [VALIDATION] GJS | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:57:11 | WARNING  | error_handler             | [VALIDATION] GJT | Only 26 rows — need 200+ for LinReg
+2026-06-17 18:57:12 | WARNING  | error_handler             | [VALIDATION] GLED | Only 85 rows — need 200+ for LinReg
+2026-06-17 18:57:25 | WARNING  | error_handler             | [VALIDATION] GOODN | Only 179 rows — need 200+ for LinReg
+2026-06-17 18:57:26 | WARNING  | error_handler             | [VALIDATION] GOOGM | Only 181 rows — need 200+ for LinReg
+2026-06-17 18:57:27 | WARNING  | error_handler             | [VALIDATION] GOOGN | Only 180 rows — need 200+ for LinReg
+2026-06-17 18:57:28 | WARNING  | error_handler             | [VALIDATION] GPAC | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:57:28 | WARNING  | error_handler             | [VALIDATION] GPACU | Only 10 rows — need 200+ for LinReg
+2026-06-17 18:57:28 | WARNING  | error_handler             | [VALIDATION] GPAT | Only 55 rows — need 200+ for LinReg
+2026-06-17 18:57:28 | WARNING  | error_handler             | [VALIDATION] GPACW | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:57:28 | WARNING  | error_handler             | [VALIDATION] GPATU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:57:32 | WARNING  | error_handler             | [VALIDATION] GRAF | Only 96 rows — need 200+ for LinReg
+2026-06-17 18:57:35 | WARNING  | error_handler             | [VALIDATION] GRF | Only 109 rows — need 200+ for LinReg
+2026-06-17 18:57:36 | WARNING  | error_handler             | [VALIDATION] GRN | Only 48 rows — need 200+ for LinReg
+2026-06-17 18:57:40 | WARNING  | error_handler             | [VALIDATION] GSHR | Only 14 rows — need 200+ for LinReg
+2026-06-17 18:57:40 | WARNING  | error_handler             | [VALIDATION] GSHRU | Only 7 rows — need 200+ for LinReg
+2026-06-17 18:57:40 | WARNING  | error_handler             | [VALIDATION] GSHRW | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:57:41 | WARNING  | error_handler             | [VALIDATION] GSIW | Only 123 rows — need 200+ for LinReg
+2026-06-17 18:57:42 | WARNING  | error_handler             | [VALIDATION] GSRFR | Only 80 rows — need 200+ for LinReg
+2026-06-17 18:57:42 | WARNING  | error_handler             | [VALIDATION] GSRF | Only 56 rows — need 200+ for LinReg
+2026-06-17 18:57:42 | WARNING  | error_handler             | [VALIDATION] GSRFU | Only 16 rows — need 200+ for LinReg
+2026-06-17 18:57:42 | WARNING  | error_handler             | [VALIDATION] GSRVU | Only 74 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTEN | Only 91 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTENU | Only 13 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTENW | Only 3 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTERA | Only 34 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTERR | Only 28 rows — need 200+ for LinReg
+2026-06-17 18:57:43 | WARNING  | error_handler             | [VALIDATION] GTERU | Only 18 rows — need 200+ for LinReg
+2026-06-17 18:57:44 | WARNING  | error_handler             | [VALIDATION] GTERW | Only 38 rows — need 200+ for LinReg
+2026-06-17 18:57:47 | WARNING  | error_handler             | [VALIDATION] GUACU | Only 134 rows — need 200+ for LinReg
+2026-06-17 18:57:51 | WARNING  | error_handler             | [VALIDATION] GYRO | Only 75 rows — need 200+ for LinReg
+2026-06-17 18:57:52 | WARNING  | error_handler             | [VALIDATION] HACQ | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:57:52 | WARNING  | error_handler             | [VALIDATION] HACQU | Only 77 rows — need 200+ for LinReg
+2026-06-17 18:57:52 | WARNING  | error_handler             | [VALIDATION] HACQW | Only 42 rows — need 200+ for LinReg
+2026-06-17 18:57:54 | WARNING  | error_handler             | [VALIDATION] HAVA | Only 25 rows — need 200+ for LinReg
+2026-06-17 18:57:55 | WARNING  | error_handler             | [VALIDATION] HAVAR | Only 19 rows — need 200+ for LinReg
+2026-06-17 18:57:55 | WARNING  | error_handler             | [VALIDATION] HAVAU | Only 8 rows — need 200+ for LinReg
+2026-06-17 18:57:57 | WARNING  | error_handler             | [VALIDATION] HBNB | Only 161 rows — need 200+ for LinReg
+2026-06-17 18:58:13 | WARNING  | error_handler             | [VALIDATION] HCAC | Only 82 rows — need 200+ for LinReg
+2026-06-17 18:58:13 | WARNING  | error_handler             | [VALIDATION] HCACR | Only 57 rows — need 200+ for LinReg
+2026-06-17 18:58:13 | WARNING  | error_handler             | [VALIDATION] HCACU | Only 32 rows — need 200+ for LinReg
+2026-06-17 18:58:14 | WARNING  | error_handler             | [VALIDATION] HCIC | Only 66 rows — need 200+ for LinReg
+2026-06-17 18:58:15 | WARNING  | error_handler             | [VALIDATION] HCICR | Only 14 rows — need 200+ for LinReg
+2026-06-17 18:58:15 | WARNING  | error_handler             | [VALIDATION] HCICU | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:58:15 | WARNING  | error_handler             | [VALIDATION] HCMA | Only 73 rows — need 200+ for LinReg
+2026-06-17 18:58:16 | WARNING  | error_handler             | [VALIDATION] HCMAU | Only 36 rows — need 200+ for LinReg
+2026-06-17 18:58:16 | WARNING  | error_handler             | [VALIDATION] HCMAW | Only 84 rows — need 200+ for LinReg
+2026-06-17 18:58:17 | WARNING  | error_handler             | [VALIDATION] HCXY | Only 151 rows — need 200+ for LinReg
+2026-06-17 18:58:17 | WARNING  | error_handler             | [VALIDATION] HDL | Only 57 rows — need 200+ for LinReg
+2026-06-17 18:58:17 | WARNING  | error_handler             | [VALIDATION] HDRNW | Only 193 rows — need 200+ for LinReg
+2026-06-17 18:58:20 | WARNING  | error_handler             | [VALIDATION] HFBL | Only 55 rows — need 200+ for LinReg
+2026-06-17 18:58:23 | WARNING  | error_handler             | [VALIDATION] HHS | Only 95 rows — need 200+ for LinReg
+2026-06-17 18:58:31 | WARNING  | error_handler             | [VALIDATION] HLXC | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:58:34 | WARNING  | error_handler             | [VALIDATION] HNNAZ | Only 54 rows — need 200+ for LinReg
+2026-06-17 18:58:36 | WARNING  | error_handler             | [VALIDATION] HONAV | Only 6 rows — need 200+ for LinReg
+2026-06-17 18:58:36 | WARNING  | error_handler             | [VALIDATION] HONIV | Only 1 rows — need 200+ for LinReg
+2026-06-17 18:58:45 | WARNING  | error_handler             | [VALIDATION] HOVNP | Only 145 rows — need 200+ for LinReg
+2026-06-17 18:58:53 | WARNING  | error_handler             | [VALIDATION] HTFC | Only 154 rows — need 200+ for LinReg
+2026-06-17 18:58:54 | WARNING  | error_handler             | [VALIDATION] HTLM | Only 147 rows — need 200+ for LinReg
+2026-06-17 18:58:59 | WARNING  | error_handler             | [VALIDATION] HVII | Only 129 rows — need 200+ for LinReg
+2026-06-17 18:59:00 | WARNING  | error_handler             | [VALIDATION] HVIIR | Only 110 rows — need 200+ for LinReg
+2026-06-17 18:59:00 | WARNING  | error_handler             | [VALIDATION] HVIIU | Only 11 rows — need 200+ for LinReg
+2026-06-17 18:59:00 | WARNING  | error_handler             | [VALIDATION] HVMC | Only 32 rows — need 200+ for LinReg
+2026-06-17 18:59:00 | WARNING  | error_handler             | [VALIDATION] HVMCU | Only 23 rows — need 200+ for LinReg
+2026-06-17 18:59:00 | WARNING  | error_handler             | [VALIDATION] HVMCW | Only 30 rows — need 200+ for LinReg
+2026-06-17 18:59:05 | WARNING  | error_handler             | [VALIDATION] IACO | Only 69 rows — need 200+ for LinReg
+2026-06-17 18:59:05 | WARNING  | error_handler             | [VALIDATION] IACOU | Only 42 rows — need 200+ for LinReg
+2026-06-17 18:59:06 | WARNING  | error_handler             | [VALIDATION] IACOW | Only 85 rows — need 200+ for LinReg
+2026-06-17 18:59:06 | WARNING  | error_handler             | [VALIDATION] IACQU | Only 166 rows — need 200+ for LinReg
+2026-06-17 18:59:08 | WARNING  | error_handler             | [VALIDATION] IBAC | Only 32 rows — need 200+ for LinReg
+2026-06-17 18:59:08 | WARNING  | error_handler             | [VALIDATION] IBACR | Only 58 rows — need 200+ for LinReg
+2026-06-17 18:59:13 | WARNING  | error_handler             | [VALIDATION] IDACU | Only 65 rows — need 200+ for LinReg
+2026-06-17 18:59:15 | WARNING  | error_handler             | [VALIDATION] IEAG | Only 47 rows — need 200+ for LinReg
+2026-06-17 18:59:15 | WARNING  | error_handler             | [VALIDATION] IEAGR | Only 44 rows — need 200+ for LinReg
+2026-06-17 18:59:16 | WARNING  | error_handler             | [VALIDATION] IEAGU | Only 41 rows — need 200+ for LinReg
+2026-06-17 18:59:19 | WARNING  | error_handler             | [VALIDATION] IGAC | Only 16 rows — need 200+ for LinReg
+2026-06-17 18:59:19 | WARNING  | error_handler             | [VALIDATION] IGACU | Only 12 rows — need 200+ for LinReg
+2026-06-17 18:59:19 | WARNING  | error_handler             | [VALIDATION] IGACR | Only 22 rows — need 200+ for LinReg
+2026-06-17 18:59:23 | WARNING  | error_handler             | [VALIDATION] ILAG | Only 144 rows — need 200+ for LinReg
+2026-06-17 18:59:23 | WARNING  | error_handler             | [VALIDATION] ILLRW | Only 115 rows — need 200+ for LinReg
+2026-06-17 18:59:23 | WARNING  | error_handler             | [VALIDATION] ILLU | Only 28 rows — need 200+ for LinReg
+2026-06-17 18:59:23 | WARNING  | error_handler             | [VALIDATION] ILLUU | Only 23 rows — need 200+ for LinReg
+2026-06-17 18:59:26 | WARNING  | error_handler             | [VALIDATION] IMPPP | Only 67 rows — need 200+ for LinReg
+2026-06-17 18:59:30 | WARNING  | error_handler             | [VALIDATION] INACR | Only 31 rows — need 200+ for LinReg
+2026-06-17 18:59:30 | WARNING  | error_handler             | [VALIDATION] INACU | Only 17 rows — need 200+ for LinReg
+2026-06-17 18:59:30 | WARNING  | error_handler             | [VALIDATION] INBKZ | Only 113 rows — need 200+ for LinReg
+2026-06-17 18:59:30 | WARNING  | error_handler             | [VALIDATION] INAC | Only 38 rows — need 200+ for LinReg
+2026-06-17 18:59:33 | WARNING  | error_handler             | [VALIDATION] INIO | Only 182 rows — need 200+ for LinReg
+2026-06-17 18:59:34 | WARNING  | error_handler             | [VALIDATION] INLX | Only 56 rows — need 200+ for LinReg
+2026-06-17 18:59:37 | WARNING  | error_handler             | [VALIDATION] INTJ | Only 119 rows — need 200+ for LinReg
+2026-06-17 18:59:41 | WARNING  | error_handler             | [VALIDATION] IOR | Only 77 rows — need 200+ for LinReg
+2026-06-17 18:59:42 | WARNING  | error_handler             | [VALIDATION] IPCX | Only 90 rows — need 200+ for LinReg
+2026-06-17 18:59:43 | WARNING  | error_handler             | [VALIDATION] IPCXR | Only 104 rows — need 200+ for LinReg
+2026-06-17 18:59:43 | WARNING  | error_handler             | [VALIDATION] IPEXR | Only 37 rows — need 200+ for LinReg
+2026-06-17 18:59:43 | WARNING  | error_handler             | [VALIDATION] IPCXU | Only 3 rows — need 200+ for LinReg
+2026-06-17 18:59:43 | WARNING  | error_handler             | [VALIDATION] IPEX | Only 58 rows — need 200+ for LinReg
+2026-06-17 18:59:44 | WARNING  | error_handler             | [VALIDATION] IPEXU | Only 5 rows — need 200+ for LinReg
+2026-06-17 18:59:44 | WARNING  | error_handler             | [VALIDATION] IPFX | Only 190 rows — need 200+ for LinReg
+2026-06-17 18:59:44 | WARNING  | error_handler             | [VALIDATION] IPFXU | Only 125 rows — need 200+ for LinReg
+2026-06-17 18:59:44 | WARNING  | error_handler             | [VALIDATION] IPFXW | Only 181 rows — need 200+ for LinReg
+2026-06-17 18:59:46 | WARNING  | error_handler             | [VALIDATION] IPVVU | Only 68 rows — need 200+ for LinReg
+2026-06-17 18:59:48 | WARNING  | error_handler             | [VALIDATION] IRAB | Only 30 rows — need 200+ for LinReg
+2026-06-17 18:59:49 | WARNING  | error_handler             | [VALIDATION] IRHO | Only 109 rows — need 200+ for LinReg
+2026-06-17 18:59:49 | WARNING  | error_handler             | [VALIDATION] IRHOR | Only 108 rows — need 200+ for LinReg
+2026-06-17 18:59:49 | WARNING  | error_handler             | [VALIDATION] IRHOU | Only 49 rows — need 200+ for LinReg
+2026-06-17 18:59:52 | WARNING  | error_handler             | [VALIDATION] ISNRU | Only 48 rows — need 200+ for LinReg
+2026-06-17 18:59:54 | WARNING  | error_handler             | [VALIDATION] ITHA | Only 20 rows — need 200+ for LinReg
+2026-06-17 18:59:54 | WARNING  | error_handler             | [VALIDATION] ITHAU | Only 5 rows — need 200+ for LinReg
+2026-06-17 18:59:54 | WARNING  | error_handler             | [VALIDATION] ITHAW | Only 15 rows — need 200+ for LinReg
+2026-06-17 18:59:59 | WARNING  | error_handler             | [VALIDATION] JABRU | Only 97 rows — need 200+ for LinReg
+2026-06-17 18:59:59 | WARNING  | error_handler             | [VALIDATION] JACS | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:00:00 | WARNING  | error_handler             | [VALIDATION] JATT | Only 124 rows — need 200+ for LinReg
+2026-06-17 19:00:02 | WARNING  | error_handler             | [VALIDATION] JBK | Only 61 rows — need 200+ for LinReg
+2026-06-17 19:00:06 | WARNING  | error_handler             | [VALIDATION] JENA | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:00:07 | WARNING  | error_handler             | [VALIDATION] JG | Only 126 rows — need 200+ for LinReg
+2026-06-17 19:00:15 | WARNING  | error_handler             | [VALIDATION] JXG | Only 144 rows — need 200+ for LinReg
+2026-06-17 19:00:15 | WARNING  | error_handler             | [VALIDATION] JWEL | Only 112 rows — need 200+ for LinReg
+2026-06-17 19:00:19 | WARNING  | error_handler             | [VALIDATION] KBON | Only 101 rows — need 200+ for LinReg
+2026-06-17 19:00:19 | WARNING  | error_handler             | [VALIDATION] KBONU | Only 100 rows — need 200+ for LinReg
+2026-06-17 19:00:20 | WARNING  | error_handler             | [VALIDATION] KBONW | Only 63 rows — need 200+ for LinReg
+2026-06-17 19:00:21 | WARNING  | error_handler             | [VALIDATION] KCHV | Only 46 rows — need 200+ for LinReg
+2026-06-17 19:00:21 | WARNING  | error_handler             | [VALIDATION] KCHVR | Only 65 rows — need 200+ for LinReg
+2026-06-17 19:00:21 | WARNING  | error_handler             | [VALIDATION] KCHVU | Only 2 rows — need 200+ for LinReg
+2026-06-17 19:00:23 | WARNING  | error_handler             | [VALIDATION] KELYB | Only 110 rows — need 200+ for LinReg
+2026-06-17 19:00:23 | WARNING  | error_handler             | [VALIDATION] KEQU | Only 101 rows — need 200+ for LinReg
+2026-06-17 19:00:24 | WARNING  | error_handler             | [VALIDATION] KEYYU | Only 84 rows — need 200+ for LinReg
+2026-06-17 19:00:25 | WARNING  | error_handler             | [VALIDATION] KFII | Only 31 rows — need 200+ for LinReg
+2026-06-17 19:00:25 | WARNING  | error_handler             | [VALIDATION] KFFB | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:00:26 | WARNING  | error_handler             | [VALIDATION] KFIIR | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:00:26 | WARNING  | error_handler             | [VALIDATION] KFIIU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:00:36 | WARNING  | error_handler             | [VALIDATION] KOYN | Only 61 rows — need 200+ for LinReg
+2026-06-17 19:00:38 | WARNING  | error_handler             | [VALIDATION] KOYNW | Only 29 rows — need 200+ for LinReg
+2026-06-17 19:00:38 | WARNING  | error_handler             | [VALIDATION] KOYNU | Only 25 rows — need 200+ for LinReg
+2026-06-17 19:00:38 | WARNING  | error_handler             | [VALIDATION] KPET | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:00:39 | WARNING  | error_handler             | [VALIDATION] KRAQ | Only 130 rows — need 200+ for LinReg
+2026-06-17 19:00:39 | WARNING  | error_handler             | [VALIDATION] KRAQW | Only 67 rows — need 200+ for LinReg
+2026-06-17 19:00:39 | WARNING  | error_handler             | [VALIDATION] KRAQU | Only 88 rows — need 200+ for LinReg
+2026-06-17 19:00:42 | WARNING  | error_handler             | [VALIDATION] KRSP | Only 161 rows — need 200+ for LinReg
+2026-06-17 19:00:43 | WARNING  | error_handler             | [VALIDATION] KTH | Only 85 rows — need 200+ for LinReg
+2026-06-17 19:00:44 | WARNING  | error_handler             | [VALIDATION] KTN | Only 105 rows — need 200+ for LinReg
+2026-06-17 19:00:44 | WARNING  | error_handler             | [VALIDATION] KTWO | Only 76 rows — need 200+ for LinReg
+2026-06-17 19:00:44 | WARNING  | error_handler             | [VALIDATION] KTWOR | Only 38 rows — need 200+ for LinReg
+2026-06-17 19:00:45 | WARNING  | error_handler             | [VALIDATION] KTWOU | Only 18 rows — need 200+ for LinReg
+2026-06-17 19:00:45 | WARNING  | error_handler             | [VALIDATION] KVAC | Only 17 rows — need 200+ for LinReg
+2026-06-17 19:00:46 | WARNING  | error_handler             | [VALIDATION] KVACU | Only 7 rows — need 200+ for LinReg
+2026-06-17 19:00:46 | WARNING  | error_handler             | [VALIDATION] KWMWW | Only 41 rows — need 200+ for LinReg
+2026-06-17 19:00:48 | WARNING  | error_handler             | [VALIDATION] KYIVW | Only 172 rows — need 200+ for LinReg
+2026-06-17 19:00:51 | WARNING  | error_handler             | [VALIDATION] LAFA | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:00:51 | WARNING  | error_handler             | [VALIDATION] LAFAR | Only 31 rows — need 200+ for LinReg
+2026-06-17 19:00:51 | WARNING  | error_handler             | [VALIDATION] LAFAU | Only 43 rows — need 200+ for LinReg
+2026-06-17 19:00:53 | WARNING  | error_handler             | [VALIDATION] LATA | Only 32 rows — need 200+ for LinReg
+2026-06-17 19:00:53 | WARNING  | error_handler             | [VALIDATION] LATAW | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:00:54 | WARNING  | error_handler             | [VALIDATION] LATAU | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:00:56 | WARNING  | error_handler             | [VALIDATION] LBTYB | Only 134 rows — need 200+ for LinReg
+2026-06-17 19:00:57 | WARNING  | error_handler             | [VALIDATION] LCCC | Only 45 rows — need 200+ for LinReg
+2026-06-17 19:00:57 | WARNING  | error_handler             | [VALIDATION] LCCCR | Only 59 rows — need 200+ for LinReg
+2026-06-17 19:00:57 | WARNING  | error_handler             | [VALIDATION] LCCCU | Only 29 rows — need 200+ for LinReg
+2026-06-17 19:01:02 | WARNING  | error_handler             | [VALIDATION] LEGO | Only 110 rows — need 200+ for LinReg
+2026-06-17 19:01:04 | WARNING  | error_handler             | [VALIDATION] LFAC | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:01:04 | WARNING  | error_handler             | [VALIDATION] LFACU | Only 5 rows — need 200+ for LinReg
+2026-06-17 19:01:04 | WARNING  | error_handler             | [VALIDATION] LFACW | Only 23 rows — need 200+ for LinReg
+2026-06-17 19:01:05 | WARNING  | error_handler             | [VALIDATION] LFMDP | Only 116 rows — need 200+ for LinReg
+2026-06-17 19:01:14 | WARNING  | error_handler             | [VALIDATION] LIMNW | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:01:18 | WARNING  | error_handler             | [VALIDATION] LKSP | Only 19 rows — need 200+ for LinReg
+2026-06-17 19:01:18 | WARNING  | error_handler             | [VALIDATION] LKSPR | Only 68 rows — need 200+ for LinReg
+2026-06-17 19:01:19 | WARNING  | error_handler             | [VALIDATION] LKSPU | Only 6 rows — need 200+ for LinReg
+2026-06-17 19:01:26 | WARNING  | error_handler             | [VALIDATION] LOKVU | Only 33 rows — need 200+ for LinReg
+2026-06-17 19:01:26 | WARNING  | error_handler             | [VALIDATION] LOKVW | Only 144 rows — need 200+ for LinReg
+2026-06-17 19:01:28 | WARNING  | error_handler             | [VALIDATION] LPAAU | Only 4 rows — need 200+ for LinReg
+2026-06-17 19:01:28 | WARNING  | error_handler             | [VALIDATION] LPAA | Only 52 rows — need 200+ for LinReg
+2026-06-17 19:01:28 | WARNING  | error_handler             | [VALIDATION] LPBB | Only 54 rows — need 200+ for LinReg
+2026-06-17 19:01:28 | WARNING  | error_handler             | [VALIDATION] LPBBU | Only 3 rows — need 200+ for LinReg
+2026-06-17 19:01:29 | WARNING  | error_handler             | [VALIDATION] LPCV | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:01:29 | WARNING  | error_handler             | [VALIDATION] LPCVU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:01:29 | WARNING  | error_handler             | [VALIDATION] LPCVW | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:01:35 | WARNING  | error_handler             | [VALIDATION] LTGRU | Only 59 rows — need 200+ for LinReg
+2026-06-17 19:01:39 | WARNING  | error_handler             | [VALIDATION] LWAC | Only 36 rows — need 200+ for LinReg
+2026-06-17 19:01:39 | WARNING  | error_handler             | [VALIDATION] LWACU | Only 2 rows — need 200+ for LinReg
+2026-06-17 19:01:39 | WARNING  | error_handler             | [VALIDATION] LWACW | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:01:46 | WARNING  | error_handler             | [VALIDATION] MACI | Only 34 rows — need 200+ for LinReg
+2026-06-17 19:01:46 | WARNING  | error_handler             | [VALIDATION] MACIU | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:01:50 | WARNING  | error_handler             | [VALIDATION] MAYS | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:01:51 | WARNING  | error_handler             | [VALIDATION] MBAVU | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:01:51 | WARNING  | error_handler             | [VALIDATION] MBAV | Only 169 rows — need 200+ for LinReg
+2026-06-17 19:01:52 | WARNING  | error_handler             | [VALIDATION] MBBC | Only 145 rows — need 200+ for LinReg
+2026-06-17 19:01:53 | WARNING  | error_handler             | [VALIDATION] MBNKO | Only 103 rows — need 200+ for LinReg
+2026-06-17 19:01:55 | WARNING  | error_handler             | [VALIDATION] MBVI | Only 78 rows — need 200+ for LinReg
+2026-06-17 19:01:55 | WARNING  | error_handler             | [VALIDATION] MBVIU | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:01:56 | WARNING  | error_handler             | [VALIDATION] MBVIW | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:01:57 | WARNING  | error_handler             | [VALIDATION] MCAHU | Only 115 rows — need 200+ for LinReg
+2026-06-17 19:01:58 | WARNING  | error_handler             | [VALIDATION] MCGAU | Only 35 rows — need 200+ for LinReg
+2026-06-17 19:01:58 | WARNING  | error_handler             | [VALIDATION] MCGAW | Only 170 rows — need 200+ for LinReg
+2026-06-17 19:02:02 | WARNING  | error_handler             | [VALIDATION] MDBH | Only 114 rows — need 200+ for LinReg
+2026-06-17 19:02:03 | WARNING  | error_handler             | [VALIDATION] MDRR | Only 60 rows — need 200+ for LinReg
+2026-06-17 19:02:07 | WARNING  | error_handler             | [VALIDATION] MESHU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:02:07 | WARNING  | error_handler             | [VALIDATION] MESH | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:02:07 | WARNING  | error_handler             | [VALIDATION] MESHW | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:02:08 | WARNING  | error_handler             | [VALIDATION] METCI | Only 190 rows — need 200+ for LinReg
+2026-06-17 19:02:09 | WARNING  | error_handler             | [VALIDATION] METCZ | Only 168 rows — need 200+ for LinReg
+2026-06-17 19:02:09 | WARNING  | error_handler             | [VALIDATION] MEVOU | Only 36 rows — need 200+ for LinReg
+2026-06-17 19:02:09 | WARNING  | error_handler             | [VALIDATION] MEVOW | Only 84 rows — need 200+ for LinReg
+2026-06-17 19:02:09 | WARNING  | error_handler             | [VALIDATION] MEVO | Only 44 rows — need 200+ for LinReg
+2026-06-17 19:02:12 | WARNING  | error_handler             | [VALIDATION] MGLD | Only 187 rows — need 200+ for LinReg
+2026-06-17 19:02:15 | WARNING  | error_handler             | [VALIDATION] MGYR | Only 119 rows — need 200+ for LinReg
+2026-06-17 19:02:17 | WARNING  | error_handler             | [VALIDATION] MHLA | Only 147 rows — need 200+ for LinReg
+2026-06-17 19:02:18 | WARNING  | error_handler             | [VALIDATION] MHNC | Only 188 rows — need 200+ for LinReg
+2026-06-17 19:02:24 | WARNING  | error_handler             | [VALIDATION] MKLY | Only 102 rows — need 200+ for LinReg
+2026-06-17 19:02:24 | WARNING  | error_handler             | [VALIDATION] MKLYU | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:02:24 | WARNING  | error_handler             | [VALIDATION] MKLYR | Only 84 rows — need 200+ for LinReg
+2026-06-17 19:02:25 | WARNING  | error_handler             | [VALIDATION] MLAAU | Only 53 rows — need 200+ for LinReg
+2026-06-17 19:02:26 | WARNING  | error_handler             | [VALIDATION] MLCIL | Only 68 rows — need 200+ for LinReg
+2026-06-17 19:02:29 | WARNING  | error_handler             | [VALIDATION] MLPB | Only 192 rows — need 200+ for LinReg
+2026-06-17 19:02:32 | WARNING  | error_handler             | [VALIDATION] MMTX | Only 46 rows — need 200+ for LinReg
+2026-06-17 19:02:32 | WARNING  | error_handler             | [VALIDATION] MMTXU | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:02:32 | WARNING  | error_handler             | [VALIDATION] MMTXW | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:02:34 | WARNING  | error_handler             | [VALIDATION] MNSBP | Only 82 rows — need 200+ for LinReg
+2026-06-17 19:02:40 | WARNING  | error_handler             | [VALIDATION] MOLN | Only 94 rows — need 200+ for LinReg
+2026-06-17 19:02:48 | WARNING  | error_handler             | [VALIDATION] MSBIP | Only 94 rows — need 200+ for LinReg
+2026-06-17 19:02:48 | WARNING  | error_handler             | [VALIDATION] MSC | Only 191 rows — need 200+ for LinReg
+2026-06-17 19:02:53 | WARNING  | error_handler             | [VALIDATION] MTAL | Only 68 rows — need 200+ for LinReg
+2026-06-17 19:03:00 | WARNING  | error_handler             | [VALIDATION] MUZE | Only 57 rows — need 200+ for LinReg
+2026-06-17 19:03:00 | WARNING  | error_handler             | [VALIDATION] MUZEU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:03:00 | WARNING  | error_handler             | [VALIDATION] MUZEW | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:03:05 | WARNING  | error_handler             | [VALIDATION] MXE | Only 120 rows — need 200+ for LinReg
+2026-06-17 19:03:07 | WARNING  | error_handler             | [VALIDATION] MYSEW | Only 61 rows — need 200+ for LinReg
+2026-06-17 19:03:08 | WARNING  | error_handler             | [VALIDATION] MYX | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:03:08 | WARNING  | error_handler             | [VALIDATION] MYXXR | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:03:08 | WARNING  | error_handler             | [VALIDATION] MYXXU | Only 77 rows — need 200+ for LinReg
+2026-06-17 19:03:08 | WARNING  | error_handler             | [VALIDATION] MYXXW | Only 13 rows — need 200+ for LinReg
+2026-06-17 19:03:09 | WARNING  | error_handler             | [VALIDATION] MZYX | Only 152 rows — need 200+ for LinReg
+2026-06-17 19:03:18 | WARNING  | error_handler             | [VALIDATION] NBRG | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:03:18 | WARNING  | error_handler             | [VALIDATION] NBRGR | Only 54 rows — need 200+ for LinReg
+2026-06-17 19:03:18 | WARNING  | error_handler             | [VALIDATION] NBRGU | Only 31 rows — need 200+ for LinReg
+2026-06-17 19:03:20 | WARNING  | error_handler             | [VALIDATION] NCEW | Only 110 rows — need 200+ for LinReg
+2026-06-17 19:03:27 | WARNING  | error_handler             | [VALIDATION] NEN | Only 56 rows — need 200+ for LinReg
+2026-06-17 19:03:31 | WARNING  | error_handler             | [VALIDATION] NEWTG | Only 145 rows — need 200+ for LinReg
+2026-06-17 19:03:32 | WARNING  | error_handler             | [VALIDATION] NEWTI | Only 86 rows — need 200+ for LinReg
+2026-06-17 19:03:32 | WARNING  | error_handler             | [VALIDATION] NEWTO | Only 12 rows — need 200+ for LinReg
+2026-06-17 19:03:32 | WARNING  | error_handler             | [VALIDATION] NEWTP | Only 177 rows — need 200+ for LinReg
+2026-06-17 19:03:34 | WARNING  | error_handler             | [VALIDATION] NEXRW | Only 111 rows — need 200+ for LinReg
+2026-06-17 19:03:38 | WARNING  | error_handler             | [VALIDATION] NHICU | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:03:39 | WARNING  | error_handler             | [VALIDATION] NHIVU | Only 70 rows — need 200+ for LinReg
+2026-06-17 19:03:39 | WARNING  | error_handler             | [VALIDATION] NHIVW | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:03:40 | WARNING  | error_handler             | [VALIDATION] NHIV | Only 11 rows — need 200+ for LinReg
+2026-06-17 19:04:01 | WARNING  | error_handler             | [VALIDATION] NMP | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:04:02 | WARNING  | error_handler             | [VALIDATION] NMPAR | Only 45 rows — need 200+ for LinReg
+2026-06-17 19:04:02 | WARNING  | error_handler             | [VALIDATION] NMPAU | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:04:07 | WARNING  | error_handler             | [VALIDATION] NOEM | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:04:08 | WARNING  | error_handler             | [VALIDATION] NOEMR | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:04:08 | WARNING  | error_handler             | [VALIDATION] NOEMU | Only 5 rows — need 200+ for LinReg
+2026-06-17 19:04:10 | WARNING  | error_handler             | [VALIDATION] NOVTU | Only 150 rows — need 200+ for LinReg
+2026-06-17 19:04:11 | WARNING  | error_handler             | [VALIDATION] NPAC | Only 98 rows — need 200+ for LinReg
+2026-06-17 19:04:11 | WARNING  | error_handler             | [VALIDATION] NPACU | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:04:11 | WARNING  | error_handler             | [VALIDATION] NPACW | Only 62 rows — need 200+ for LinReg
+2026-06-17 19:04:26 | WARNING  | error_handler             | [VALIDATION] NTWO | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:04:27 | WARNING  | error_handler             | [VALIDATION] NTWOU | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:04:27 | WARNING  | error_handler             | [VALIDATION] NTZ | Only 170 rows — need 200+ for LinReg
+2026-06-17 19:04:40 | WARNING  | error_handler             | [VALIDATION] NXB | Only 170 rows — need 200+ for LinReg
+2026-06-17 19:04:45 | WARNING  | error_handler             | [VALIDATION] OACC | Only 20 rows — need 200+ for LinReg
+2026-06-17 19:04:45 | WARNING  | error_handler             | [VALIDATION] OACCU | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:04:45 | WARNING  | error_handler             | [VALIDATION] OBA | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:04:46 | WARNING  | error_handler             | [VALIDATION] OBAWW | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:04:46 | WARNING  | error_handler             | [VALIDATION] OBAWU | Only 2 rows — need 200+ for LinReg
+2026-06-17 19:04:49 | WARNING  | error_handler             | [VALIDATION] OCCIN | Only 133 rows — need 200+ for LinReg
+2026-06-17 19:04:49 | WARNING  | error_handler             | [VALIDATION] OCCIM | Only 78 rows — need 200+ for LinReg
+2026-06-17 19:04:54 | WARNING  | error_handler             | [VALIDATION] OFSSH | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:04:54 | WARNING  | error_handler             | [VALIDATION] OFSSO | Only 19 rows — need 200+ for LinReg
+2026-06-17 19:04:55 | WARNING  | error_handler             | [VALIDATION] OGCP | Only 35 rows — need 200+ for LinReg
+2026-06-17 19:04:56 | WARNING  | error_handler             | [VALIDATION] OHAC | Only 41 rows — need 200+ for LinReg
+2026-06-17 19:04:56 | WARNING  | error_handler             | [VALIDATION] OHACR | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:04:56 | WARNING  | error_handler             | [VALIDATION] OHACU | Only 105 rows — need 200+ for LinReg
+2026-06-17 19:04:57 | WARNING  | error_handler             | [VALIDATION] OIM | Only 41 rows — need 200+ for LinReg
+2026-06-17 19:04:58 | WARNING  | error_handler             | [VALIDATION] OIMAU | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:04:58 | WARNING  | error_handler             | [VALIDATION] OIOWW | Only 19 rows — need 200+ for LinReg
+2026-06-17 19:05:08 | WARNING  | error_handler             | [VALIDATION] ONCHU | Only 131 rows — need 200+ for LinReg
+2026-06-17 19:05:08 | WARNING  | error_handler             | [VALIDATION] ONCH | Only 67 rows — need 200+ for LinReg
+2026-06-17 19:05:08 | WARNING  | error_handler             | [VALIDATION] ONCHW | Only 49 rows — need 200+ for LinReg
+2026-06-17 19:05:19 | WARNING  | error_handler             | [VALIDATION] ORIQ | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:05:20 | WARNING  | error_handler             | [VALIDATION] ORIQU | Only 2 rows — need 200+ for LinReg
+2026-06-17 19:05:20 | WARNING  | error_handler             | [VALIDATION] ORIQW | Only 69 rows — need 200+ for LinReg
+2026-06-17 19:05:25 | WARNING  | error_handler             | [VALIDATION] OTGA | Only 48 rows — need 200+ for LinReg
+2026-06-17 19:05:25 | WARNING  | error_handler             | [VALIDATION] OTGAU | Only 38 rows — need 200+ for LinReg
+2026-06-17 19:05:26 | WARNING  | error_handler             | [VALIDATION] OTGAW | Only 38 rows — need 200+ for LinReg
+2026-06-17 19:05:30 | WARNING  | error_handler             | [VALIDATION] OXLCL | Only 153 rows — need 200+ for LinReg
+2026-06-17 19:05:30 | WARNING  | error_handler             | [VALIDATION] OXLCI | Only 191 rows — need 200+ for LinReg
+2026-06-17 19:05:30 | WARNING  | error_handler             | [VALIDATION] OXLCN | Only 137 rows — need 200+ for LinReg
+2026-06-17 19:05:30 | WARNING  | error_handler             | [VALIDATION] OXLCO | Only 98 rows — need 200+ for LinReg
+2026-06-17 19:05:31 | WARNING  | error_handler             | [VALIDATION] OXSQG | Only 60 rows — need 200+ for LinReg
+2026-06-17 19:05:32 | WARNING  | error_handler             | [VALIDATION] OXSQH | Only 131 rows — need 200+ for LinReg
+2026-06-17 19:05:34 | WARNING  | error_handler             | [VALIDATION] OYSEU | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:05:34 | WARNING  | error_handler             | [VALIDATION] OYSE | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:05:34 | WARNING  | error_handler             | [VALIDATION] OYSER | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:05:35 | WARNING  | error_handler             | [VALIDATION] PAAC | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:05:36 | WARNING  | error_handler             | [VALIDATION] PAACU | Only 18 rows — need 200+ for LinReg
+2026-06-17 19:05:36 | WARNING  | error_handler             | [VALIDATION] PAACW | Only 33 rows — need 200+ for LinReg
+2026-06-17 19:05:37 | WARNING  | error_handler             | [VALIDATION] PACH | Only 50 rows — need 200+ for LinReg
+2026-06-17 19:05:37 | WARNING  | error_handler             | [VALIDATION] PACHU | Only 17 rows — need 200+ for LinReg
+2026-06-17 19:05:37 | WARNING  | error_handler             | [VALIDATION] PACHW | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:05:41 | WARNING  | error_handler             | [VALIDATION] PAII | Only 31 rows — need 200+ for LinReg
+2026-06-17 19:05:42 | WARNING  | error_handler             | [VALIDATION] PALOU | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:05:42 | WARNING  | error_handler             | [VALIDATION] PALO | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:05:42 | WARNING  | error_handler             | [VALIDATION] PALOW | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:05:49 | WARNING  | error_handler             | [VALIDATION] PBLS | Only 118 rows — need 200+ for LinReg
+2026-06-17 19:05:49 | WARNING  | error_handler             | [VALIDATION] PBHC | Only 140 rows — need 200+ for LinReg
+2026-06-17 19:05:51 | WARNING  | error_handler             | [VALIDATION] PCAP | Only 66 rows — need 200+ for LinReg
+2026-06-17 19:05:51 | WARNING  | error_handler             | [VALIDATION] PCAPU | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:05:51 | WARNING  | error_handler             | [VALIDATION] PCAPW | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:05:57 | WARNING  | error_handler             | [VALIDATION] PCTTU | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:06:02 | WARNING  | error_handler             | [VALIDATION] PDPA | Only 103 rows — need 200+ for LinReg
+2026-06-17 19:06:04 | WARNING  | error_handler             | [VALIDATION] PECE | Only 60 rows — need 200+ for LinReg
+2026-06-17 19:06:04 | WARNING  | error_handler             | [VALIDATION] PECER | Only 99 rows — need 200+ for LinReg
+2026-06-17 19:06:05 | WARNING  | error_handler             | [VALIDATION] PECEU | Only 150 rows — need 200+ for LinReg
+2026-06-17 19:06:05 | WARNING  | error_handler             | [VALIDATION] PECEW | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:06:12 | WARNING  | error_handler             | [VALIDATION] PFAI | Only 102 rows — need 200+ for LinReg
+2026-06-17 19:06:13 | WARNING  | error_handler             | [VALIDATION] PFFL | Only 104 rows — need 200+ for LinReg
+2026-06-17 19:06:15 | WARNING  | error_handler             | [VALIDATION] PFLA | Only 145 rows — need 200+ for LinReg
+2026-06-17 19:06:16 | WARNING  | error_handler             | [VALIDATION] PFX | Only 39 rows — need 200+ for LinReg
+2026-06-17 19:06:16 | WARNING  | error_handler             | [VALIDATION] PFXNZ | Only 62 rows — need 200+ for LinReg
+2026-06-17 19:06:17 | WARNING  | error_handler             | [VALIDATION] PGAC | Only 35 rows — need 200+ for LinReg
+2026-06-17 19:06:17 | WARNING  | error_handler             | [VALIDATION] PGACR | Only 12 rows — need 200+ for LinReg
+2026-06-17 19:06:17 | WARNING  | error_handler             | [VALIDATION] PGACU | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:06:29 | WARNING  | error_handler             | [VALIDATION] PLMK | Only 136 rows — need 200+ for LinReg
+2026-06-17 19:06:29 | WARNING  | error_handler             | [VALIDATION] PLMKU | Only 5 rows — need 200+ for LinReg
+2026-06-17 19:06:31 | WARNING  | error_handler             | [VALIDATION] PLSM | Only 186 rows — need 200+ for LinReg
+2026-06-17 19:06:32 | WARNING  | error_handler             | [VALIDATION] PLUT | Only 176 rows — need 200+ for LinReg
+2026-06-17 19:06:36 | WARNING  | error_handler             | [VALIDATION] PMTRU | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:06:36 | WARNING  | error_handler             | [VALIDATION] PMTR | Only 157 rows — need 200+ for LinReg
+2026-06-17 19:06:37 | WARNING  | error_handler             | [VALIDATION] PMTRW | Only 96 rows — need 200+ for LinReg
+2026-06-17 19:06:37 | WARNING  | error_handler             | [VALIDATION] PMTU | Only 114 rows — need 200+ for LinReg
+2026-06-17 19:06:41 | WARNING  | error_handler             | [VALIDATION] POLE | Only 46 rows — need 200+ for LinReg
+2026-06-17 19:06:41 | WARNING  | error_handler             | [VALIDATION] POLEU | Only 11 rows — need 200+ for LinReg
+2026-06-17 19:06:42 | WARNING  | error_handler             | [VALIDATION] PONO | Only 82 rows — need 200+ for LinReg
+2026-06-17 19:06:42 | WARNING  | error_handler             | [VALIDATION] PONOU | Only 89 rows — need 200+ for LinReg
+2026-06-17 19:06:42 | WARNING  | error_handler             | [VALIDATION] PONOR | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:06:44 | WARNING  | error_handler             | [VALIDATION] POWWP | Only 165 rows — need 200+ for LinReg
+2026-06-17 19:06:51 | WARNING  | error_handler             | [VALIDATION] PRHIZ | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:07:01 | WARNING  | error_handler             | [VALIDATION] PSNYW | Only 184 rows — need 200+ for LinReg
+2026-06-17 19:07:02 | WARNING  | error_handler             | [VALIDATION] PTACU | Only 89 rows — need 200+ for LinReg
+2026-06-17 19:07:04 | WARNING  | error_handler             | [VALIDATION] PTOR | Only 76 rows — need 200+ for LinReg
+2026-06-17 19:07:04 | WARNING  | error_handler             | [VALIDATION] PTORU | Only 77 rows — need 200+ for LinReg
+2026-06-17 19:07:04 | WARNING  | error_handler             | [VALIDATION] PTORW | Only 59 rows — need 200+ for LinReg
+2026-06-17 19:07:10 | WARNING  | error_handler             | [VALIDATION] PYT | Only 50 rows — need 200+ for LinReg
+2026-06-17 19:07:12 | WARNING  | error_handler             | [VALIDATION] QADR | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:07:12 | WARNING  | error_handler             | [VALIDATION] QADRU | Only 68 rows — need 200+ for LinReg
+2026-06-17 19:07:13 | WARNING  | error_handler             | [VALIDATION] QADRW | Only 43 rows — need 200+ for LinReg
+2026-06-17 19:07:14 | WARNING  | error_handler             | [VALIDATION] QETAU | Only 17 rows — need 200+ for LinReg
+2026-06-17 19:07:18 | WARNING  | error_handler             | [VALIDATION] QRED | Only 89 rows — need 200+ for LinReg
+2026-06-17 19:07:19 | WARNING  | error_handler             | [VALIDATION] QSEA | Only 102 rows — need 200+ for LinReg
+2026-06-17 19:07:19 | WARNING  | error_handler             | [VALIDATION] QSEAR | Only 60 rows — need 200+ for LinReg
+2026-06-17 19:07:19 | WARNING  | error_handler             | [VALIDATION] QSEAU | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:07:23 | WARNING  | error_handler             | [VALIDATION] QUMS | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:07:23 | WARNING  | error_handler             | [VALIDATION] QUMSU | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:07:23 | WARNING  | error_handler             | [VALIDATION] QUMSR | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:07:24 | WARNING  | error_handler             | [VALIDATION] RAAQU | Only 25 rows — need 200+ for LinReg
+2026-06-17 19:07:25 | WARNING  | error_handler             | [VALIDATION] RACC | Only 105 rows — need 200+ for LinReg
+2026-06-17 19:07:25 | WARNING  | error_handler             | [VALIDATION] RAC | Only 83 rows — need 200+ for LinReg
+2026-06-17 19:07:27 | WARNING  | error_handler             | [VALIDATION] RAND | Only 134 rows — need 200+ for LinReg
+2026-06-17 19:07:27 | WARNING  | error_handler             | [VALIDATION] RANG | Only 52 rows — need 200+ for LinReg
+2026-06-17 19:07:27 | WARNING  | error_handler             | [VALIDATION] RANGR | Only 57 rows — need 200+ for LinReg
+2026-06-17 19:07:28 | WARNING  | error_handler             | [VALIDATION] RANGU | Only 4 rows — need 200+ for LinReg
+2026-06-17 19:07:36 | WARNING  | error_handler             | [VALIDATION] RDACU | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:07:36 | WARNING  | error_handler             | [VALIDATION] RDAG | Only 88 rows — need 200+ for LinReg
+2026-06-17 19:07:36 | WARNING  | error_handler             | [VALIDATION] RDACR | Only 61 rows — need 200+ for LinReg
+2026-06-17 19:07:37 | WARNING  | error_handler             | [VALIDATION] RDAGU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:07:37 | WARNING  | error_handler             | [VALIDATION] RDAGW | Only 3 rows — need 200+ for LinReg
+2026-06-17 19:07:38 | WARNING  | error_handler             | [VALIDATION] RDIB | Only 42 rows — need 200+ for LinReg
+2026-06-17 19:07:42 | WARNING  | error_handler             | [VALIDATION] REGCP | Only 139 rows — need 200+ for LinReg
+2026-06-17 19:07:42 | WARNING  | error_handler             | [VALIDATION] REGCO | Only 105 rows — need 200+ for LinReg
+2026-06-17 19:07:49 | WARNING  | error_handler             | [VALIDATION] RFAI | Only 20 rows — need 200+ for LinReg
+2026-06-17 19:07:49 | WARNING  | error_handler             | [VALIDATION] RFAM | Only 50 rows — need 200+ for LinReg
+2026-06-17 19:07:49 | WARNING  | error_handler             | [VALIDATION] RFAIR | Only 65 rows — need 200+ for LinReg
+2026-06-17 19:07:50 | WARNING  | error_handler             | [VALIDATION] RFAMR | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:07:50 | WARNING  | error_handler             | [VALIDATION] RFAIU | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:07:50 | WARNING  | error_handler             | [VALIDATION] RFAMU | Only 74 rows — need 200+ for LinReg
+2026-06-17 19:07:55 | WARNING  | error_handler             | [VALIDATION] RIBB | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:07:55 | WARNING  | error_handler             | [VALIDATION] RIBBR | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:07:56 | WARNING  | error_handler             | [VALIDATION] RIBBU | Only 34 rows — need 200+ for LinReg
+2026-06-17 19:08:06 | WARNING  | error_handler             | [VALIDATION] RMCOW | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:08:09 | WARNING  | error_handler             | [VALIDATION] RNGT | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:08:09 | WARNING  | error_handler             | [VALIDATION] RNGTU | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:08:10 | WARNING  | error_handler             | [VALIDATION] RNGTW | Only 19 rows — need 200+ for LinReg
+2026-06-17 19:08:19 | WARNING  | error_handler             | [VALIDATION] RREVU | Only 129 rows — need 200+ for LinReg
+2026-06-17 19:08:19 | WARNING  | error_handler             | [VALIDATION] RREV | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:08:20 | WARNING  | error_handler             | [VALIDATION] RREVW | Only 25 rows — need 200+ for LinReg
+2026-06-17 19:08:22 | WARNING  | error_handler             | [VALIDATION] RTACU | Only 118 rows — need 200+ for LinReg
+2026-06-17 19:08:28 | WARNING  | error_handler             | [VALIDATION] RWAYL | Only 183 rows — need 200+ for LinReg
+2026-06-17 19:08:34 | WARNING  | error_handler             | [VALIDATION] SAAQU | Only 56 rows — need 200+ for LinReg
+2026-06-17 19:08:34 | WARNING  | error_handler             | [VALIDATION] SAAQW | Only 122 rows — need 200+ for LinReg
+2026-06-17 19:08:36 | WARNING  | error_handler             | [VALIDATION] SAC | Only 89 rows — need 200+ for LinReg
+2026-06-17 19:08:36 | WARNING  | error_handler             | [VALIDATION] SAGU | Only 61 rows — need 200+ for LinReg
+2026-06-17 19:08:38 | WARNING  | error_handler             | [VALIDATION] SAIH | Only 91 rows — need 200+ for LinReg
+2026-06-17 19:08:40 | WARNING  | error_handler             | [VALIDATION] SAJ | Only 81 rows — need 200+ for LinReg
+2026-06-17 19:08:41 | WARNING  | error_handler             | [VALIDATION] SANG | Only 155 rows — need 200+ for LinReg
+2026-06-17 19:08:42 | WARNING  | error_handler             | [VALIDATION] SAT | Only 186 rows — need 200+ for LinReg
+2026-06-17 19:08:49 | WARNING  | error_handler             | [VALIDATION] SBXD | Only 84 rows — need 200+ for LinReg
+2026-06-17 19:08:50 | WARNING  | error_handler             | [VALIDATION] SBXE | Only 18 rows — need 200+ for LinReg
+2026-06-17 19:08:50 | WARNING  | error_handler             | [VALIDATION] SCCD | Only 186 rows — need 200+ for LinReg
+2026-06-17 19:08:50 | WARNING  | error_handler             | [VALIDATION] SCAGW | Only 47 rows — need 200+ for LinReg
+2026-06-17 19:08:51 | WARNING  | error_handler             | [VALIDATION] SCCF | Only 177 rows — need 200+ for LinReg
+2026-06-17 19:08:51 | WARNING  | error_handler             | [VALIDATION] SCCG | Only 187 rows — need 200+ for LinReg
+2026-06-17 19:08:54 | WARNING  | error_handler             | [VALIDATION] SCII | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:08:54 | WARNING  | error_handler             | [VALIDATION] SCIIU | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:08:54 | WARNING  | error_handler             | [VALIDATION] SCIIR | Only 38 rows — need 200+ for LinReg
+2026-06-17 19:08:56 | WARNING  | error_handler             | [VALIDATION] SCPQ | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:08:56 | WARNING  | error_handler             | [VALIDATION] SCPQW | Only 48 rows — need 200+ for LinReg
+2026-06-17 19:08:57 | WARNING  | error_handler             | [VALIDATION] SCPQU | Only 23 rows — need 200+ for LinReg
+2026-06-17 19:08:59 | WARNING  | error_handler             | [VALIDATION] SDHI | Only 34 rows — need 200+ for LinReg
+2026-06-17 19:08:59 | WARNING  | error_handler             | [VALIDATION] SDHIR | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:09:00 | WARNING  | error_handler             | [VALIDATION] SDHIU | Only 3 rows — need 200+ for LinReg
+2026-06-17 19:09:03 | WARNING  | error_handler             | [VALIDATION] SENEB | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:09:08 | WARNING  | error_handler             | [VALIDATION] SFBC | Only 168 rows — need 200+ for LinReg
+2026-06-17 19:09:09 | WARNING  | error_handler             | [VALIDATION] SFWL | Only 158 rows — need 200+ for LinReg
+2026-06-17 19:09:15 | WARNING  | error_handler             | [VALIDATION] SHOE | Only 78 rows — need 200+ for LinReg
+2026-06-17 19:09:15 | WARNING  | error_handler             | [VALIDATION] SHOTU | Only 54 rows — need 200+ for LinReg
+2026-06-17 19:09:21 | WARNING  | error_handler             | [VALIDATION] SIM | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:09:21 | WARNING  | error_handler             | [VALIDATION] SIMAU | Only 50 rows — need 200+ for LinReg
+2026-06-17 19:09:25 | WARNING  | error_handler             | [VALIDATION] SKYAW | Only 51 rows — need 200+ for LinReg
+2026-06-17 19:09:27 | WARNING  | error_handler             | [VALIDATION] SLBT | Only 52 rows — need 200+ for LinReg
+2026-06-17 19:09:31 | WARNING  | error_handler             | [VALIDATION] SLMBP | Only 119 rows — need 200+ for LinReg
+2026-06-17 19:09:36 | WARNING  | error_handler             | [VALIDATION] SMCIP | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:09:46 | WARNING  | error_handler             | [VALIDATION] SOCA | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:09:46 | WARNING  | error_handler             | [VALIDATION] SOCAU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:09:46 | WARNING  | error_handler             | [VALIDATION] SOCAW | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:09:50 | WARNING  | error_handler             | [VALIDATION] SORNU | Only 21 rows — need 200+ for LinReg
+2026-06-17 19:09:50 | WARNING  | error_handler             | [VALIDATION] SORN | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:09:51 | WARNING  | error_handler             | [VALIDATION] SOUL | Only 151 rows — need 200+ for LinReg
+2026-06-17 19:09:53 | WARNING  | error_handler             | [VALIDATION] SPEG | Only 43 rows — need 200+ for LinReg
+2026-06-17 19:09:54 | WARNING  | error_handler             | [VALIDATION] SPEGR | Only 25 rows — need 200+ for LinReg
+2026-06-17 19:09:54 | WARNING  | error_handler             | [VALIDATION] SPCX | Only 69 rows — need 200+ for LinReg
+2026-06-17 19:09:55 | WARNING  | error_handler             | [VALIDATION] SPEGU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:09:56 | WARNING  | error_handler             | [VALIDATION] SPKLU | Only 36 rows — need 200+ for LinReg
+2026-06-17 19:09:57 | WARNING  | error_handler             | [VALIDATION] SPME | Only 137 rows — need 200+ for LinReg
+2026-06-17 19:10:00 | WARNING  | error_handler             | [VALIDATION] SPWRW | Only 75 rows — need 200+ for LinReg
+2026-06-17 19:10:01 | WARNING  | error_handler             | [VALIDATION] SQFTP | Only 109 rows — need 200+ for LinReg
+2026-06-17 19:10:05 | WARNING  | error_handler             | [VALIDATION] SRL | Only 129 rows — need 200+ for LinReg
+2026-06-17 19:10:07 | WARNING  | error_handler             | [VALIDATION] SSAC | Only 146 rows — need 200+ for LinReg
+2026-06-17 19:10:08 | WARNING  | error_handler             | [VALIDATION] SSACR | Only 118 rows — need 200+ for LinReg
+2026-06-17 19:10:08 | WARNING  | error_handler             | [VALIDATION] SSACU | Only 11 rows — need 200+ for LinReg
+2026-06-17 19:10:08 | WARNING  | error_handler             | [VALIDATION] SSBI | Only 94 rows — need 200+ for LinReg
+2026-06-17 19:10:08 | WARNING  | error_handler             | [VALIDATION] SSEAR | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:10:09 | WARNING  | error_handler             | [VALIDATION] SSEAU | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:10:09 | WARNING  | error_handler             | [VALIDATION] SSEA | Only 58 rows — need 200+ for LinReg
+2026-06-17 19:10:11 | WARNING  | error_handler             | [VALIDATION] SSSSL | Only 82 rows — need 200+ for LinReg
+2026-06-17 19:10:22 | WARNING  | error_handler             | [VALIDATION] STRRP | Only 164 rows — need 200+ for LinReg
+2026-06-17 19:10:25 | WARNING  | error_handler             | [VALIDATION] SUMA | Only 100 rows — need 200+ for LinReg
+2026-06-17 19:10:26 | WARNING  | error_handler             | [VALIDATION] SUMAU | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:10:26 | WARNING  | error_handler             | [VALIDATION] SUMAR | Only 23 rows — need 200+ for LinReg
+2026-06-17 19:10:30 | WARNING  | error_handler             | [VALIDATION] SVACU | Only 27 rows — need 200+ for LinReg
+2026-06-17 19:10:30 | WARNING  | error_handler             | [VALIDATION] SVAQ | Only 46 rows — need 200+ for LinReg
+2026-06-17 19:10:30 | WARNING  | error_handler             | [VALIDATION] SVAQU | Only 7 rows — need 200+ for LinReg
+2026-06-17 19:10:30 | WARNING  | error_handler             | [VALIDATION] SVAQW | Only 62 rows — need 200+ for LinReg
+2026-06-17 19:10:31 | WARNING  | error_handler             | [VALIDATION] SVCCU | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:10:31 | WARNING  | error_handler             | [VALIDATION] SVCC | Only 8 rows — need 200+ for LinReg
+2026-06-17 19:10:31 | WARNING  | error_handler             | [VALIDATION] SVIVU | Only 41 rows — need 200+ for LinReg
+2026-06-17 19:10:31 | WARNING  | error_handler             | [VALIDATION] SVIV | Only 76 rows — need 200+ for LinReg
+2026-06-17 19:10:32 | WARNING  | error_handler             | [VALIDATION] SVIVW | Only 138 rows — need 200+ for LinReg
+2026-06-17 19:10:34 | WARNING  | error_handler             | [VALIDATION] SWKHL | Only 107 rows — need 200+ for LinReg
+2026-06-17 19:10:42 | WARNING  | error_handler             | [VALIDATION] SZZLR | Only 67 rows — need 200+ for LinReg
+2026-06-17 19:10:42 | WARNING  | error_handler             | [VALIDATION] SZZLU | Only 2 rows — need 200+ for LinReg
+2026-06-17 19:10:42 | WARNING  | error_handler             | [VALIDATION] TACH | Only 67 rows — need 200+ for LinReg
+2026-06-17 19:10:43 | WARNING  | error_handler             | [VALIDATION] TACHU | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:10:43 | WARNING  | error_handler             | [VALIDATION] TACHW | Only 181 rows — need 200+ for LinReg
+2026-06-17 19:10:43 | WARNING  | error_handler             | [VALIDATION] TACOU | Only 59 rows — need 200+ for LinReg
+2026-06-17 19:10:44 | WARNING  | error_handler             | [VALIDATION] TACOW | Only 108 rows — need 200+ for LinReg
+2026-06-17 19:10:48 | WARNING  | error_handler             | [VALIDATION] TAVI | Only 74 rows — need 200+ for LinReg
+2026-06-17 19:10:48 | WARNING  | error_handler             | [VALIDATION] TAVIR | Only 76 rows — need 200+ for LinReg
+2026-06-17 19:10:49 | WARNING  | error_handler             | [VALIDATION] TAVIU | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:10:52 | WARNING  | error_handler             | [VALIDATION] TC | Only 115 rows — need 200+ for LinReg
+2026-06-17 19:10:52 | WARNING  | error_handler             | [VALIDATION] TCBS | Only 85 rows — need 200+ for LinReg
+2026-06-17 19:10:53 | WARNING  | error_handler             | [VALIDATION] TCI | Only 131 rows — need 200+ for LinReg
+2026-06-17 19:11:00 | WARNING  | error_handler             | [VALIDATION] TDACU | Only 31 rows — need 200+ for LinReg
+2026-06-17 19:11:02 | WARNING  | error_handler             | [VALIDATION] TDWDR | Only 20 rows — need 200+ for LinReg
+2026-06-17 19:11:02 | WARNING  | error_handler             | [VALIDATION] TDWD | Only 28 rows — need 200+ for LinReg
+2026-06-17 19:11:03 | WARNING  | error_handler             | [VALIDATION] TDWDU | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:11:14 | WARNING  | error_handler             | [VALIDATION] THCH | Only 167 rows — need 200+ for LinReg
+2026-06-17 19:11:20 | WARNING  | error_handler             | [VALIDATION] TLNCU | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:11:20 | WARNING  | error_handler             | [VALIDATION] TLNC | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:11:20 | WARNING  | error_handler             | [VALIDATION] TLNCW | Only 33 rows — need 200+ for LinReg
+2026-06-17 19:11:25 | WARNING  | error_handler             | [VALIDATION] TMTSU | Only 20 rows — need 200+ for LinReg
+2026-06-17 19:11:25 | WARNING  | error_handler             | [VALIDATION] TMTS | Only 33 rows — need 200+ for LinReg
+2026-06-17 19:11:26 | WARNING  | error_handler             | [VALIDATION] TMTSW | Only 35 rows — need 200+ for LinReg
+2026-06-17 19:11:32 | WARNING  | error_handler             | [VALIDATION] TPTA | Only 169 rows — need 200+ for LinReg
+2026-06-17 19:11:36 | WARNING  | error_handler             | [VALIDATION] TRGS | Only 43 rows — need 200+ for LinReg
+2026-06-17 19:11:37 | WARNING  | error_handler             | [VALIDATION] TRGSR | Only 36 rows — need 200+ for LinReg
+2026-06-17 19:11:37 | WARNING  | error_handler             | [VALIDATION] TRGSU | Only 21 rows — need 200+ for LinReg
+2026-06-17 19:11:38 | WARNING  | error_handler             | [VALIDATION] TRLV | Only 130 rows — need 200+ for LinReg
+2026-06-17 19:11:41 | WARNING  | error_handler             | [VALIDATION] TRSG | Only 159 rows — need 200+ for LinReg
+2026-06-17 19:11:49 | WARNING  | error_handler             | [VALIDATION] TULP | Only 141 rows — need 200+ for LinReg
+2026-06-17 19:11:50 | WARNING  | error_handler             | [VALIDATION] TVACU | Only 9 rows — need 200+ for LinReg
+2026-06-17 19:11:50 | WARNING  | error_handler             | [VALIDATION] TVACW | Only 4 rows — need 200+ for LinReg
+2026-06-17 19:11:51 | WARNING  | error_handler             | [VALIDATION] TVAI | Only 19 rows — need 200+ for LinReg
+2026-06-17 19:11:51 | WARNING  | error_handler             | [VALIDATION] TVAIR | Only 13 rows — need 200+ for LinReg
+2026-06-17 19:11:51 | WARNING  | error_handler             | [VALIDATION] TVAIU | Only 25 rows — need 200+ for LinReg
+2026-06-17 19:11:53 | WARNING  | error_handler             | [VALIDATION] TWLV | Only 21 rows — need 200+ for LinReg
+2026-06-17 19:11:53 | WARNING  | error_handler             | [VALIDATION] TWLVR | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:11:53 | WARNING  | error_handler             | [VALIDATION] TWLVU | Only 7 rows — need 200+ for LinReg
+2026-06-17 19:12:00 | WARNING  | error_handler             | [VALIDATION] UAC | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:12:01 | WARNING  | error_handler             | [VALIDATION] UBCP | Only 167 rows — need 200+ for LinReg
+2026-06-17 19:12:03 | WARNING  | error_handler             | [VALIDATION] UCIB | Only 57 rows — need 200+ for LinReg
+2026-06-17 19:12:14 | WARNING  | error_handler             | [VALIDATION] UONEK | Only 167 rows — need 200+ for LinReg
+2026-06-17 19:12:21 | WARNING  | error_handler             | [VALIDATION] UTSI | Only 123 rows — need 200+ for LinReg
+2026-06-17 19:12:23 | WARNING  | error_handler             | [VALIDATION] UYSCR | Only 1 rows — need 200+ for LinReg
+2026-06-17 19:12:23 | WARNING  | error_handler             | [VALIDATION] UYSC | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:12:24 | WARNING  | error_handler             | [VALIDATION] UYSCU | Only 13 rows — need 200+ for LinReg
+2026-06-17 19:12:25 | WARNING  | error_handler             | [VALIDATION] VABK | Only 131 rows — need 200+ for LinReg
+2026-06-17 19:12:26 | WARNING  | error_handler             | [VALIDATION] VALU | Only 114 rows — need 200+ for LinReg
+2026-06-17 19:12:29 | WARNING  | error_handler             | [VALIDATION] VECA | Only 76 rows — need 200+ for LinReg
+2026-06-17 19:12:35 | WARNING  | error_handler             | [VALIDATION] VHCP | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:12:35 | WARNING  | error_handler             | [VALIDATION] VHCPU | Only 34 rows — need 200+ for LinReg
+2026-06-17 19:12:35 | WARNING  | error_handler             | [VALIDATION] VHCPW | Only 11 rows — need 200+ for LinReg
+2026-06-17 19:12:45 | WARNING  | error_handler             | [VALIDATION] VLYPP | Only 156 rows — need 200+ for LinReg
+2026-06-17 19:12:47 | WARNING  | error_handler             | [VALIDATION] VNME | Only 57 rows — need 200+ for LinReg
+2026-06-17 19:12:47 | WARNING  | error_handler             | [VALIDATION] VNMEU | Only 15 rows — need 200+ for LinReg
+2026-06-17 19:12:47 | WARNING  | error_handler             | [VALIDATION] VNMEW | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:12:50 | WARNING  | error_handler             | [VALIDATION] VRM | Only 171 rows — need 200+ for LinReg
+2026-06-17 19:12:52 | WARNING  | error_handler             | [VALIDATION] VRXA | Only 64 rows — need 200+ for LinReg
+2026-06-17 19:12:52 | WARNING  | error_handler             | [VALIDATION] VRXAW | Only 65 rows — need 200+ for LinReg
+2026-06-17 19:13:10 | WARNING  | error_handler             | [VALIDATION] WENC | Only 54 rows — need 200+ for LinReg
+2026-06-17 19:13:10 | WARNING  | error_handler             | [VALIDATION] WENN | Only 83 rows — need 200+ for LinReg
+2026-06-17 19:13:10 | WARNING  | error_handler             | [VALIDATION] WENNU | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:13:10 | WARNING  | error_handler             | [VALIDATION] WENNW | Only 37 rows — need 200+ for LinReg
+2026-06-17 19:13:14 | WARNING  | error_handler             | [VALIDATION] WHFCL | Only 82 rows — need 200+ for LinReg
+2026-06-17 19:13:14 | WARNING  | error_handler             | [VALIDATION] WHK | Only 153 rows — need 200+ for LinReg
+2026-06-17 19:13:15 | WARNING  | error_handler             | [VALIDATION] WHLRL | Only 6 rows — need 200+ for LinReg
+2026-06-17 19:13:15 | WARNING  | error_handler             | [VALIDATION] WHLRD | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:13:15 | WARNING  | error_handler             | [VALIDATION] WHLRP | Only 110 rows — need 200+ for LinReg
+2026-06-17 19:13:16 | WARNING  | error_handler             | [VALIDATION] WILC | Only 136 rows — need 200+ for LinReg
+2026-06-17 19:13:21 | WARNING  | error_handler             | [VALIDATION] WLIIW | Only 74 rows — need 200+ for LinReg
+2026-06-17 19:13:21 | WARNING  | error_handler             | [VALIDATION] WLIIU | Only 21 rows — need 200+ for LinReg
+2026-06-17 19:13:21 | WARNING  | error_handler             | [VALIDATION] WLII | Only 77 rows — need 200+ for LinReg
+2026-06-17 19:13:22 | WARNING  | error_handler             | [VALIDATION] WLYB | Only 26 rows — need 200+ for LinReg
+2026-06-17 19:13:25 | WARNING  | error_handler             | [VALIDATION] WPAC | Only 97 rows — need 200+ for LinReg
+2026-06-17 19:13:28 | WARNING  | error_handler             | [VALIDATION] WSBCO | Only 176 rows — need 200+ for LinReg
+2026-06-17 19:13:32 | WARNING  | error_handler             | [VALIDATION] WSTN | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:13:32 | WARNING  | error_handler             | [VALIDATION] WSTNR | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:13:32 | WARNING  | error_handler             | [VALIDATION] WSTNU | Only 24 rows — need 200+ for LinReg
+2026-06-17 19:13:34 | WARNING  | error_handler             | [VALIDATION] WTG | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:13:34 | WARNING  | error_handler             | [VALIDATION] WTGUU | Only 10 rows — need 200+ for LinReg
+2026-06-17 19:13:34 | WARNING  | error_handler             | [VALIDATION] WTGUR | Only 16 rows — need 200+ for LinReg
+2026-06-17 19:13:37 | WARNING  | error_handler             | [VALIDATION] WVVI | Only 145 rows — need 200+ for LinReg
+2026-06-17 19:13:37 | WARNING  | error_handler             | [VALIDATION] WVVIP | Only 121 rows — need 200+ for LinReg
+2026-06-17 19:13:40 | WARNING  | error_handler             | [VALIDATION] XCBE | Only 40 rows — need 200+ for LinReg
+2026-06-17 19:13:40 | WARNING  | error_handler             | [VALIDATION] XCBEU | Only 13 rows — need 200+ for LinReg
+2026-06-17 19:13:40 | WARNING  | error_handler             | [VALIDATION] XCBEW | Only 21 rows — need 200+ for LinReg
+2026-06-17 19:13:43 | WARNING  | error_handler             | [VALIDATION] XFLH | Only 71 rows — need 200+ for LinReg
+2026-06-17 19:13:49 | WARNING  | error_handler             | [VALIDATION] XOMAP | Only 119 rows — need 200+ for LinReg
+2026-06-17 19:13:52 | WARNING  | error_handler             | [VALIDATION] XRPNU | Only 14 rows — need 200+ for LinReg
+2026-06-17 19:13:53 | WARNING  | error_handler             | [VALIDATION] XSLL | Only 53 rows — need 200+ for LinReg
+2026-06-17 19:13:55 | WARNING  | error_handler             | [VALIDATION] XSLLU | Only 23 rows — need 200+ for LinReg
+2026-06-17 19:13:55 | WARNING  | error_handler             | [VALIDATION] XSLLW | Only 70 rows — need 200+ for LinReg
+2026-06-17 19:13:59 | WARNING  | error_handler             | [VALIDATION] YCY | Only 48 rows — need 200+ for LinReg
+2026-06-17 19:14:01 | WARNING  | error_handler             | [VALIDATION] YDESW | Only 112 rows — need 200+ for LinReg
+2026-06-17 19:14:03 | WARNING  | error_handler             | [VALIDATION] YICCU | Only 22 rows — need 200+ for LinReg
+2026-06-17 19:14:03 | WARNING  | error_handler             | [VALIDATION] YJ | Only 136 rows — need 200+ for LinReg
+2026-06-17 19:14:12 | WARNING  | error_handler             | [VALIDATION] ZIONP | Only 197 rows — need 200+ for LinReg
+2026-06-17 19:14:13 | WARNING  | error_handler             | [VALIDATION] ZKP | Only 30 rows — need 200+ for LinReg
+2026-06-17 19:14:13 | WARNING  | error_handler             | [VALIDATION] ZKPU | Only 3 rows — need 200+ for LinReg
+2026-06-17 19:14:13 | WARNING  | error_handler             | [VALIDATION] ZKIN | Only 191 rows — need 200+ for LinReg
+2026-06-17 19:14:13 | WARNING  | error_handler             | [VALIDATION] ZKPW | Only 58 rows — need 200+ for LinReg
+2026-06-17 19:20:12 | CRITICAL | error_handler             | [CRITICAL] Step 8: Indicator engines | KeyError: 'std_dev_period'
+Traceback:
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\run_pipeline.py", line 193, in run_full_pipeline
+    from engines.linreg import run_linreg_engine
+  File "C:\Users\DELL\Desktop\MLOps\Stock_screener\engines\linreg.py", line 71, in <module>
+    STD_DEV_PERIOD = LINREG_CFG["std_dev_period"]  # 21 candles
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'std_dev_period'
+

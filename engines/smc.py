@@ -291,16 +291,274 @@ def _detect_choch(
 
     return False
 
+# =============================================================================
+# BOS DETECTION (Break of Structure — trend continuation, opposite of CHoCH)
+# =============================================================================
+
+def _find_bos(
+    closes      : np.ndarray,
+    swing_highs : list[tuple[int, float]],
+    swing_lows  : list[tuple[int, float]],
+    structure   : str,
+) -> Optional[tuple[int, int]]:
+    """
+    Detect the most recent Break of Structure (BOS) in the direction
+    of the current trend.
+
+    BULLISH structure:
+    - BOS = candle CLOSES ABOVE the most recent confirmed swing high
+    - The swing LOW immediately preceding that swing high is the
+      "base of the BOS swing" — this is where we look for the
+      demand zone engulfing candle
+
+    BEARISH structure:
+    - BOS = candle CLOSES BELOW the most recent confirmed swing low
+    - The swing HIGH immediately preceding that swing low is the
+      "base of the BOS swing" — supply zone search location
+
+    Args:
+        closes      : numpy array of close prices, oldest first
+        swing_highs : list of (index, price) swing highs
+        swing_lows  : list of (index, price) swing lows
+        structure   : 'bullish', 'bearish', or 'broken'
+
+    Returns:
+        Tuple of (bos_candle_index, base_swing_index) or None if no BOS found
+        base_swing_index = index of the swing point at the base of the move
+    """
+    if structure == "broken":
+        return None
+
+    lookback = MIN_PIVOT_CANDLES * 2
+    recent_indices = range(max(0, len(closes) - lookback), len(closes))
+
+    if structure == "bullish":
+        if not swing_highs or not swing_lows:
+            return None
+
+        # Most recent swing high = the level that must be broken for BOS
+        bos_level = swing_highs[-1][1]
+
+        # Find the swing low that occurred BEFORE this swing high
+        # — that's the "base" of the impulsive move
+        sh_index  = swing_highs[-1][0]
+        base_candidates = [sl for sl in swing_lows if sl[0] < sh_index]
+
+        if not base_candidates:
+            return None
+
+        base_swing_index = base_candidates[-1][0]
+
+        # Check recent candles for a close above bos_level
+        for i in recent_indices:
+            if closes[i] > bos_level:
+                return (i, base_swing_index)
+
+        return None
+
+    elif structure == "bearish":
+        if not swing_highs or not swing_lows:
+            return None
+
+        bos_level = swing_lows[-1][1]
+        sl_index  = swing_lows[-1][0]
+        base_candidates = [sh for sh in swing_highs if sh[0] < sl_index]
+
+        if not base_candidates:
+            return None
+
+        base_swing_index = base_candidates[-1][0]
+
+        for i in recent_indices:
+            if closes[i] < bos_level:
+                return (i, base_swing_index)
+
+        return None
+
+    return None
+
+
+# =============================================================================
+# ENGULFING CANDLE DETECTION
+# =============================================================================
+
+def _is_bullish_engulfing(
+    opens  : np.ndarray,
+    closes : np.ndarray,
+    idx    : int,
+) -> bool:
+    """
+    Check if the candle at idx (and idx-1) forms a bullish engulfing pattern.
+
+    BULLISH ENGULFING:
+    - Candle idx-1 is red (close < open)
+    - Candle idx   is green (close > open)
+    - Candle idx's body fully engulfs candle idx-1's body:
+      open[idx] <= close[idx-1] AND close[idx] >= open[idx-1]
+
+    Args:
+        opens  : numpy array of open prices
+        closes : numpy array of close prices
+        idx    : index of the second (engulfing) candle
+
+    Returns:
+        True if bullish engulfing pattern confirmed at idx
+    """
+    if idx < 1 or idx >= len(closes):
+        return False
+
+    prev_red    = closes[idx - 1] < opens[idx - 1]
+    curr_green  = closes[idx]     > opens[idx]
+    engulfs     = (opens[idx] <= closes[idx - 1]) and (closes[idx] >= opens[idx - 1])
+
+    return bool(prev_red and curr_green and engulfs)
+
+
+def _is_bearish_engulfing(
+    opens  : np.ndarray,
+    closes : np.ndarray,
+    idx    : int,
+) -> bool:
+    """
+    Check if the candle at idx (and idx-1) forms a bearish engulfing pattern.
+
+    BEARISH ENGULFING:
+    - Candle idx-1 is green (close > open)
+    - Candle idx   is red (close < open)
+    - Candle idx's body fully engulfs candle idx-1's body:
+      open[idx] >= close[idx-1] AND close[idx] <= open[idx-1]
+
+    Args:
+        opens  : numpy array of open prices
+        closes : numpy array of close prices
+        idx    : index of the second (engulfing) candle
+
+    Returns:
+        True if bearish engulfing pattern confirmed at idx
+    """
+    if idx < 1 or idx >= len(closes):
+        return False
+
+    prev_green = closes[idx - 1] > opens[idx - 1]
+    curr_red   = closes[idx]     < opens[idx]
+    engulfs    = (opens[idx] >= closes[idx - 1]) and (closes[idx] <= opens[idx - 1])
+
+    return bool(prev_green and curr_red and engulfs)
+
+
+# =============================================================================
+# DEMAND / SUPPLY ZONE DETECTION
+# Combines BOS + engulfing candle + SD band overlap check
+# =============================================================================
+
+def _find_demand_supply_zone(
+    df          : pd.DataFrame,
+    swing_highs : list[tuple[int, float]],
+    swing_lows  : list[tuple[int, float]],
+    structure   : str,
+    sd1         : float,
+    sd3         : float,
+) -> Optional[dict]:
+    """
+    Find a valid Demand Zone (bullish) or Supply Zone (bearish) that:
+    1. Is formed by a BOS in the direction of the trend
+    2. Has an engulfing candle at the base of the BOS swing
+    3. Overlaps the -1 to -3 SD band (demand) or +1 to +3 SD band (supply)
+
+    SEARCH WINDOW:
+    The engulfing candle is searched for in a small window around the
+    base swing index (±2 candles), since the exact engulfing candle
+    may be the swing candle itself or one adjacent to it.
+
+    Args:
+        df          : Full OHLCV DataFrame, sorted date ascending
+        swing_highs : list of (index, price) swing highs
+        swing_lows  : list of (index, price) swing lows
+        structure   : 'bullish', 'bearish', or 'broken'
+        sd1         : Current SD1 band value (lower for demand, upper for supply)
+        sd3         : Current SD3 band value (lower for demand, upper for supply)
+
+    Returns:
+        Dict with zone details if valid zone found, else None:
+        {
+            "zone_type"  : "demand" or "supply",
+            "zone_high"  : float,
+            "zone_low"   : float,
+            "candle_idx" : int,
+        }
+    """
+    opens  = df["open"].values
+    highs  = df["high"].values
+    lows   = df["low"].values
+    closes = df["close"].values
+
+    bos_result = _find_bos(closes, swing_highs, swing_lows, structure)
+    if bos_result is None:
+        return None
+
+    _, base_idx = bos_result
+
+    # Search window around the base swing for the engulfing candle
+    search_start = max(1, base_idx - 2)
+    search_end   = min(len(closes), base_idx + 3)
+
+    for idx in range(search_start, search_end):
+
+        if structure == "bullish":
+            if _is_bullish_engulfing(opens, closes, idx):
+                zone_high = max(opens[idx], closes[idx-1], highs[idx], highs[idx-1])
+                zone_low  = min(opens[idx], closes[idx-1], lows[idx],  lows[idx-1])
+
+                # Demand zone must overlap the -1 to -3 SD band
+                # (sd1 and sd3 passed in as lower bounds, sd1 > sd3 numerically since both negative offset)
+                band_lower = min(sd1, sd3)
+                band_upper = max(sd1, sd3)
+
+                overlaps = (zone_low <= band_upper) and (zone_high >= band_lower)
+
+                if overlaps:
+                    return {
+                        "zone_type" : "demand",
+                        "zone_high" : float(zone_high),
+                        "zone_low"  : float(zone_low),
+                        "candle_idx": idx,
+                    }
+
+        elif structure == "bearish":
+            if _is_bearish_engulfing(opens, closes, idx):
+                zone_high = max(opens[idx-1], closes[idx], highs[idx], highs[idx-1])
+                zone_low  = min(opens[idx-1], closes[idx], lows[idx],  lows[idx-1])
+
+                band_lower = min(sd1, sd3)
+                band_upper = max(sd1, sd3)
+
+                overlaps = (zone_low <= band_upper) and (zone_high >= band_lower)
+
+                if overlaps:
+                    return {
+                        "zone_type" : "supply",
+                        "zone_high" : float(zone_high),
+                        "zone_low"  : float(zone_low),
+                        "candle_idx": idx,
+                    }
+
+    return None
+
 
 # =============================================================================
 # PER-TICKER ENTRY POINT
 # =============================================================================
 
 @graceful(default_return=None, exceptions=(Exception,), log_level="warning")
+
 def compute_smc(
-    ticker : str,
-    df     : pd.DataFrame,
-    date   : str,
+    ticker      : str,
+    df          : pd.DataFrame,
+    date        : str,
+    sd1_lower   : Optional[float] = None,
+    sd3_lower   : Optional[float] = None,
+    sd1_upper   : Optional[float] = None,
+    sd3_upper   : Optional[float] = None,
 ) -> Optional[dict]:
     """
     Run the full SMC engine for a single ticker.
@@ -310,18 +568,21 @@ def compute_smc(
     2. Find all swing highs and swing lows
     3. Determine trend structure (bullish/bearish/broken)
     4. Detect CHoCH
-    5. Package results for database
+    5. NEW: Find Demand/Supply zone (BOS + engulfing + SD band overlap)
+    6. Package results for database
 
     Args:
-        ticker : Ticker symbol
-        df     : Full OHLCV DataFrame, sorted date ascending
-        date   : Today's date string YYYY-MM-DD
+        ticker    : Ticker symbol
+        df        : Full OHLCV DataFrame, sorted date ascending
+        date      : Today's date string YYYY-MM-DD
+        sd1_lower : Current SD1 lower band value (for demand zone check)
+        sd3_lower : Current SD3 lower band value (for demand zone check)
+        sd1_upper : Current SD1 upper band value (for supply zone check)
+        sd3_upper : Current SD3 upper band value (for supply zone check)
 
     Returns:
-        Dict with smc_structure and choch_detected, or None on failure
+        Dict with smc_structure, choch_detected, has_valid_zone, or None on failure
     """
-
-    # Need at least 3x MIN_PIVOT_CANDLES to have meaningful pivots
     min_required = MIN_PIVOT_CANDLES * 3
     if len(df) < min_required:
         logger.warning(
@@ -329,12 +590,10 @@ def compute_smc(
         )
         return None
 
-    # ── Step 1: Extract price arrays ──────────────────────────────────────────
     highs  = df["high"].values
     lows   = df["low"].values
     closes = df["close"].values
 
-    # ── Step 2: Find swing highs and swing lows ───────────────────────────────
     swing_highs = _find_swing_highs(highs)
     swing_lows  = _find_swing_lows(lows)
 
@@ -343,23 +602,39 @@ def compute_smc(
         f"Swing lows: {len(swing_lows)}"
     )
 
-    # ── Step 3: Determine market structure ────────────────────────────────────
     structure = _detect_structure(swing_highs, swing_lows)
+    choch     = _detect_choch(closes, swing_highs, swing_lows, structure)
 
-    # ── Step 4: Detect CHoCH ──────────────────────────────────────────────────
-    choch = _detect_choch(closes, swing_highs, swing_lows, structure)
+    # ── NEW: Demand/Supply zone detection ─────────────────────────────────────
+    zone           = None
+    has_valid_zone = 0
 
-    # ── Step 5: Package results ───────────────────────────────────────────────
+    if structure == "bullish" and sd1_lower is not None and sd3_lower is not None:
+        zone = _find_demand_supply_zone(
+            df, swing_highs, swing_lows, structure,
+            sd1=sd1_lower, sd3=sd3_lower
+        )
+    elif structure == "bearish" and sd1_upper is not None and sd3_upper is not None:
+        zone = _find_demand_supply_zone(
+            df, swing_highs, swing_lows, structure,
+            sd1=sd1_upper, sd3=sd3_upper
+        )
+
+    if zone is not None:
+        has_valid_zone = 1
+
     result = {
         "ticker"        : ticker,
         "date"          : date,
         "smc_structure" : structure,
         "choch_detected": 1 if choch else 0,
+        "has_valid_zone": has_valid_zone,
     }
 
     logger.debug(
         f"{ticker} | Structure: {structure} | "
-        f"CHoCH: {'YES' if choch else 'no'}"
+        f"CHoCH: {'YES' if choch else 'no'} | "
+        f"Valid Zone: {'YES' if has_valid_zone else 'no'}"
     )
 
     return result
@@ -372,30 +647,48 @@ def compute_smc(
 def run_smc_engine(
     tickers_data : dict[str, pd.DataFrame],
     date         : str,
+    linreg_df    : Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """
     Run SMC computation for all tickers in the filtered universe.
 
-    FLOW:
-    1. Iterate over each ticker and its OHLCV DataFrame
-    2. Call compute_smc() for each
-    3. Collect non-None results
-    4. Return combined DataFrame for database write
-
     Args:
         tickers_data : Dict mapping ticker → OHLCV DataFrame
         date         : Today's date string YYYY-MM-DD
+        linreg_df    : Output of run_linreg_engine() — provides SD band
+                       values needed for demand/supply zone detection.
+                       If None, zone detection is skipped (has_valid_zone=0).
 
     Returns:
-        DataFrame with one row per ticker containing SMC columns
+        DataFrame with columns including smc_structure, choch_detected,
+        has_valid_zone
     """
     logger.info(f"SMC engine starting | {len(tickers_data)} tickers | Date: {date}")
+
+    # Build lookup of SD bands per ticker if linreg_df provided
+    sd_lookup = {}
+    if linreg_df is not None and not linreg_df.empty:
+        for _, row in linreg_df.iterrows():
+            sd_lookup[row["ticker"]] = {
+                "sd1_lower": row.get("sd1_lower"),
+                "sd3_lower": row.get("sd3_lower"),
+                "sd1_upper": row.get("sd1_upper"),
+                "sd3_upper": row.get("sd3_upper"),
+            }
 
     results = []
     failed  = 0
 
     for ticker, df in tickers_data.items():
-        result = compute_smc(ticker, df, date)
+        sd = sd_lookup.get(ticker, {})
+
+        result = compute_smc(
+            ticker, df, date,
+            sd1_lower = sd.get("sd1_lower"),
+            sd3_lower = sd.get("sd3_lower"),
+            sd1_upper = sd.get("sd1_upper"),
+            sd3_upper = sd.get("sd3_upper"),
+        )
 
         if result is not None:
             results.append(result)

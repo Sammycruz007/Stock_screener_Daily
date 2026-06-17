@@ -67,7 +67,8 @@ def _load_config() -> dict:
 config     = _load_config()
 LINREG_CFG = config["linreg"]
 
-PERIOD   = LINREG_CFG["period"]       # 200 candles
+PERIOD   = LINREG_CFG["period"]       # 150 candles
+STD_DEV_PERIOD = LINREG_CFG["std_dev_period"]  # 21 candles
 STD_DEVS = LINREG_CFG["std_devs"]     # [1, 2, 3]
 
 
@@ -114,7 +115,7 @@ def _compute_linreg(closes: np.ndarray) -> dict:
 
     # ── Step 4: Compute standard deviation of residuals ───────────────────────
     # This is the "width" of typical price deviation from the LinReg line
-    std_dev = np.std(residuals, ddof=1)  # ddof=1 for sample std dev
+    std_dev = np.std(residuals[-STD_DEV_PERIOD:], ddof=1)  # ddof=1 for sample std dev
 
     # ── Step 5: Get values for the MOST RECENT candle ─────────────────────────
     # We only care about where the line and bands sit TODAY (last candle)

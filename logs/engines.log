@@ -1,11 +1,1 @@
-2026-06-06 10:42:44 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
-2026-06-06 10:42:44 | WARNING  | linreg_engine             | AAPL | Insufficient data: 150 rows, need 200
-2026-06-06 10:42:44 | INFO     | linreg_engine             | LinReg engine starting | 3 tickers | Date: 2026-06-06
-2026-06-06 10:42:44 | INFO     | linreg_engine             | LinReg engine complete | Computed: 3 | Skipped: 0
-2026-06-06 10:46:20 | INFO     | smc_engine                | Logger initialised → logs\engines.log
-2026-06-06 10:49:30 | INFO     | smc_engine                | Logger initialised → logs\engines.log
-2026-06-06 10:49:30 | INFO     | smc_engine                | SMC engine starting | 3 tickers | Date: 2026-06-06
-2026-06-06 10:49:30 | INFO     | smc_engine                | SMC engine complete | Computed: 3 | Skipped: 0
-2026-06-06 10:50:02 | INFO     | volume_engine             | Logger initialised → logs\engines.log
-2026-06-06 10:50:02 | INFO     | volume_engine             | Volume engine starting | 3 tickers | Date: 2026-06-06
-2026-06-06 10:50:03 | INFO     | volume_engine             | Volume engine complete | Computed: 3 | Skipped: 0
+2026-06-17 19:20:11 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
