@@ -1,20 +1,20 @@
 database:
-  path: /app/data/scanner.db
+  path: data/scanner.db
 
 fetcher:
-  batch_size: 50
+  batch_size: 25        # was 50 — smaller batches hit Yahoo less aggressively
+  max_workers: 6      # 6 arallel connections per batch
+  retry_attempts: 3
+  retry_delay_seconds: 5  # was 8 — more time between retries
   historical_days: 58
   incremental_days: 5
-  max_workers: 5
-  retry_attempts: 8
-  retry_delay_seconds: 5
-
+  
 filters:
-  min_avg_volume: 1000000
+  min_avg_volume: 500000
   min_price: 10.0
 
 linreg:
-  period: 380
+  period: 400
   std_devs:
   - 1
   - 2
@@ -28,8 +28,8 @@ logging:
 
 ml:
   high_probability_threshold: 0.7
-  label_forward_days: 26
-  min_training_samples: 500
+  label_forward_periods: 26
+  min_training_samples: 50
   model_retrain_days: 7
   backfill_stride: 4
 

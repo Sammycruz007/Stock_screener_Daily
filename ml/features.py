@@ -326,10 +326,10 @@ def compute_signal_features(
 
     if not mkt.empty:
         market_slope_avg   = mkt["linreg_slope"].mean()
-        market_choch_count = int(mkt["choch_detected"].sum())
+        #market_choch_count = int(mkt["choch_detected"].sum())
     else:
         market_slope_avg   = 0.0
-        market_choch_count = 0
+        #market_choch_count = 0
 
     # ── Direction encoding ────────────────────────────────────────────────────
     # 1 = long setup, 0 = short setup
@@ -361,7 +361,7 @@ def compute_signal_features(
 
         # Group 5: Market context
         "market_slope_avg"   : round(market_slope_avg,   6),
-        "market_choch_count" : market_choch_count,
+        #"market_choch_count" : market_choch_count,
 
         # Direction
         "direction_flag"     : direction_flag,
@@ -559,7 +559,6 @@ SIGNAL_FEATURE_COLS = [
     "short_interest",
     # Market context
     "market_slope_avg",
-    "market_choch_count",
     # Direction
     "direction_flag",
 ]

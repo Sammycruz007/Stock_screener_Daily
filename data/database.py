@@ -200,7 +200,7 @@ def initialise_database() -> None:
             sd3_lower         REAL,
             price_sd_position REAL,
             smc_structure     TEXT,
-            choch_detected    INTEGER,
+            choch_detected    INTEGER,           
             volume_signal     TEXT,
             has_valid_zone    INTEGER,            -- 1 = valid demand/supply zone found,
             created_at        TEXT DEFAULT (datetime('now')),
@@ -895,7 +895,7 @@ def read_latest_indicator_results() -> pd.DataFrame:
     
 
 # Cleanup function
-def prune_old_prices(max_days: int = 65) -> int:
+def prune_old_prices(max_days: int = 70) -> int:
     """Delete raw_prices rows older than max_days to keep DB size bounded."""
     cutoff = (datetime.today() - timedelta(days=max_days)).strftime("%Y-%m-%d %H:%M:%S")
     with get_connection() as conn:

@@ -69,7 +69,7 @@ def _load_config() -> dict:
 config = _load_config()
 ML_CFG = config["ml"]
 
-FORWARD_DAYS    = ML_CFG["label_forward_days"]   # 26 days forward to check
+FORWARD_DAYS    = ML_CFG["label_forward_periods"]   # 1 trading period to check
 SCANNER_CFG     = config["scanner"]
 LONG_SD_MIN     = SCANNER_CFG["long_entry_sd_min"]   # -1
 LONG_SD_MAX     = SCANNER_CFG["long_entry_sd_max"]   # -3

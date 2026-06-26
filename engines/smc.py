@@ -207,7 +207,6 @@ def _detect_structure(
 # A CHoCH means the trend structure has CHANGED — we do not trade in
 # the direction of the previous trend until structure is re-established.
 # =============================================================================
-
 def _detect_choch(
     closes      : np.ndarray,
     swing_highs : list[tuple[int, float]],
@@ -290,6 +289,7 @@ def _detect_choch(
         return choch
 
     return False
+
 
 # =============================================================================
 # BOS DETECTION (Break of Structure — trend continuation, opposite of CHoCH)
@@ -603,7 +603,7 @@ def compute_smc(
     )
 
     structure = _detect_structure(swing_highs, swing_lows)
-    choch     = _detect_choch(closes, swing_highs, swing_lows, structure)
+    #choch     = _detect_choch(closes, swing_highs, swing_lows, structure)
 
     # ── NEW: Demand/Supply zone detection ─────────────────────────────────────
     zone           = None
@@ -627,13 +627,13 @@ def compute_smc(
         "ticker"        : ticker,
         "date"          : date,
         "smc_structure" : structure,
-        "choch_detected": 1 if choch else 0,
+        #"choch_detected": 1 if choch else 0,
         "has_valid_zone": has_valid_zone,
     }
 
     logger.debug(
         f"{ticker} | Structure: {structure} | "
-        f"CHoCH: {'YES' if choch else 'no'} | "
+        #f"CHoCH: {'YES' if choch else 'no'} | "
         f"Valid Zone: {'YES' if has_valid_zone else 'no'}"
     )
 

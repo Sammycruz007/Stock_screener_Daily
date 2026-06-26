@@ -95,3 +95,368 @@
 2026-06-17 19:19:14 | INFO     | pipeline_runner           | ✅ Loaded data for 33 tickers
 2026-06-17 19:19:14 | INFO     | pipeline_runner           | 
 [STEP 8/12] Running indicator engines...
+2026-06-19 19:05:20 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-19 19:07:38 | INFO     | pipeline_runner           | ======================================================================
+2026-06-19 19:07:38 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-19 19:07:38 | INFO     | pipeline_runner           | Date: 2026-06-19
+2026-06-19 19:07:38 | INFO     | pipeline_runner           | ======================================================================
+2026-06-19 19:07:38 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-19 19:07:42 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-19 19:07:42 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-19 19:09:20 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-19 19:09:20 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-19 19:09:20 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-19 19:28:59 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | Date: 2026-06-19
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-19 19:29:01 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-19 19:29:05 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-19 19:29:05 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-19 19:29:05 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-19 19:34:36 | INFO     | pipeline_runner           | ✅ Fetched 10945 rows for 28 tickers
+2026-06-19 19:34:36 | INFO     | pipeline_runner           | 
+[STEP 4/12] Writing raw prices to database...
+2026-06-19 19:34:39 | INFO     | pipeline_runner           | ✅ 10945 rows written to raw_prices
+2026-06-19 19:34:39 | INFO     | pipeline_runner           | Pruning old price data...
+2026-06-19 19:35:49 | INFO     | pipeline_runner           | ✅ Pruned 121995 old rows
+2026-06-19 19:35:49 | INFO     | pipeline_runner           | 
+[STEP 5/12] Applying Stage 1 filter...
+2026-06-19 19:35:49 | INFO     | pipeline_runner           | ✅ Stage 1 filter | Input: 28 | Passed: 0
+2026-06-20 11:57:26 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 11:57:27 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 11:58:01 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 11:58:01 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 11:58:01 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 12:10:38 | ERROR    | pipeline_runner           | No data fetched — aborting
+2026-06-20 12:30:06 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 12:30:07 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 12:30:11 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 12:30:11 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 12:30:11 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:33:02 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 12:33:03 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 12:33:03 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 12:33:07 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 12:33:07 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 12:33:07 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 12:39:47 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 12:39:54 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 12:39:54 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 12:39:54 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 12:41:10 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 12:41:16 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 12:41:16 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 12:41:16 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 12:56:49 | ERROR    | pipeline_runner           | No data fetched — aborting
+2026-06-20 13:06:38 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 13:06:39 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 13:06:44 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 13:06:44 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 13:06:44 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 13:09:11 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 13:09:12 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 13:09:17 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 13:09:17 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 13:09:17 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-20 22:30:42 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | Date: 2026-06-20
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-20 22:31:01 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-20 22:31:18 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-20 22:31:18 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-20 22:31:18 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-21 21:48:18 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-21 21:49:29 | INFO     | pipeline_runner           | ======================================================================
+2026-06-21 21:49:29 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-21 21:49:29 | INFO     | pipeline_runner           | Date: 2026-06-21
+2026-06-21 21:49:29 | INFO     | pipeline_runner           | ======================================================================
+2026-06-21 21:49:29 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-21 21:49:31 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-21 21:49:31 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-21 21:50:30 | INFO     | pipeline_runner           | ✅ Universe: 6604 tickers
+2026-06-21 21:50:30 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6604 tickers
+2026-06-21 21:50:30 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-22 15:57:12 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | ======================================================================
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | Date: 2026-06-22
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | ======================================================================
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-22 15:57:25 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-22 15:57:48 | INFO     | pipeline_runner           | ✅ Universe: 6613 tickers
+2026-06-22 15:57:48 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6613 tickers
+2026-06-22 15:57:48 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-22 16:29:48 | INFO     | pipeline_runner           | ✅ Fetched 206737 rows for 3575 tickers
+2026-06-22 16:29:48 | INFO     | pipeline_runner           | 
+[STEP 4/12] Writing raw prices to database...
+2026-06-22 16:31:13 | INFO     | pipeline_runner           | ✅ 206269 rows written to raw_prices
+2026-06-22 16:31:13 | INFO     | pipeline_runner           | Pruning old price data...
+2026-06-22 16:31:36 | INFO     | pipeline_runner           | ✅ Pruned 0 old rows
+2026-06-22 16:31:36 | INFO     | pipeline_runner           | 
+[STEP 5/12] Applying Stage 1 filter...
+2026-06-22 16:31:38 | INFO     | pipeline_runner           | 
+[STEP 6/12] Fetching sector metadata...
+2026-06-22 16:31:38 | INFO     | pipeline_runner           | ✅ Sector metadata: 0 tickers classified
+2026-06-22 16:31:38 | INFO     | pipeline_runner           | 
+[STEP 7/12] Loading price data for indicator engines...
+2026-06-22 16:31:38 | INFO     | pipeline_runner           | ✅ Loaded data for 13 tickers
+2026-06-22 16:31:38 | INFO     | pipeline_runner           | 
+[STEP 8/12] Running indicator engines...
+2026-06-22 16:31:58 | INFO     | pipeline_runner           | Running LinReg engine...
+2026-06-22 16:31:58 | INFO     | pipeline_runner           | ✅ LinReg: 13 tickers computed
+2026-06-22 16:31:58 | INFO     | pipeline_runner           | Running SMC engine...
+2026-06-22 16:31:58 | INFO     | pipeline_runner           | ✅ SMC: 13 tickers computed
+2026-06-22 16:31:58 | INFO     | pipeline_runner           | Running Volume engine...
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | ✅ Volume: 13 tickers computed
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | Merging engine outputs...
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | ✅ Indicator results written: 13 rows
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | 
+[STEP 9/12] Fetching sentiment data...
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | ✅ Sentiment data: 0 tickers
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | 
+[STEP 10/12] Running scanner waterfall...
+2026-06-22 16:31:59 | WARNING  | pipeline_runner           | Scanner returned no candidates today. This is normal — market conditions may not favour any setups.
+2026-06-22 16:31:59 | INFO     | pipeline_runner           | 
+[STEP 11/12] Running ML scoring...
+2026-06-22 16:32:17 | WARNING  | pipeline_runner           | ML models not trained yet — candidates will use SD position as preliminary ranking. Run model training first to enable ML scoring.
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | 
+[STEP 12/12] Writing scan results to database...
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | No candidates to write
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | 
+======================================================================
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | PIPELINE COMPLETE
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | Total time: 34m 52s
+2026-06-22 16:32:17 | INFO     | pipeline_runner           | ======================================================================
+2026-06-24 17:39:11 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | ======================================================================
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | Date: 2026-06-24
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | ======================================================================
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-24 17:40:31 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-24 17:41:08 | INFO     | pipeline_runner           | ✅ Universe: 6620 tickers
+2026-06-24 17:41:08 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6620 tickers
+2026-06-24 17:41:08 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-24 18:24:27 | INFO     | pipeline_runner           | ✅ Fetched 177286 rows for 3322 tickers
+2026-06-24 18:24:27 | INFO     | pipeline_runner           | 
+[STEP 4/12] Writing raw prices to database...
+2026-06-24 18:26:16 | INFO     | pipeline_runner           | ✅ 177286 rows written to raw_prices
+2026-06-24 18:26:16 | INFO     | pipeline_runner           | Pruning old price data...
+2026-06-24 18:26:56 | INFO     | pipeline_runner           | ✅ Pruned 0 old rows
+2026-06-24 18:26:56 | INFO     | pipeline_runner           | 
+[STEP 5/12] Applying Stage 1 filter...
+2026-06-24 18:26:58 | INFO     | pipeline_runner           | 
+[STEP 6/12] Fetching sector metadata...
+2026-06-24 18:27:05 | INFO     | pipeline_runner           | ✅ Sector metadata: 113 tickers classified
+2026-06-24 18:27:05 | INFO     | pipeline_runner           | 
+[STEP 7/12] Loading price data for indicator engines...
+2026-06-24 18:27:09 | INFO     | pipeline_runner           | ✅ Loaded data for 127 tickers
+2026-06-24 18:27:09 | INFO     | pipeline_runner           | 
+[STEP 8/12] Running indicator engines...
+2026-06-24 18:28:02 | INFO     | pipeline_runner           | Running LinReg engine...
+2026-06-24 18:28:02 | INFO     | pipeline_runner           | ✅ LinReg: 126 tickers computed
+2026-06-24 18:28:02 | INFO     | pipeline_runner           | Running SMC engine...
+2026-06-24 18:28:04 | INFO     | pipeline_runner           | ✅ SMC: 126 tickers computed
+2026-06-24 18:28:04 | INFO     | pipeline_runner           | Running Volume engine...
+2026-06-24 18:28:05 | INFO     | pipeline_runner           | ✅ Volume: 127 tickers computed
+2026-06-24 18:28:05 | INFO     | pipeline_runner           | Merging engine outputs...
+2026-06-24 21:07:28 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-24 21:07:44 | INFO     | pipeline_runner           | ======================================================================
+2026-06-24 21:07:44 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-24 21:07:44 | INFO     | pipeline_runner           | Date: 2026-06-24
+2026-06-24 21:07:44 | INFO     | pipeline_runner           | ======================================================================
+2026-06-24 21:07:44 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-24 21:07:45 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-24 21:07:45 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-24 21:08:09 | INFO     | pipeline_runner           | ✅ Universe: 6620 tickers
+2026-06-24 21:08:09 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6620 tickers
+2026-06-24 21:08:09 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-24 21:52:46 | INFO     | pipeline_runner           | ✅ Fetched 181409 rows for 3499 tickers
+2026-06-24 21:52:46 | INFO     | pipeline_runner           | 
+[STEP 4/12] Writing raw prices to database...
+2026-06-24 21:53:49 | INFO     | pipeline_runner           | ✅ 25516 rows written to raw_prices
+2026-06-24 21:53:49 | INFO     | pipeline_runner           | Pruning old price data...
+2026-06-24 21:55:09 | INFO     | pipeline_runner           | ✅ Pruned 0 old rows
+2026-06-24 21:55:09 | INFO     | pipeline_runner           | 
+[STEP 5/12] Applying Stage 1 filter...
+2026-06-24 21:55:11 | INFO     | pipeline_runner           | 
+[STEP 6/12] Fetching sector metadata...
+2026-06-24 21:56:01 | INFO     | pipeline_runner           | ✅ Sector metadata: 241 tickers classified
+2026-06-24 21:56:01 | INFO     | pipeline_runner           | 
+[STEP 7/12] Loading price data for indicator engines...
+2026-06-24 21:56:08 | INFO     | pipeline_runner           | ✅ Loaded data for 244 tickers
+2026-06-24 21:56:08 | INFO     | pipeline_runner           | 
+[STEP 8/12] Running indicator engines...
+2026-06-24 21:56:17 | INFO     | pipeline_runner           | Running LinReg engine...
+2026-06-24 21:56:17 | INFO     | pipeline_runner           | ✅ LinReg: 243 tickers computed
+2026-06-24 21:56:17 | INFO     | pipeline_runner           | Running SMC engine...
+2026-06-24 21:56:20 | INFO     | pipeline_runner           | ✅ SMC: 243 tickers computed
+2026-06-24 21:56:20 | INFO     | pipeline_runner           | Running Volume engine...
+2026-06-24 21:56:21 | INFO     | pipeline_runner           | ✅ Volume: 244 tickers computed
+2026-06-24 21:56:21 | INFO     | pipeline_runner           | Merging engine outputs...
+2026-06-24 21:56:22 | INFO     | pipeline_runner           | ✅ Indicator results written: 243 rows
+2026-06-24 21:56:22 | INFO     | pipeline_runner           | 
+[STEP 9/12] Fetching sentiment data...
+2026-06-24 21:58:53 | INFO     | pipeline_runner           | ✅ Sentiment data: 241 tickers
+2026-06-24 21:58:53 | INFO     | pipeline_runner           | 
+[STEP 10/12] Running scanner waterfall...
+2026-06-26 18:52:00 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | Date: 2026-06-26
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-26 18:52:01 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-26 18:53:00 | INFO     | pipeline_runner           | Logger initialised → logs\pipeline_runner.log
+2026-06-26 18:53:01 | INFO     | pipeline_runner           | ======================================================================
+2026-06-26 18:53:01 | INFO     | pipeline_runner           | STOCK SCANNER PIPELINE — FULL RUN
+2026-06-26 18:53:02 | INFO     | pipeline_runner           | Date: 2026-06-26
+2026-06-26 18:53:02 | INFO     | pipeline_runner           | ======================================================================
+2026-06-26 18:53:02 | INFO     | pipeline_runner           | 
+[STEP 1/12] Initialising database...
+2026-06-26 18:53:02 | INFO     | pipeline_runner           | ✅ Database initialised
+2026-06-26 18:53:02 | INFO     | pipeline_runner           | 
+[STEP 2/12] Fetching full US stock universe...
+2026-06-26 18:53:14 | INFO     | pipeline_runner           | ✅ Universe: 6629 tickers
+2026-06-26 18:53:14 | INFO     | pipeline_runner           | 
+[STEP 3/12] FULL MODE: Fetching 6629 tickers
+2026-06-26 18:53:14 | INFO     | pipeline_runner           | Fetching OHLCV data...
+2026-06-26 19:31:47 | INFO     | pipeline_runner           | ✅ Fetched 406134 rows for 4147 tickers
+2026-06-26 19:31:47 | INFO     | pipeline_runner           | 
+[STEP 4/12] Writing raw prices to database...
+2026-06-26 19:34:00 | INFO     | pipeline_runner           | ✅ 243803 rows written to raw_prices
+2026-06-26 19:34:00 | INFO     | pipeline_runner           | Pruning old price data...
+2026-06-26 19:34:25 | INFO     | pipeline_runner           | ✅ Pruned 0 old rows
+2026-06-26 19:34:25 | INFO     | pipeline_runner           | 
+[STEP 5/12] Applying Stage 1 filter...
+2026-06-26 19:34:27 | INFO     | pipeline_runner           | 
+[STEP 6/12] Fetching sector metadata...
+2026-06-26 19:34:30 | INFO     | pipeline_runner           | ✅ Sector metadata: 472 tickers classified
+2026-06-26 19:34:30 | INFO     | pipeline_runner           | 
+[STEP 7/12] Loading price data for indicator engines...
+2026-06-26 19:34:42 | INFO     | pipeline_runner           | ✅ Loaded data for 485 tickers
+2026-06-26 19:34:42 | INFO     | pipeline_runner           | 
+[STEP 8/12] Running indicator engines...
+2026-06-26 19:34:51 | INFO     | pipeline_runner           | Running LinReg engine...
+2026-06-26 19:34:51 | INFO     | pipeline_runner           | ✅ LinReg: 481 tickers computed
+2026-06-26 19:34:51 | INFO     | pipeline_runner           | Running SMC engine...
+2026-06-26 19:34:56 | INFO     | pipeline_runner           | ✅ SMC: 484 tickers computed
+2026-06-26 19:34:56 | INFO     | pipeline_runner           | Running Volume engine...
+2026-06-26 19:34:59 | INFO     | pipeline_runner           | ✅ Volume: 485 tickers computed
+2026-06-26 19:34:59 | INFO     | pipeline_runner           | Merging engine outputs...
+2026-06-26 19:34:59 | INFO     | pipeline_runner           | ✅ Indicator results written: 481 rows
+2026-06-26 19:34:59 | INFO     | pipeline_runner           | 
+[STEP 9/12] Fetching sentiment data...
+2026-06-26 19:35:04 | INFO     | pipeline_runner           | ✅ Sentiment data: 472 tickers
+2026-06-26 19:35:04 | INFO     | pipeline_runner           | 
+[STEP 10/12] Running scanner waterfall...
+2026-06-26 19:35:04 | WARNING  | pipeline_runner           | Scanner returned no candidates today. This is normal — market conditions may not favour any setups.
+2026-06-26 19:35:04 | INFO     | pipeline_runner           | 
+[STEP 11/12] Running ML scoring...
+2026-06-26 19:35:08 | WARNING  | pipeline_runner           | ML models not trained yet — candidates will use SD position as preliminary ranking. Run model training first to enable ML scoring.
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | 
+[STEP 12/12] Writing scan results to database...
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | No candidates to write
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | 
+======================================================================
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | PIPELINE COMPLETE
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | Total time: 42m 7s
+2026-06-26 19:35:08 | INFO     | pipeline_runner           | ======================================================================

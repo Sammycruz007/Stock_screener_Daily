@@ -132,7 +132,7 @@ def run_full_pipeline():
 
         logger.info("Pruning old price data...")
         from data.database import prune_old_prices
-        deleted = prune_old_prices(max_days=60)
+        deleted = prune_old_prices(max_days=70)
         logger.info(f"✅ Pruned {deleted} old rows")
 
     except Exception as e:
@@ -145,11 +145,12 @@ def run_full_pipeline():
     try:
         filtered_df = apply_stage1_filter(raw_df, today)
         write_filtered_universe(filtered_df, today)
-        logger.info(
-            f"✅ Stage 1 filter | "
-            f"Input: {raw_df['ticker'].nunique()} | "
-            f"Passed: {len(filtered_df)}"
-        )
+
+            # Guard: abort gracefully if nothing passed Stage 1
+        if filtered_df.empty:
+            logger.error("Stage 1 filter: 0 tickers passed — aborting pipeline")
+            return {"error": "No tickers passed Stage 1 filter"}
+
         passed_tickers = filtered_df["ticker"].tolist()
     except Exception as e:
         handle_critical_error(e, "Step 5/6: Stage 1 filter", reraise=True)
@@ -214,7 +215,7 @@ def run_full_pipeline():
         logger.info("Merging engine outputs...")
 
         indicator_df = linreg_df.merge(
-            smc_df[["ticker", "date", "smc_structure", "choch_detected", "has_valid_zone"]],
+            smc_df[["ticker", "date", "smc_structure","has_valid_zone"]],
             on=["ticker", "date"], how="left"
         ).merge(
             volume_df[["ticker", "date", "volume_signal"]],
@@ -223,7 +224,7 @@ def run_full_pipeline():
 
         # Fill any missing SMC or volume values with safe defaults
         indicator_df["smc_structure"]  = indicator_df["smc_structure"].fillna("broken")
-        indicator_df["choch_detected"] = indicator_df["choch_detected"].fillna(1)
+        #indicator_df["choch_detected"] = indicator_df["choch_detected"].fillna(1)
         indicator_df["has_valid_zone"] = indicator_df["has_valid_zone"].fillna(0)
         indicator_df["volume_signal"]  = indicator_df["volume_signal"].fillna("neutral")
 

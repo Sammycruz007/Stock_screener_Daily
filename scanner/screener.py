@@ -199,26 +199,27 @@ def _check_market_health(indicator_df: pd.DataFrame) -> dict:
         row = row.iloc[0]
 
         slope_up = int(row["linreg_slope_up"]) == 1
-        no_choch = int(row["choch_detected"])  == 0
+        #no_choch = int(row["choch_detected"])  == 0
 
-        if slope_up and no_choch:
+        if slope_up:
             result[idx] = "bullish"
-        elif not slope_up and no_choch:
-            result[idx] = "bearish"
         else:
-            result[idx] = "broken"   # CHoCH detected
-
+            result[idx] = "bearish"
+        
         logger.info(
             f"Market | {idx}: {result[idx].upper()} | "
-            f"Slope up: {slope_up} | CHoCH: {not no_choch}"
+            f"Slope up: {slope_up} |"
         )
 
     # ── Determine overall market bias ─────────────────────────────────────────
-    statuses = list(result.values())
+    # Exclude "unknown" — missing indices don't override found ones
+    known_statuses = [s for s in result.values() if s != "unknown"]
 
-    if all(s == "bullish" for s in statuses):
+    if not known_statuses:
+        market_bias = "mixed"
+    elif all(s == "bullish" for s in known_statuses):
         market_bias = "bullish"
-    elif all(s == "bearish" for s in statuses):
+    elif all(s == "bearish" for s in known_statuses):
         market_bias = "bearish"
     else:
         market_bias = "mixed"
@@ -263,15 +264,13 @@ def _check_sector_health(indicator_df: pd.DataFrame) -> dict:
         row = row.iloc[0]
 
         slope_up = int(row["linreg_slope_up"]) == 1
-        no_choch = int(row["choch_detected"])  == 0
+        #no_choch = int(row["choch_detected"])  == 0
 
-        if slope_up and no_choch:
+        if slope_up:
             result[sector] = "bullish"
-        elif not slope_up and no_choch:
-            result[sector] = "bearish"
         else:
-            result[sector] = "broken"
-
+            result[sector] = "bearish"
+        
         logger.info(
             f"Sector | {sector}: {result[sector].upper()}"
         )
@@ -300,8 +299,8 @@ def _is_long_candidate(
         return False
 
     # ── Condition 2: No CHoCH ─────────────────────────────────────────────────
-    if int(row["choch_detected"]) != 0:
-        return False
+   # if int(row["choch_detected"]) != 0:
+    #    return False
 
     # ── Condition 3: Price in buy zone (-1 to -3 SD) ─────────────────────────
     sd_pos = float(row["price_sd_position"])
@@ -344,8 +343,8 @@ def _is_short_candidate(
     if int(row["linreg_slope_up"]) != 0:
         return False
 
-    if int(row["choch_detected"]) != 0:
-        return False
+    #if int(row["choch_detected"]) != 0:
+    #    return False
 
     sd_pos = float(row["price_sd_position"])
     if not (SHORT_SD_MIN <= sd_pos <= SHORT_SD_MAX):

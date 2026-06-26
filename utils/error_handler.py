@@ -310,9 +310,9 @@ def validate_dataframe(
             return False
 
     # ── Check 4: Sufficient rows for LinReg ──────────────────────────────────
-    if len(df) < 200:
+    if len(df) < 50:
         logger.warning(
-            f"[VALIDATION] {ticker} | Only {len(df)} rows — need 200+ for LinReg"
+            f"[VALIDATION] {ticker} | Only {len(df)} rows — Skipping"
         )
         return False
 

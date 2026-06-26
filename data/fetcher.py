@@ -38,8 +38,9 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import requests
+import time as _time
 from io import StringIO
-from datetime import datetime, timedelta
+from datetime import datetime, time , timedelta
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
@@ -661,6 +662,8 @@ def fetch_universe(
     Returns:
         Combined DataFrame for all tickers
     """
+  
+
     total   = len(tickers)
     batches = [
         tickers[i : i + BATCH_SIZE]
@@ -680,6 +683,11 @@ def fetch_universe(
 
         if not batch_df.empty:
             all_data.append(batch_df)
+
+        # Pause between batches to avoid Yahoo Finance rate limiting
+        # Without this, Yahoo blocks requests after ~20-30 batches
+        if i < len(batches):
+            _time.sleep(3)
 
     if not all_data:
         logger.error("fetch_universe: No data returned for any ticker")
@@ -814,7 +822,7 @@ def apply_stage1_filter(
     for ticker, group in df.groupby("ticker"):
         group      = group.sort_values("date")
         last_close = group["close"].iloc[-1]
-        avg_volume = group["volume"].tail(20).mean()
+        avg_volume = group["volume"].tail(20 * 26).sum()/20
 
         # Indices and sector ETFs always pass
         if ticker in protected:

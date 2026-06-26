@@ -67,8 +67,7 @@ def _load_config() -> dict:
 config     = _load_config()
 LINREG_CFG = config["linreg"]
 
-PERIOD   = LINREG_CFG["period"]       # 150 candles
-STD_DEV_PERIOD = LINREG_CFG["std_dev_period"]  # 21 candles
+PERIOD   = LINREG_CFG["period"]       # 500 candles
 STD_DEVS = LINREG_CFG["std_devs"]     # [1, 2, 3]
 
 
@@ -115,7 +114,8 @@ def _compute_linreg(closes: np.ndarray) -> dict:
 
     # ── Step 4: Compute standard deviation of residuals ───────────────────────
     # This is the "width" of typical price deviation from the LinReg line
-    std_dev = np.std(residuals[-STD_DEV_PERIOD:], ddof=1)  # ddof=1 for sample std dev
+    n_1= len(residuals)
+    std_dev = np.sqrt(np.sum(residuals**2) / (n_1 - 2))  # Sample std dev
 
     # ── Step 5: Get values for the MOST RECENT candle ─────────────────────────
     # We only care about where the line and bands sit TODAY (last candle)
@@ -180,7 +180,8 @@ def compute_linreg_series(closes: np.ndarray) -> pd.DataFrame:
     slope, intercept, _, _, _ = stats.linregress(x, closes)
     y_fitted  = slope * x + intercept
     residuals = closes - y_fitted
-    std_dev   = np.std(residuals, ddof=1)
+    n_1= len(residuals)
+    std_dev   = np.sqrt(np.sum(residuals**2) / (n_1 - 2))
 
     # Build a DataFrame with the full line and all bands
     result = pd.DataFrame({"linreg": y_fitted})
@@ -226,11 +227,8 @@ def compute_linreg_latest(
 
     # ── Step 1: Check we have enough candles ─────────────────────────────────
     if len(df) < PERIOD:
-        logger.warning(
-            f"{ticker} | Insufficient data: {len(df)} rows, need {PERIOD}"
-        )
+        logger.warning(f"{ticker} | Only {len(df)} rows — need {PERIOD}+ for LinReg")
         return None
-
     # ── Step 2: Extract the last PERIOD closing prices as numpy array ─────────
     closes = df["close"].values[-PERIOD:]
 
