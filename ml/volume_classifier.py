@@ -48,8 +48,10 @@ from typing import Optional, Tuple
 import yaml
 
 from xgboost import XGBClassifier
-from sklearn.model_selection import StratifiedKFold, cross_val_score
-from sklearn.metrics import precision_score, roc_auc_score
+from sklearn.model_selection import TimeSeriesSplit, cross_val_score
+from sklearn.metrics import (
+    precision_score, recall_score, f1_score,
+      roc_auc_score, average_precision_score)
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 
@@ -78,6 +80,7 @@ ML_CFG  = config["ml"]
 MIN_SAMPLES    = ML_CFG["min_training_samples"]    # 500
 MODEL_DIR      = Path(__file__).resolve().parents[1] / "models"
 MODEL_PATH     = MODEL_DIR / "volume_classifier.pkl"
+GAP = ML_CFG["label_forward_periods"]
 
 
 # =============================================================================
@@ -144,7 +147,7 @@ def train_volume_classifier(
     2. Separate features (X) from labels (y)
     3. Compute class imbalance ratio for scale_pos_weight
     4. Build pipeline
-    5. Evaluate with 5-fold stratified cross-validation
+    5. Evaluate with 5-fold Walk-Forward Cross-Validation
        (stratified = preserves class balance in each fold)
     6. Train final model on ALL data
     7. Compute final metrics on full training set
@@ -174,9 +177,23 @@ def train_volume_classifier(
             f"(need {MIN_SAMPLES})"
         )
 
-    # ── Step 2: Separate features and labels ──────────────────────────────────
-    X = feature_matrix[VOLUME_FEATURE_COLS].copy()
-    y = feature_matrix["label"].values
+    # ── Step 2: Separate features, labels, AND DATE ─────────────────────────
+    # DO NOT include 'date' in X. But we need it to split
+    df = feature_matrix.copy()
+    X = df[VOLUME_FEATURE_COLS].copy()
+    y = df["label"].values
+
+    # Use index as time proxy if date column not present
+    # Features are already sorted chronologically by build_volume_feature_matrix()
+    if "date" in df.columns:
+        dates = pd.to_datetime(df["date"])
+    else:
+        # No date column — use row index as time proxy (already sorted chronologically)
+        dates = pd.Series(range(len(df)), index=df.index)
+        logger.warning(
+            "No 'date' column in feature matrix — "
+            "using row index as time proxy for walk-forward split"
+        )
 
     logger.info(
         f"Training data | Samples: {len(X)} | "
@@ -184,57 +201,86 @@ def train_volume_classifier(
         f"Positive: {y.sum()} | Negative: {(y==0).sum()}"
     )
 
-    # ── Step 3: Compute class imbalance ratio ─────────────────────────────────
-    n_negative      = (y == 0).sum()
-    n_positive      = (y == 1).sum()
-    scale_pos_weight = n_negative / n_positive if n_positive > 0 else 1.0
-
-    logger.info(f"Class balance | scale_pos_weight: {scale_pos_weight:.2f}")
+    # ── Step 3: Class imbalance ratio ─────────────────────────────────────────
+    n_negative       = (y == 0).sum()
+    n_positive       = (y == 1).sum()
+    raw_ratio        = n_negative / n_positive if n_positive > 0 else 1.0
+    scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. 43 is too high
+    logger.info(
+        f"Class balance | "
+        f"Positive: {n_positive} | Negative: {n_negative} | "
+        f"Raw ratio: {raw_ratio:.2f} | "
+        f"scale_pos_weight (capped): {scale_pos_weight:.2f}"
+    )
 
     # ── Step 4: Build pipeline ────────────────────────────────────────────────
     pipeline = _build_pipeline(scale_pos_weight)
 
-    # ── Step 5: Cross-validation ──────────────────────────────────────────────
-    # 5-fold stratified CV gives reliable performance estimate
-    cv          = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-    cv_auc_roc  = cross_val_score(
-        pipeline, X, y, cv=cv, scoring="roc_auc", n_jobs=-1
-    )
+    # ── Step 5: Cut a FINAL HOLDOUT FIRST. Never touch this during CV ───────
+    # Last 20% by time = walk-forward reality check
+    
+    split_idx  = int(len(dates) * 0.80)
+    train_mask = dates.index < dates.index[split_idx]
+    test_mask  = dates.index >= dates.index[split_idx]
+
+    X_train, y_train = X[train_mask], y[train_mask]
+    X_test,  y_test  = X[test_mask],  y[test_mask]
+
+    logger.info(f"Walk-Forward Split | Train: {len(X_train)} | OOS Test: {len(X_test)} | Ratio: {raw_ratio:.2f}:1")
+
+
+
+    # ── Step 6: Cross-validation on TRAIN only ──────────────────────────────
+    # Walk-Forward split - trains on past, test on future. gap must >= your lookback
+    cv = TimeSeriesSplit(n_splits=5, gap=78) # GAP >= LOOKBACK_DAYS
+
+    cv_auc_roc = cross_val_score(pipeline, X_train, y_train, cv=cv, 
+                                 scoring="roc_auc", n_jobs=-1)
+    
+    cv_pr_auc  = cross_val_score(pipeline, X_train, y_train, 
+                                 cv=cv, scoring="average_precision", n_jobs=-1)
 
     logger.info(
-        f"Cross-validation AUC-ROC | "
-        f"Mean: {cv_auc_roc.mean():.4f} | "
-        f"Std: {cv_auc_roc.std():.4f} | "
-        f"Folds: {cv_auc_roc.tolist()}"
+        f"Cross-validation | "
+        f"AUC-ROC: {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f} | "
+        f"PR-AUC:  {cv_pr_auc.mean():.4f} ± {cv_pr_auc.std():.4f}"
     )
 
-    # ── Step 6: Train final model on all data ─────────────────────────────────
-    logger.info("Training final model on full dataset...")
-    pipeline.fit(X, y)
+    # ── Step 7: Train FINAL model on TRAIN only ─────────────────────────────
+    logger.info("Training final model on TRAIN set only...")
+    pipeline.fit(X_train, y_train)
 
-    # ── Step 7: Compute final metrics ─────────────────────────────────────────
-    y_pred_proba = pipeline.predict_proba(X)[:, 1]
-    y_pred       = (y_pred_proba >= 0.5).astype(int)
+    # ── Step 8: Compute REAL OOS metrics on HOLDOUT only ────────────────────
+    y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
+    # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
+    y_pred       = (y_pred_proba >= 0.5).astype(int) 
 
-    precision = precision_score(y, y_pred, zero_division=0)
-    auc_roc   = roc_auc_score(y, y_pred_proba)
+    precision = precision_score(y_test, y_pred, zero_division=0)
+    recall    = recall_score(y_test, y_pred, zero_division=0)
+    f1        = f1_score(y_test, y_pred, zero_division=0)
+    auc_roc   = roc_auc_score(y_test, y_pred_proba)
+    pr_auc    = average_precision_score(y_test, y_pred_proba) 
+
+    logger.info(
+        f"OOS Test Metrics | Precision: {precision:.4f} | Recall: {recall:.4f} | "
+        f"F1: {f1:.4f} | AUC-ROC: {auc_roc:.4f} | PR-AUC: {pr_auc:.4f}"
+    )
 
     metrics = {
         "model_name"     : "volume_classifier",
         "train_date"     : datetime.today().strftime("%Y-%m-%d"),
-        "precision_score": round(precision, 4),
-        "auc_roc_score"  : round(auc_roc, 4),
+        "precision"      : round(precision, 4), # <- This is your real one
+        "Recall"         : round(recall, 4),
+        "f1"             : round(f1, 4),
+        "auc_roc"        : round(auc_roc, 4),
+        "pr_auc"         : round(pr_auc, 4),    # <- Target > 0.28
         "cv_auc_mean"    : round(cv_auc_roc.mean(), 4),
         "cv_auc_std"     : round(cv_auc_roc.std(), 4),
-        "n_samples"      : len(X),
-        "n_features"     : len(VOLUME_FEATURE_COLS),
+        "cv_pr_mean"     : round(cv_pr_auc.mean(), 4),
+        "cv_pr_std"      : round(cv_pr_auc.std(), 4),
+        "n_train"        : len(X_train),
+        "n_test"         : len(X_test),
     }
-
-    logger.info(
-        f"Final metrics | "
-        f"Precision: {precision:.4f} | "
-        f"AUC-ROC: {auc_roc:.4f}"
-    )
 
     # ── Step 8: Save model to disk ────────────────────────────────────────────
     MODEL_DIR.mkdir(parents=True, exist_ok=True)

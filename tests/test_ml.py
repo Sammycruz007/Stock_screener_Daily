@@ -227,16 +227,15 @@ def test_train_volume_classifier():
     pipeline, metrics = train_volume_classifier(matrix)
 
     assert pipeline   is not None
-    assert "precision_score" in metrics
-    assert "auc_roc_score"   in metrics
-    assert metrics["n_samples"] == 600
-    assert 0.0 <= metrics["precision_score"] <= 1.0
-    assert 0.0 <= metrics["auc_roc_score"]   <= 1.0
+    assert "precision" in metrics
+    assert "auc_roc"   in metrics
+    assert 0.0 <= metrics["precision"] <= 1.0
+    assert 0.0 <= metrics["auc_roc"]   <= 1.0
 
     print(
         f"✅ train_volume_classifier | "
-        f"Precision: {metrics['precision_score']} | "
-        f"AUC-ROC: {metrics['auc_roc_score']}"
+        f"Precision: {metrics['precision']} | "
+        f"AUC-ROC: {metrics['auc_roc']}"
     )
 
 
@@ -273,16 +272,15 @@ def test_train_signal_ranker():
     pipeline, metrics = train_signal_ranker(matrix)
 
     assert pipeline   is not None
-    assert "precision_score" in metrics
-    assert "auc_roc_score"   in metrics
-    assert metrics["n_samples"] == 600
-    assert 0.0 <= metrics["precision_score"] <= 1.0
-    assert 0.0 <= metrics["auc_roc_score"]   <= 1.0
+    assert "precision" in metrics
+    assert "auc_roc"   in metrics
+    assert 0.0 <= metrics["precision"] <= 1.0
+    assert 0.0 <= metrics["auc_roc"]   <= 1.0
 
     print(
         f"✅ train_signal_ranker | "
-        f"Precision: {metrics['precision_score']} | "
-        f"AUC-ROC: {metrics['auc_roc_score']}"
+        f"Precision: {metrics['precision']} | "
+        f"AUC-ROC: {metrics['auc_roc']}"
     )
 
 
@@ -323,7 +321,6 @@ def test_score_candidates():
         candidates_df  = candidates_df,
         prices_df      = prices_df,
         indicators_df  = indicators_df,
-        sentiment_df   = sentiment_df,
         market_ind_df  = market_ind_df,
         vol_scores     = vol_scores,
         signal_date    = TODAY,

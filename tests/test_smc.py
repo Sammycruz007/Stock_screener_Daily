@@ -14,7 +14,6 @@ from engines.smc import (
     _find_swing_highs,
     _find_swing_lows,
     _detect_structure,
-    _detect_choch,
     _find_bos,
     _is_bullish_engulfing,
     _is_bearish_engulfing,
@@ -171,31 +170,9 @@ def test_broken_structure():
 # CHoCH TESTS
 # =============================================================================
 
-def test_choch_bullish_broken():
-    """CHoCH detected when close breaks below recent swing low."""
-    swing_lows  = [(200, 100.0)]
-    swing_highs = [(150, 110.0)]
-
-    # Recent closes — last MIN_PIVOT_CANDLES*2 must include a close < 100
-    n = MIN_PIVOT_CANDLES * 2
-    closes = np.linspace(105, 97, n)  # drops below 100
-
-    choch = _detect_choch(closes, swing_highs, swing_lows, "bullish")
-    assert choch == True
-    print("✅ CHoCH detection: bullish CHoCH correctly detected (close below swing low)")
 
 
-def test_choch_not_triggered():
-    """CHoCH should NOT trigger if closes stay above swing low."""
-    swing_lows  = [(200, 100.0)]
-    swing_highs = [(150, 110.0)]
 
-    n = MIN_PIVOT_CANDLES * 2
-    closes = np.linspace(105, 102, n)  # stays above 100
-
-    choch = _detect_choch(closes, swing_highs, swing_lows, "bullish")
-    assert choch == False
-    print("✅ CHoCH detection: correctly NOT triggered (closes above swing low)")
 
 
 # =============================================================================
@@ -348,9 +325,8 @@ def test_compute_smc_full():
     assert result is not None
     assert result["ticker"] == "AAPL"
     assert result["smc_structure"] in ["bullish", "bearish", "broken"]
-    assert result["choch_detected"] in [0, 1]
     assert "has_valid_zone" in result
-    print(f"✅ compute_smc: structure={result['smc_structure']} | choch={result['choch_detected']} | zone={result['has_valid_zone']}")
+    print(f"✅ compute_smc: structure={result['smc_structure']} | zone={result['has_valid_zone']}")
 
 
 def test_compute_smc_with_zone_params():
@@ -379,10 +355,9 @@ def test_run_smc_engine():
 
     assert len(result) == 3
     assert "smc_structure"  in result.columns
-    assert "choch_detected" in result.columns
     assert "has_valid_zone" in result.columns
     print(f"✅ run_smc_engine: {len(result)} tickers processed")
-    print(result[["ticker", "smc_structure", "choch_detected", "has_valid_zone"]].to_string(index=False))
+    print(result[["ticker", "smc_structure", "has_valid_zone"]].to_string(index=False))
 
 
 def test_run_smc_engine_with_linreg_df():
@@ -404,7 +379,7 @@ def test_run_smc_engine_with_linreg_df():
     assert len(result) == 2
     assert "has_valid_zone" in result.columns
     print(f"✅ run_smc_engine with linreg_df: {len(result)} tickers")
-    print(result[["ticker", "smc_structure", "choch_detected", "has_valid_zone"]].to_string(index=False))
+    print(result[["ticker", "smc_structure", "has_valid_zone"]].to_string(index=False))
 
 
 # =============================================================================
@@ -426,10 +401,7 @@ def run_all_tests():
         test_bearish_structure()
         test_broken_structure()
 
-        print("\n--- CHoCH ---")
-        test_choch_bullish_broken()
-        test_choch_not_triggered()
-
+    
         print("\n--- Engulfing Candles ---")
         test_bullish_engulfing_detected()
         test_bullish_engulfing_not_detected()

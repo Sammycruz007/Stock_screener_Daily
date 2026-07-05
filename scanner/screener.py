@@ -308,15 +308,15 @@ def _is_long_candidate(
         return False
 
     # ── Condition 4: Accumulation volume ─────────────────────────────────────
-    if row["volume_signal"] != "accumulation":
-        return False
+    #if row["volume_signal"] != "accumulation":
+    #    return False
 
     # ── Condition 5: Sector health (dynamic lookup) ───────────────────────────
     sector_etf = ticker_to_etf.get(ticker)
 
     # ── Condition 6: Valid demand zone (BOS + engulfing in SD band) ───────────
-    if int(row.get("has_valid_zone", 0)) != 1:
-        return False
+    #if int(row.get("has_valid_zone", 0)) != 1:
+    #    return False
 
     if sector_etf is not None:
         # Sector found — apply the health check
@@ -350,14 +350,14 @@ def _is_short_candidate(
     if not (SHORT_SD_MIN <= sd_pos <= SHORT_SD_MAX):
         return False
 
-    if row["volume_signal"] != "distribution":
-        return False
+    #if row["volume_signal"] != "distribution":
+    #    return False
 
     sector_etf = ticker_to_etf.get(ticker)
 
     # ── Condition 6: Valid supply zone (BOS + engulfing in SD band) ───────────
-    if int(row.get("has_valid_zone", 0)) != 1:
-        return False
+    #if int(row.get("has_valid_zone", 0)) != 1:
+    #    return False
 
     if sector_etf is not None:
         if sector_health.get(sector_etf) != "bearish":
@@ -377,7 +377,6 @@ def _build_candidate_row(
     row            : pd.Series,
     direction      : str,
     sector_health  : dict,
-    sentiment_df   : pd.DataFrame,
     ticker_to_etf  : dict,
     ticker_to_name : dict,
 ) -> dict:
@@ -394,15 +393,7 @@ def _build_candidate_row(
     if sector_etf is None:
         sector_name = f"⚠️ {sector_name}"
 
-    # Attach sentiment data
-    sentiment_row = sentiment_df[sentiment_df["ticker"] == ticker]
-
-    if not sentiment_row.empty:
-        put_call_ratio     = sentiment_row.iloc[0]["put_call_ratio"]
-        short_interest_pct = sentiment_row.iloc[0]["short_interest_pct"]
-    else:
-        put_call_ratio     = None
-        short_interest_pct = None
+    
 
     return {
         "ticker"            : ticker,
@@ -410,8 +401,6 @@ def _build_candidate_row(
         "sector"            : sector_name,
         "sd_position"       : float(row["price_sd_position"]),
         "volume_signal"     : row["volume_signal"],
-        "put_call_ratio"    : put_call_ratio,
-        "short_interest_pct": short_interest_pct,
         "ml_score"          : 0.0,
         "ml_rank"           : 0,
     }
@@ -422,7 +411,6 @@ def _build_candidate_row(
 
 def run_scanner(
     indicator_df : pd.DataFrame,
-    sentiment_df : pd.DataFrame,
     date         : str,
 ) -> pd.DataFrame:
     """
@@ -468,15 +456,14 @@ def run_scanner(
 
         if scan_long and _is_long_candidate(row, sector_health, ticker_to_etf):
             candidate = _build_candidate_row(
-                row, "long", sector_health,
-                sentiment_df, ticker_to_etf, ticker_to_name
+                row, "long", sector_health, ticker_to_etf, ticker_to_name
             )
             long_candidates.append(candidate)
 
         if scan_short and _is_short_candidate(row, sector_health, ticker_to_etf):
             candidate = _build_candidate_row(
                 row, "short", sector_health,
-                sentiment_df, ticker_to_etf, ticker_to_name
+                         ticker_to_etf, ticker_to_name
             )
             short_candidates.append(candidate)
 

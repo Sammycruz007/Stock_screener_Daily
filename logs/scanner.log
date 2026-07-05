@@ -8113,3 +8113,120 @@
 2026-06-26 19:35:04 | WARNING  | scanner                   | Scanner: No candidates found today
 2026-06-26 19:41:59 | INFO     | scanner                   | Logger initialised → logs\scanner.log
 2026-06-26 19:48:35 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-06-27 07:40:41 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-06-27 08:37:30 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-06-27 08:37:30 | INFO     | scanner                   | ============================================================
+2026-06-27 08:37:30 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-06-27 08:37:30 | INFO     | scanner                   | ============================================================
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector lookup loaded | Classified: 735 | Unclassified: 4
+2026-06-27 08:37:30 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-06-27 08:37:30 | INFO     | scanner                   | Market | QQQ: BEARISH | Slope up: False |
+2026-06-27 08:37:30 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-06-27 08:37:30 | INFO     | scanner                   | Overall market bias: MIXED
+2026-06-27 08:37:30 | INFO     | scanner                   | Market bias: MIXED | Scan longs: True | Scan shorts: True
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLK: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLY: BEARISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLP: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLB: BULLISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-06-27 08:37:30 | INFO     | scanner                   | Scanning 724 stocks...
+2026-06-27 08:37:30 | INFO     | scanner                   | Scanner complete | Long: 0 | Short: 0
+2026-06-27 08:37:30 | WARNING  | scanner                   | Scanner: No candidates found today
+2026-06-27 08:38:09 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-06-27 09:42:24 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-06-27 10:14:54 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-01 15:04:49 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-02 16:33:19 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-02 16:33:19 | INFO     | scanner                   | ============================================================
+2026-07-02 16:33:19 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-02 16:33:19 | INFO     | scanner                   | ============================================================
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector lookup loaded | Classified: 750 | Unclassified: 5
+2026-07-02 16:33:20 | INFO     | scanner                   | Market | SPY: BULLISH | Slope up: True |
+2026-07-02 16:33:20 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-02 16:33:20 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-02 16:33:20 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Market bias: BULLISH | Scan longs: True | Scan shorts: False
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLK: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-02 16:33:20 | INFO     | scanner                   | Scanning 339 stocks...
+2026-07-02 16:33:20 | INFO     | scanner                   | Scanner complete | Long: 0 | Short: 0
+2026-07-02 16:33:20 | WARNING  | scanner                   | Scanner: No candidates found today
+2026-07-02 16:54:07 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-03 14:31:38 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-03 15:01:26 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-03 15:05:17 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 13:47:47 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 14:56:11 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 14:59:02 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 20:56:47 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 21:59:17 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 22:02:45 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 22:56:50 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-04 23:40:19 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 00:37:25 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 01:17:40 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 01:41:54 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 02:18:37 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 02:18:37 | INFO     | scanner                   | ============================================================
+2026-07-05 02:18:37 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-05 02:18:37 | INFO     | scanner                   | ============================================================
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector lookup loaded | Classified: 670 | Unclassified: 110
+2026-07-05 02:18:37 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-07-05 02:18:37 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-05 02:18:37 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-05 02:18:37 | INFO     | scanner                   | Overall market bias: MIXED
+2026-07-05 02:18:37 | INFO     | scanner                   | Market bias: MIXED | Scan longs: True | Scan shorts: True
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-05 02:18:37 | INFO     | scanner                   | Scanning 412 stocks...
+2026-07-05 02:18:37 | INFO     | scanner                   | Scanner complete | Long: 0 | Short: 0
+2026-07-05 02:18:37 | WARNING  | scanner                   | Scanner: No candidates found today
+2026-07-05 02:29:01 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 03:18:58 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 03:18:58 | INFO     | scanner                   | ============================================================
+2026-07-05 03:18:58 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-05 03:18:58 | INFO     | scanner                   | ============================================================
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector lookup loaded | Classified: 670 | Unclassified: 110
+2026-07-05 03:18:58 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-07-05 03:18:58 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-05 03:18:58 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-05 03:18:58 | INFO     | scanner                   | Overall market bias: MIXED
+2026-07-05 03:18:58 | INFO     | scanner                   | Market bias: MIXED | Scan longs: True | Scan shorts: True
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-05 03:18:58 | INFO     | scanner                   | Scanning 405 stocks...
+2026-07-05 03:18:58 | INFO     | scanner                   | Scanner complete | Long: 25 | Short: 50
+2026-07-05 03:18:58 | INFO     | scanner                   | Final candidates | Total: 75

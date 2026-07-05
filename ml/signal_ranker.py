@@ -12,7 +12,8 @@ to succeed (price reaching the LinReg mean within N days)?
 It is the final ranking layer before the dashboard display.
 
 TRAINING FLOW:
-1. Load labelled scanner hits from labeller.py
+1. Load 
+led scanner hits from labeller.py
 2. Build full feature matrix from features.py
    (includes volume features + vol_clf_score + sentiment + market)
 3. Handle class imbalance
@@ -45,11 +46,13 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, Tuple
+from sklearn import pipeline
 import yaml
 
 from xgboost import XGBClassifier
-from sklearn.model_selection import StratifiedKFold, cross_val_score
-from sklearn.metrics import precision_score, roc_auc_score
+from sklearn.model_selection import TimeSeriesSplit, cross_val_score
+from sklearn.metrics import (precision_score, recall_score,
+                              f1_score, roc_auc_score, average_precision_score)
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 
@@ -79,7 +82,7 @@ MIN_SAMPLES  = ML_CFG["min_training_samples"]
 HIGH_PROB_THRESHOLD = ML_CFG["high_probability_threshold"]   # 0.70
 MODEL_DIR    = Path(__file__).resolve().parents[1] / "models"
 MODEL_PATH   = MODEL_DIR / "signal_ranker.pkl"
-
+GAP = ML_CFG["label_forward_periods"]
 
 # =============================================================================
 # MODEL BUILDER
@@ -98,7 +101,9 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
 
     Returns:
         sklearn Pipeline
-    """
+            """
+    
+    
     model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 5,
@@ -138,7 +143,7 @@ def train_signal_ranker(
        — these are not features, just row identifiers
     4. Compute class imbalance ratio
     5. Build pipeline
-    6. 5-fold stratified cross-validation
+    6. 5-fold Walk-Forward cross-validation
     7. Train final model on all data
     8. Compute final metrics
     9. Save model to disk
@@ -161,66 +166,109 @@ def train_signal_ranker(
             f"(need {MIN_SAMPLES})"
         )
 
-    # ── Step 2 & 3: Separate features and labels ──────────────────────────────
-    # Drop identifier columns — they are not predictive features
-    drop_cols = ["ticker", "date", "direction", "label"]
-    X = feature_matrix[SIGNAL_FEATURE_COLS].copy()
-    y = feature_matrix["label"].values
+    # ── Step 2 & 3: Separate features, labels, AND DATE ─────────────────────
+    # Keep date out of X. We only use it to split time
+    df = feature_matrix.copy()
+    X = df[SIGNAL_FEATURE_COLS].copy()
+    y = df["label"].values
 
-    logger.info(
-        f"Training data | Samples: {len(X)} | "
-        f"Features: {len(SIGNAL_FEATURE_COLS)} | "
-        f"Positive: {y.sum()} | Negative: {(y==0).sum()}"
-    )
 
+    # Use index as time proxy if date column not present
+    # Features are already sorted chronologically by build_volume_feature_matrix()
+    if "date" in df.columns:
+        dates = pd.to_datetime(df["date"])
+    else:
+        # No date column — use row index as time proxy (already sorted chronologically)
+        dates = pd.Series(range(len(df)), index=df.index)
+        logger.warning(
+            "No 'date' column in feature matrix — "
+            "using row index as time proxy for walk-forward split"
+        )
     # ── Step 4: Class imbalance ratio ─────────────────────────────────────────
     n_negative       = (y == 0).sum()
     n_positive       = (y == 1).sum()
-    scale_pos_weight = n_negative / n_positive if n_positive > 0 else 1.0
+    raw_ratio        = n_negative / n_positive if n_positive > 0 else 1.0
+    scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
 
-    logger.info(f"Class balance | scale_pos_weight: {scale_pos_weight:.2f}")
+    logger.info(
+        f"Class balance | "
+        f"Positive: {n_positive} | Negative: {n_negative} | "
+        f"Raw ratio: {raw_ratio:.2f} | scale_pos_weight: {scale_pos_weight:.2f}"
+    )
 
     # ── Step 5: Build pipeline ────────────────────────────────────────────────
     pipeline = _build_pipeline(scale_pos_weight)
 
-    # ── Step 6: Cross-validation ──────────────────────────────────────────────
-    cv         = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-    cv_auc_roc = cross_val_score(
-        pipeline, X, y, cv=cv, scoring="roc_auc", n_jobs=-1
-    )
+    # ── Step 6: Cut a FINAL HOLDOUT FIRST. Never touch this during CV ───────
+    # Last 20% by time = walk-forward reality check
+   
+    split_idx  = int(len(dates) * 0.80)
+    train_mask = dates.index < dates.index[split_idx]
+    test_mask  = dates.index >= dates.index[split_idx]
+
+    X_train, y_train = X[train_mask], y[train_mask]
+    X_test,  y_test  = X[test_mask],  y[test_mask]
+
+    logger.info(f"Walk-Forward Split | Train: {len(X_train)} | OOS Test: {len(X_test)} | Ratio: {raw_ratio:.2f}:1")
+
+    # ── Step 7: Cross-validation on TRAIN only ───────────────────────────────
+    # GAP must be >= your max lookback. From config: smc min_pivot_candles=78
+    
+    cv = TimeSeriesSplit(n_splits=5, gap=78)
+    cv_auc_roc = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring="roc_auc", n_jobs=-1)
+    cv_pr_auc  = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring="average_precision", n_jobs=-1)
 
     logger.info(
-        f"Cross-validation AUC-ROC | "
-        f"Mean: {cv_auc_roc.mean():.4f} | "
-        f"Std: {cv_auc_roc.std():.4f}"
+        f"Cross-validation | "
+        f"AUC-ROC: {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f} | "
+        f"PR-AUC:  {cv_pr_auc.mean():.4f} ± {cv_pr_auc.std():.4f}"
     )
 
-    # ── Step 7: Train final model ─────────────────────────────────────────────
-    logger.info("Training final model on full dataset...")
-    pipeline.fit(X, y)
 
-    # ── Step 8: Final metrics ─────────────────────────────────────────────────
-    y_pred_proba = pipeline.predict_proba(X)[:, 1]
-    y_pred       = (y_pred_proba >= 0.5).astype(int)
+    # ── Step 8: Train FINAL model on TRAIN only ─────────────────────────────
+    logger.info("Training final model on TRAIN set only...")
+    pipeline.fit(X_train, y_train)
 
-    precision = precision_score(y, y_pred, zero_division=0)
-    auc_roc   = roc_auc_score(y, y_pred_proba)
+
+    y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
+    # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
+    y_pred       = (y_pred_proba >= 0.5).astype(int) 
+
+    precision = precision_score(y_test, y_pred, zero_division=0)
+    recall    = recall_score(y_test, y_pred, zero_division=0)
+    f1        = f1_score(y_test, y_pred, zero_division=0)
+    auc_roc   = roc_auc_score(y_test, y_pred_proba)
+    pr_auc    = average_precision_score(y_test, y_pred_proba) 
+
+    logger.info(
+        f"OOS Test Metrics | Precision: {precision:.4f} | Recall: {recall:.4f} | "
+        f"F1: {f1:.4f} | AUC-ROC: {auc_roc:.4f} | PR-AUC: {pr_auc:.4f}"
+    )
 
     metrics = {
         "model_name"     : "signal_ranker",
         "train_date"     : datetime.today().strftime("%Y-%m-%d"),
-        "precision_score": round(precision, 4),
-        "auc_roc_score"  : round(auc_roc, 4),
+        "precision"      : round(precision, 4), # <- This is your real one
+        "recall"         : round(recall, 4),
+        "f1"             : round(f1, 4),
+        "auc_roc"        : round(auc_roc, 4),
+        "pr_auc"         : round(pr_auc, 4),    # <- Target > 0.28
         "cv_auc_mean"    : round(cv_auc_roc.mean(), 4),
         "cv_auc_std"     : round(cv_auc_roc.std(), 4),
-        "n_samples"      : len(X),
-        "n_features"     : len(SIGNAL_FEATURE_COLS),
+        "cv_pr_mean"     : round(cv_pr_auc.mean(), 4),
+        "cv_pr_std"      : round(cv_pr_auc.std(), 4),
+        "n_train"        : len(X_train),
+        "n_test"         : len(X_test),
     }
 
     logger.info(
         f"Final metrics | "
         f"Precision: {precision:.4f} | "
-        f"AUC-ROC: {auc_roc:.4f}"
+        f"Recall: {recall:.4f} | "
+        f"F1: {f1:.4f} | "
+        f"PR-AUC: {pr_auc:.4f} | "  
+        f"AUC-ROC: {auc_roc:.4f} | "
+        f"CV AUC-ROC: {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f}"
     )
 
     # ── Step 9: Save model to disk ────────────────────────────────────────────
@@ -265,7 +313,6 @@ def score_candidates(
     candidates_df  : pd.DataFrame,
     prices_df      : pd.DataFrame,
     indicators_df  : pd.DataFrame,
-    sentiment_df   : pd.DataFrame,
     market_ind_df  : pd.DataFrame,
     vol_scores     : dict,
     signal_date    : str,
@@ -341,7 +388,6 @@ def score_candidates(
                 direction     = direction,
                 prices_df     = px,
                 indicators_df = indicators_df,
-                sentiment_df  = sentiment_df,
                 market_ind_df = market_ind_df,
                 vol_clf_score = vol_score,
             )

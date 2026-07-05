@@ -132,7 +132,7 @@ def run_full_pipeline():
 
         logger.info("Pruning old price data...")
         from data.database import prune_old_prices
-        deleted = prune_old_prices(max_days=70)
+        deleted = prune_old_prices(max_days=60)
         logger.info(f"✅ Pruned {deleted} old rows")
 
     except Exception as e:
@@ -238,20 +238,9 @@ def run_full_pipeline():
     # =========================================================================
     # STEP 9: Fetch sentiment data
     # =========================================================================
-    logger.info("\n[STEP 9/12] Fetching sentiment data...")
-    try:
-        from sentiment.sentiment import run_sentiment_pipeline
-        from data.database       import write_sentiment_data
+       
 
-        sentiment_df = run_sentiment_pipeline(passed_tickers, today)
-        write_sentiment_data(sentiment_df)
-        logger.info(f"✅ Sentiment data: {len(sentiment_df)} tickers")
-    except Exception as e:
-        logger.warning(f"Step 9 sentiment failed: {e} — continuing with empty sentiment")
-        sentiment_df = pd.DataFrame(columns=[
-            "ticker", "date", "put_call_ratio", "short_interest_pct"
-        ])
-
+      
     # =========================================================================
     # STEP 10: Run scanner waterfall
     # =========================================================================
@@ -259,7 +248,7 @@ def run_full_pipeline():
     try:
         from scanner.screener import run_scanner
 
-        candidates_df = run_scanner(indicator_df, sentiment_df, today)
+        candidates_df = run_scanner(indicator_df, today)
 
         if candidates_df.empty:
             logger.warning(
@@ -316,7 +305,6 @@ def run_full_pipeline():
                     candidates_df  = candidates_df,
                     prices_df      = raw_df,
                     indicators_df  = indicator_df,
-                    sentiment_df   = sentiment_df,
                     market_ind_df  = market_ind_df,
                     vol_scores     = vol_scores,
                     signal_date    = today,
@@ -371,8 +359,7 @@ def run_full_pipeline():
             print("-" * 70)
             print(longs[[
                 "ml_rank", "ticker", "sector",
-                "sd_position", "volume_signal",
-                "put_call_ratio", "short_interest_pct", "ml_score"
+                "sd_position", "volume_signal", "ml_score"
             ]].to_string(index=False))
 
         if not shorts.empty:
@@ -380,8 +367,7 @@ def run_full_pipeline():
             print("-" * 70)
             print(shorts[[
                 "ml_rank", "ticker", "sector",
-                "sd_position", "volume_signal",
-                "put_call_ratio", "short_interest_pct", "ml_score"
+                "sd_position", "volume_signal", "ml_score"
             ]].to_string(index=False))
 
         print("\n" + "=" * 70)

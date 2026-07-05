@@ -2,10 +2,10 @@ database:
   path: data/scanner.db
 
 fetcher:
-  batch_size: 25        # was 50 — smaller batches hit Yahoo less aggressively
-  max_workers: 6      # 6 arallel connections per batch
+  batch_size: 25       # was 50 — smaller batches hit Yahoo less aggressively
+  max_workers: 7     # 7 Parallel connections per batch
   retry_attempts: 3
-  retry_delay_seconds: 5  # was 8 — more time between retries
+  retry_delay_seconds: 5 # was 8 — more time between retries
   historical_days: 58
   incremental_days: 5
   
@@ -28,7 +28,7 @@ logging:
 
 ml:
   high_probability_threshold: 0.7
-  label_forward_periods: 26
+  label_forward_periods: 52 # 2 trading days. 26 gave us 2% positive labels, 52 gives us 4% positive labels
   min_training_samples: 50
   model_retrain_days: 7
   backfill_stride: 4

@@ -194,7 +194,6 @@ def compute_signal_features(
     direction      : str,
     prices_df      : pd.DataFrame,
     indicators_df  : pd.DataFrame,
-    sentiment_df   : pd.DataFrame,
     market_ind_df  : pd.DataFrame,
     vol_clf_score  : Optional[float] = None,
 ) -> Optional[dict]:
@@ -308,18 +307,29 @@ def compute_signal_features(
             "price_recovery_ratio",
         ]}
 
-    # ── GROUP 4: Sentiment features ──────────────────────────────────────────
-    sent_row = sentiment_df[
-        (sentiment_df["ticker"] == ticker) &
-        (sentiment_df["date"]   == signal_date)
-    ]
-
-    if not sent_row.empty:
-        put_call_ratio = sent_row.iloc[0]["put_call_ratio"]
-        short_interest = sent_row.iloc[0]["short_interest_pct"]
+    # ── ATR14 ─────────────────────────────────────────────────────────────────
+    # Average True Range over last 14 candles
+    # Used to normalise BOS strength and volume delta
+    recent_14 = px.tail(14)
+    if len(recent_14) >= 2:
+        high_low   = recent_14["high"] - recent_14["low"]
+        high_close = (recent_14["high"] - recent_14["close"].shift(1)).abs()
+        low_close  = (recent_14["low"]  - recent_14["close"].shift(1)).abs()
+        true_range = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
+        atr14      = true_range.mean()
     else:
-        put_call_ratio = np.nan   # Will be imputed at training time
-        short_interest = np.nan
+        atr14 = float(px["close"].iloc[-1]) * 0.01   # 1% fallback
+
+    # ── BOS strength (candle body / ATR14) ────────────────────────────────────
+    # Measures how violent the Break of Structure was
+    # High value = strong institutional move, not retail noise
+    # Uses the most recent significant candle as BOS proxy
+    last_candle    = px.iloc[-1]
+    bos_body       = abs(last_candle["close"] - last_candle["open"])
+    bos_strength   = bos_body / atr14 if atr14 > 0 else 0.0
+    
+
+   
 
     # ── GROUP 5: Market context features ────────────────────────────────────
     mkt = market_ind_df[market_ind_df["date"] == signal_date]
@@ -334,6 +344,14 @@ def compute_signal_features(
     # ── Direction encoding ────────────────────────────────────────────────────
     # 1 = long setup, 0 = short setup
     direction_flag = 1 if direction == "long" else 0
+
+    # ── Volume signal encoded ─────────────────────────────────────────────────
+    vol_signal_map    = {"accumulation": 2, "neutral": 1, "distribution": 0}
+    vol_sig_str       = str(ind.get("volume_signal", "neutral"))
+    volume_signal_enc = vol_signal_map.get(vol_sig_str, 1)
+
+    # ── Zone flag ─────────────────────────────────────────────────────────────
+    has_valid_zone = int(ind.get("has_valid_zone", 0))
 
     # ── Assemble all features ─────────────────────────────────────────────────
     features = {
@@ -350,21 +368,25 @@ def compute_signal_features(
         # Group 2: Trend strength
         "linreg_slope"       : round(linreg_slope,    6),
         "days_in_trend"      : days_in_trend,
+        "bos_strength_vs_atr"  : round(bos_strength, 4),
 
         # Group 3: Volume
         **vol_features,
         "vol_clf_score"      : vol_clf_score if vol_clf_score is not None else np.nan,
 
-        # Group 4: Sentiment
-        "put_call_ratio"     : put_call_ratio,
-        "short_interest"     : short_interest,
-
         # Group 5: Market context
-        "market_slope_avg"   : round(market_slope_avg,   6),
+         "market_slope_avg"   : round(market_slope_avg,   6),
         #"market_choch_count" : market_choch_count,
 
         # Direction
         "direction_flag"     : direction_flag,
+        # Volume signal (encoded for ML)
+        "volume_signal_encoded" : volume_signal_enc,
+        # Zone flag
+        "has_valid_zone"        : has_valid_zone,
+        # Direction
+        "direction_flag"        : direction_flag,
+    
     }
 
     return features
@@ -426,9 +448,14 @@ def build_volume_feature_matrix(
             continue
 
         vol_features["label"] = label
-        rows.append(vol_features)
+        rows.append({"date" : date,
+                     **vol_features,})
 
     result = pd.DataFrame(rows)
+
+    # Set chronologically - required for walk-forward method
+    if "date" in result.columns:
+        result = result.sort_values("date").reset_index(drop = True)
 
     logger.info(
         f"Volume feature matrix built | "
@@ -443,7 +470,6 @@ def build_volume_feature_matrix(
 def build_signal_feature_matrix(
     prices_df    : pd.DataFrame,
     indicators_df: pd.DataFrame,
-    sentiment_df : pd.DataFrame,
     market_ind_df: pd.DataFrame,
     labels_df    : pd.DataFrame,
     vol_scores   : Optional[dict] = None,
@@ -454,7 +480,6 @@ def build_signal_feature_matrix(
     Args:
         prices_df    : Full OHLCV data
         indicators_df: Full indicator results (all tickers)
-        sentiment_df : Sentiment data (all tickers)
         market_ind_df: Indicator results for SPY, QQQ, DIA only
         labels_df    : Labels from label_scanner_hits()
         vol_scores   : Optional dict of (ticker, date) → vol_clf_score
@@ -494,9 +519,9 @@ def build_signal_feature_matrix(
             direction     = direction,
             prices_df     = px,
             indicators_df = indicators_df,
-            sentiment_df  = sentiment_df,
             market_ind_df = market_ind_df,
             vol_clf_score = vol_score,
+     
         )
 
         if features is None:
@@ -507,6 +532,10 @@ def build_signal_feature_matrix(
         rows.append(features)
 
     result = pd.DataFrame(rows)
+    
+    # Set chronologically - required for walk-forward method
+    if "date" in result.columns:
+        result = result.sort_values("date").reset_index(drop = True)
 
     logger.info(
         f"Signal feature matrix built | "
@@ -554,11 +583,13 @@ SIGNAL_FEATURE_COLS = [
     "vol_consistency",
     "price_recovery_ratio",
     "vol_clf_score",
-    # Sentiment
-    "put_call_ratio",
-    "short_interest",
-    # Market context
+   "bos_strength_vs_atr",    # BOS candle body / ATR14
+   "volume_signal_encoded",    # accumulation=2, neutral=1, distribution=0
     "market_slope_avg",
     # Direction
     "direction_flag",
+    "volume_signal_encoded",    # accumulation=2, neutral=1, distribution=0
+   "has_valid_zone",           # 1 = valid demand/supply zone exists
+    "market_slope_avg",
+    
 ]

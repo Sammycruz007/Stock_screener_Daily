@@ -138,3 +138,196 @@
 2026-06-26 19:48:35 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
 2026-06-26 19:48:35 | INFO     | database                  | read_filtered_universe: 485 tickers for 2026-06-26
 2026-06-26 20:49:20 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.7540 | AUC-ROC: 0.9978 | Samples: 6558
+2026-06-27 07:40:30 | INFO     | database                  | Logger initialised → logs\database.log
+2026-06-27 07:40:46 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-06-27 07:40:46 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-06-27 07:40:46 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-06-27
+2026-06-27 08:04:41 | INFO     | database                  | Logger initialised → logs\database.log
+2026-06-27 08:04:41 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-06-27 08:04:41 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-06-27 08:32:00 | INFO     | database                  | write_raw_prices: 183208 new rows inserted
+2026-06-27 08:32:29 | INFO     | database                  | prune_old_prices: 0 rows deleted (older than 70 days)
+2026-06-27 08:32:31 | INFO     | database                  | write_filtered_universe: 745 tickers written for 2026-06-27
+2026-06-27 08:34:23 | INFO     | database                  | write_sector_metadata: 731 tickers written
+2026-06-27 08:37:30 | INFO     | database                  | write_sentiment_data: 731 rows written
+2026-06-27 08:37:30 | INFO     | database                  | read_sector_metadata: 739 tickers loaded
+2026-06-27 08:38:08 | INFO     | database                  | Logger initialised → logs\database.log
+2026-06-27 08:38:10 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-06-27 08:38:10 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-06-27 08:38:10 | INFO     | database                  | read_filtered_universe: 745 tickers for 2026-06-27
+2026-06-27 09:42:23 | INFO     | database                  | Logger initialised → logs\database.log
+2026-06-27 09:42:24 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-06-27 09:42:24 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-06-27 09:42:24 | INFO     | database                  | read_filtered_universe: 745 tickers for 2026-06-27
+2026-06-27 10:14:53 | INFO     | database                  | Logger initialised → logs\database.log
+2026-06-27 10:14:54 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-06-27 10:14:54 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-06-27 10:14:54 | INFO     | database                  | read_filtered_universe: 745 tickers for 2026-06-27
+2026-06-27 11:49:31 | INFO     | database                  | write_model_metrics: volume_classifier | Precision: 0.9942 | AUC-ROC: 0.8462 | Samples: 65818
+2026-06-27 13:02:24 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.6109 | AUC-ROC: 0.9955 | Samples: 10441
+2026-07-01 15:04:18 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-01 15:05:04 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-01 15:05:04 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-01 15:05:05 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-07-01
+2026-07-01 15:19:30 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-01 15:19:30 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-01 15:19:30 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-02 15:14:53 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-02 15:14:53 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-02 15:14:54 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-02 15:20:12 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-02 15:20:12 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-02 15:20:12 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-02 15:21:23 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-02 15:21:23 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-02 15:21:23 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-02 16:23:49 | INFO     | database                  | write_raw_prices: 285009 new rows inserted
+2026-07-02 16:30:05 | INFO     | database                  | prune_old_prices: 365350 rows deleted (older than 70 days)
+2026-07-02 16:30:08 | INFO     | database                  | write_filtered_universe: 357 tickers written for 2026-07-02
+2026-07-02 16:30:42 | INFO     | database                  | write_sector_metadata: 343 tickers written
+2026-07-02 16:33:19 | INFO     | database                  | write_sentiment_data: 343 rows written
+2026-07-02 16:33:19 | INFO     | database                  | read_sector_metadata: 755 tickers loaded
+2026-07-02 16:52:32 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-02 16:54:47 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-02 16:54:47 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-02 16:54:48 | INFO     | database                  | read_filtered_universe: 357 tickers for 2026-07-02
+2026-07-02 17:36:29 | INFO     | database                  | write_model_metrics: volume_classifier | Precision: 0.6361 | AUC-ROC: 0.9980 | Samples: 35059
+2026-07-02 18:05:30 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.8446 | AUC-ROC: 0.9999 | Samples: 4909
+2026-07-03 14:13:27 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-03 14:31:19 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-03 14:31:48 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-03 14:31:48 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-03 14:31:48 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-07-03
+2026-07-03 14:32:06 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-03 14:32:06 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-03 14:32:06 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-03 14:58:37 | INFO     | database                  | write_raw_prices: 212166 new rows inserted
+2026-07-03 14:59:42 | INFO     | database                  | prune_old_prices: 101426 rows deleted (older than 70 days)
+2026-07-03 14:59:45 | INFO     | database                  | write_filtered_universe: 603 tickers written for 2026-07-03
+2026-07-03 15:00:56 | INFO     | database                  | write_sector_metadata: 589 tickers written
+2026-07-03 15:05:16 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-03 15:05:24 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-03 15:05:24 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-03 15:05:24 | INFO     | database                  | read_filtered_universe: 603 tickers for 2026-07-03
+2026-07-03 16:01:26 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 11:06:23 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 11:07:04 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 11:07:04 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 11:07:04 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 13:02:21 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 13:02:21 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 13:02:21 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 13:38:02 | INFO     | database                  | write_raw_prices: 0 new rows inserted
+2026-07-04 13:39:14 | INFO     | database                  | prune_old_prices: 19170 rows deleted (older than 70 days)
+2026-07-04 13:39:16 | INFO     | database                  | write_filtered_universe: 386 tickers written for 2026-07-04
+2026-07-04 13:39:19 | INFO     | database                  | write_sector_metadata: 373 tickers written
+2026-07-04 13:40:02 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 13:47:44 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 13:49:07 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 13:49:07 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 13:49:09 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 14:55:58 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 14:56:17 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 14:56:17 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 14:56:17 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 14:59:02 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 14:59:03 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 14:59:03 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 14:59:03 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 20:28:01 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:28:01 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:28:01 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:28:02 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 20:31:12 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:31:12 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:31:12 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:31:12 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 20:32:57 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:32:57 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:32:57 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:32:57 | ERROR    | database                  | write_indicator_results failed: SQLite error: near ")": syntax error
+2026-07-04 20:34:24 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:34:24 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:34:24 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:34:24 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 20:49:27 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:49:27 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:49:27 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:49:27 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 20:54:05 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:54:05 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:54:05 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:54:05 | ERROR    | database                  | write_indicator_results failed: SQLite error: table indicator_results has no column named has_valid_zone
+2026-07-04 20:55:53 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:55:53 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:55:53 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:55:54 | INFO     | database                  | write_indicator_results: 1 rows written
+2026-07-04 20:56:40 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 20:56:52 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 20:56:52 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 20:56:52 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 21:59:17 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 21:59:18 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 21:59:18 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 21:59:18 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 22:02:44 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 22:02:45 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 22:02:45 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 22:02:45 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 22:56:50 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 22:56:51 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 22:56:51 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 22:56:51 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-04 23:40:18 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-04 23:40:19 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-04 23:40:19 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-04 23:40:19 | INFO     | database                  | read_filtered_universe: 386 tickers for 2026-07-04
+2026-07-05 00:37:25 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 00:37:26 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 00:37:26 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 00:37:26 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-07-05
+2026-07-05 00:38:14 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 00:38:14 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 00:38:14 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 01:04:06 | INFO     | database                  | write_raw_prices: 0 new rows inserted
+2026-07-05 01:04:43 | INFO     | database                  | prune_old_prices: 0 rows deleted (older than 70 days)
+2026-07-05 01:04:45 | INFO     | database                  | write_filtered_universe: 431 tickers written for 2026-07-05
+2026-07-05 01:05:49 | INFO     | database                  | write_sector_metadata: 417 tickers written
+2026-07-05 01:06:27 | ERROR    | database                  | write_indicator_results failed: SQLite error: no such column: choch_detected
+2026-07-05 01:16:31 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 01:16:31 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 01:16:31 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 01:17:39 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 01:17:49 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 01:17:49 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 01:17:49 | INFO     | database                  | read_filtered_universe: 431 tickers for 2026-07-05
+2026-07-05 01:38:49 | INFO     | database                  | write_raw_prices: 0 new rows inserted
+2026-07-05 01:40:33 | INFO     | database                  | prune_old_prices: 862735 rows deleted (older than 60 days)
+2026-07-05 01:40:35 | INFO     | database                  | write_filtered_universe: 0 tickers written for 2026-07-05
+2026-07-05 01:41:22 | INFO     | database                  | write_sector_metadata: 416 tickers written
+2026-07-05 01:41:54 | INFO     | database                  | write_indicator_results: 425 rows written
+2026-07-05 01:56:10 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 01:56:10 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 01:56:10 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 02:17:32 | INFO     | database                  | write_raw_prices: 0 new rows inserted
+2026-07-05 02:17:33 | INFO     | database                  | prune_old_prices: 0 rows deleted (older than 60 days)
+2026-07-05 02:17:36 | INFO     | database                  | write_filtered_universe: 0 tickers written for 2026-07-05
+2026-07-05 02:18:24 | INFO     | database                  | write_sector_metadata: 417 tickers written
+2026-07-05 02:18:37 | INFO     | database                  | write_indicator_results: 426 rows written
+2026-07-05 02:18:37 | INFO     | database                  | read_sector_metadata: 780 tickers loaded
+2026-07-05 02:29:00 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 02:29:02 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 02:29:02 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 02:29:02 | INFO     | database                  | read_filtered_universe: 431 tickers for 2026-07-05
+2026-07-05 02:52:10 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 02:52:10 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 02:52:10 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 03:04:52 | INFO     | database                  | write_model_metrics: volume_classifier | Precision: 0.3425 | AUC-ROC: 0.9902 | Samples: 32424
+2026-07-05 03:16:38 | INFO     | database                  | write_raw_prices: 0 new rows inserted
+2026-07-05 03:17:29 | INFO     | database                  | prune_old_prices: 0 rows deleted (older than 60 days)
+2026-07-05 03:17:33 | INFO     | database                  | write_filtered_universe: 0 tickers written for 2026-07-05
+2026-07-05 03:18:19 | INFO     | database                  | write_sector_metadata: 409 tickers written
+2026-07-05 03:18:58 | INFO     | database                  | write_indicator_results: 419 rows written
+2026-07-05 03:18:58 | INFO     | database                  | read_sector_metadata: 780 tickers loaded
+2026-07-05 03:19:00 | ERROR    | database                  | write_scan_results failed: SQLite error: table scan_results has no column named has_valid_zone
+2026-07-05 03:29:35 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.2295 | AUC-ROC: 0.6597 | Samples: 4508

@@ -251,6 +251,16 @@ def run_training():
     initialise_database()
     today = datetime.today().strftime("%Y-%m-%d")
 
+    # Delete stale models to force clean retraining with new fixes
+    from ml.volume_classifier import MODEL_PATH as VOL_PATH
+    from ml.signal_ranker     import MODEL_PATH as SIG_PATH
+
+    for model_path in [VOL_PATH, SIG_PATH]:
+        if model_path.exists():
+            model_path.unlink()
+            logger.info(f"Deleted stale model: {model_path}")
+            
+
     # ── Step 1: Load filtered universe ────────────────────────────────────────
     filtered = read_filtered_universe(today)
     if filtered.empty:
@@ -351,9 +361,9 @@ def run_training():
                 write_model_metrics(
                     model_name = vol_metrics["model_name"],
                     train_date = vol_metrics["train_date"],
-                    precision  = vol_metrics["precision_score"],
-                    auc_roc    = vol_metrics["auc_roc_score"],
-                    n_samples  = vol_metrics["n_samples"],
+                    precision  = vol_metrics["precision"],
+                    auc_roc    = vol_metrics["auc_roc"],
+                    n_samples  = vol_metrics["n_train"] + vol_metrics["n_test"],
                 )
             else:
                 logger.warning(
@@ -429,9 +439,6 @@ def run_training():
     sig_matrix = build_signal_feature_matrix(
         prices_df     = prices_all_df,
         indicators_df = indicators_history_df,
-        sentiment_df  = pd.DataFrame(
-            columns=["ticker", "date", "put_call_ratio", "short_interest_pct"]
-        ),
         market_ind_df = market_ind_df,
         labels_df     = sig_labels,
         vol_scores    = vol_scores,
@@ -460,15 +467,14 @@ def run_training():
         write_model_metrics(
             model_name = sig_metrics["model_name"],
             train_date = sig_metrics["train_date"],
-            precision  = sig_metrics["precision_score"],
-            auc_roc    = sig_metrics["auc_roc_score"],
-            n_samples  = sig_metrics["n_samples"],
+            precision  = sig_metrics["precision"],
+            auc_roc    = sig_metrics["auc_roc"],
+            n_samples  = sig_metrics["n_train"] + sig_metrics["n_test"],
         )
         logger.info(
             f"Signal Ranker trained | "
-            f"Precision: {sig_metrics['precision_score']:.4f} | "
-            f"AUC-ROC: {sig_metrics['auc_roc_score']:.4f} | "
-            f"Samples: {sig_metrics['n_samples']}"
+            f"Precision: {sig_metrics['precision']:.4f} | "
+            f"AUC-ROC: {sig_metrics['auc_roc']:.4f} | "
         )
     finally:
         # Restore original threshold

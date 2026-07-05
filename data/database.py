@@ -200,9 +200,8 @@ def initialise_database() -> None:
             sd3_lower         REAL,
             price_sd_position REAL,
             smc_structure     TEXT,
-            choch_detected    INTEGER,           
+            has_valid_zone    INTEGER,            -- 1 = valid demand/supply zone found,         
             volume_signal     TEXT,
-            has_valid_zone    INTEGER,            -- 1 = valid demand/supply zone found,
             created_at        TEXT DEFAULT (datetime('now')),
             UNIQUE(ticker, date)
         )
@@ -211,17 +210,7 @@ def initialise_database() -> None:
         # ── Table 4: Sentiment data ────────────────────────────────────────
         # Put/Call Ratio and Short Interest per ticker per date.
         # These feed directly into the ML feature vectors.
-        """
-        CREATE TABLE IF NOT EXISTS sentiment_data (
-            id                 INTEGER PRIMARY KEY AUTOINCREMENT,
-            ticker             TEXT NOT NULL,
-            date               TEXT NOT NULL,
-            put_call_ratio     REAL,
-            short_interest_pct REAL,
-            created_at         TEXT DEFAULT (datetime('now')),
-            UNIQUE(ticker, date)
-        )
-        """,
+       
 
         # ── Table 5: Final scan results ────────────────────────────────────
         # What the Streamlit dashboard reads.
@@ -236,8 +225,8 @@ def initialise_database() -> None:
             sector             TEXT,
             sd_position        REAL,
             volume_signal      TEXT,
-            put_call_ratio     REAL,
-            short_interest_pct REAL,
+            volume_signal     TEXT,
+            has_valid_zone    INTEGER DEFAULT 0,
             ml_score           REAL,
             ml_rank            INTEGER,
             created_at         TEXT DEFAULT (datetime('now')),
@@ -397,7 +386,7 @@ def write_indicator_results(df: pd.DataFrame) -> int:
     """
     Write indicator engine outputs for all tickers.
     Uses INSERT OR REPLACE — re-running engines overwrites previous results
-    for the same ticker+date (useful if you need to reprocess a day).
+    for the same ticker+date.
 
     Args:
         df: DataFrame containing all indicator columns
@@ -405,71 +394,35 @@ def write_indicator_results(df: pd.DataFrame) -> int:
     Returns:
         Number of rows written
     """
-    def write_indicator_results(df: pd.DataFrame) -> int:
-        if df.empty:
-            logger.warning("write_indicator_results: Empty DataFrame")
-            return 0
-
-        try:
-            with get_connection() as conn:
-                df.to_sql("indicator_staging", conn, if_exists="replace", index=False)
-                cursor = conn.execute("""
-                    INSERT OR REPLACE INTO indicator_results (
-                        ticker, date, linreg_value, linreg_slope, linreg_slope_up,
-                        sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
-                        price_sd_position, smc_structure, choch_detected, volume_signal,
-                        has_valid_zone
-                    )
-                    SELECT
-                        ticker, date, linreg_value, linreg_slope, linreg_slope_up,
-                        sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
-                        price_sd_position, smc_structure, choch_detected, volume_signal,
-                        has_valid_zone
-                    FROM indicator_staging
-                """)
-                rows_written = cursor.rowcount
-                conn.execute("DROP TABLE IF EXISTS indicator_staging")
-
-            logger.info(f"write_indicator_results: {rows_written} rows written")
-            return rows_written
-
-        except DatabaseError as e:
-            logger.error(f"write_indicator_results failed: {e}")
-            raise
-
-def write_sentiment_data(df: pd.DataFrame) -> int:
-    """
-    Write Put/Call Ratio and Short Interest data.
-
-    Args:
-        df: DataFrame with columns [ticker, date, put_call_ratio, short_interest_pct]
-
-    Returns:
-        Number of rows written
-    """
     if df.empty:
-        logger.warning("write_sentiment_data: Empty DataFrame")
+        logger.warning("write_indicator_results: Empty DataFrame")
         return 0
 
     try:
         with get_connection() as conn:
-            df[["ticker", "date", "put_call_ratio", "short_interest_pct"]].to_sql(
-                "sentiment_staging", conn, if_exists="replace", index=False
-            )
+            df.to_sql("indicator_staging", conn, if_exists="replace", index=False)
             cursor = conn.execute("""
-                INSERT OR REPLACE INTO sentiment_data
-                    (ticker, date, put_call_ratio, short_interest_pct)
-                SELECT ticker, date, put_call_ratio, short_interest_pct
-                FROM sentiment_staging
+                INSERT OR REPLACE INTO indicator_results (
+                    ticker, date, linreg_value, linreg_slope, linreg_slope_up,
+                    sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
+                    price_sd_position, smc_structure, volume_signal, 
+                    has_valid_zone
+                )
+                SELECT
+                    ticker, date, linreg_value, linreg_slope, linreg_slope_up,
+                    sd1_upper, sd1_lower, sd2_upper, sd2_lower, sd3_upper, sd3_lower,
+                    price_sd_position, smc_structure, volume_signal,
+                    has_valid_zone
+                FROM indicator_staging
             """)
             rows_written = cursor.rowcount
-            conn.execute("DROP TABLE IF EXISTS sentiment_staging")
+            conn.execute("DROP TABLE IF EXISTS indicator_staging")
 
-        logger.info(f"write_sentiment_data: {rows_written} rows written")
+        logger.info(f"write_indicator_results: {rows_written} rows written")
         return rows_written
 
     except DatabaseError as e:
-        logger.error(f"write_sentiment_data failed: {e}")
+        logger.error(f"write_indicator_results failed: {e}")
         raise
 
 
@@ -497,14 +450,13 @@ def write_scan_results(df: pd.DataFrame, scan_date: str) -> int:
             cursor = conn.execute("""
                 INSERT OR REPLACE INTO scan_results (
                     scan_date, ticker, direction, sector,
-                    sd_position, volume_signal,
-                    put_call_ratio, short_interest_pct,
+                    sd_position, volume_signal, has_valid_zone,
                     ml_score, ml_rank
                 )
                 SELECT
                     scan_date, ticker, direction, sector,
-                    sd_position, volume_signal,
-                    put_call_ratio, short_interest_pct,
+                    sd_position, volume_signal, has_valid_zone,
+                
                     ml_score, ml_rank
                 FROM scan_results_staging
             """)
@@ -895,7 +847,7 @@ def read_latest_indicator_results() -> pd.DataFrame:
     
 
 # Cleanup function
-def prune_old_prices(max_days: int = 70) -> int:
+def prune_old_prices(max_days: int = 60) -> int:
     """Delete raw_prices rows older than max_days to keep DB size bounded."""
     cutoff = (datetime.today() - timedelta(days=max_days)).strftime("%Y-%m-%d %H:%M:%S")
     with get_connection() as conn:

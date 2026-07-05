@@ -10,3 +10,11 @@
 2026-06-26 19:34:59 | INFO     | sentiment                 | Sentiment pipeline | Stock tickers: 472 | Excluded ETFs/indices: 13
 2026-06-26 19:34:59 | INFO     | sentiment                 | Sentiment fetch starting | 472 tickers | Date: 2026-06-26
 2026-06-26 19:35:03 | INFO     | sentiment                 | Sentiment fetch complete | Total: 472 | No options data: 472 | No short interest: 472
+2026-06-27 08:34:46 | INFO     | sentiment                 | Logger initialised → logs\sentiment.log
+2026-06-27 08:34:46 | INFO     | sentiment                 | Sentiment pipeline | Stock tickers: 731 | Excluded ETFs/indices: 14
+2026-06-27 08:34:46 | INFO     | sentiment                 | Sentiment fetch starting | 731 tickers | Date: 2026-06-27
+2026-06-27 08:37:30 | INFO     | sentiment                 | Sentiment fetch complete | Total: 731 | No options data: 589 | No short interest: 602
+2026-07-02 16:32:15 | INFO     | sentiment                 | Logger initialised → logs\sentiment.log
+2026-07-02 16:32:15 | INFO     | sentiment                 | Sentiment pipeline | Stock tickers: 343 | Excluded ETFs/indices: 14
+2026-07-02 16:32:15 | INFO     | sentiment                 | Sentiment fetch starting | 343 tickers | Date: 2026-07-02
+2026-07-02 16:33:16 | INFO     | sentiment                 | Sentiment fetch complete | Total: 343 | No options data: 4 | No short interest: 22
