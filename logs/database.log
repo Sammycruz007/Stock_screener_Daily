@@ -331,3 +331,9 @@
 2026-07-05 03:18:58 | INFO     | database                  | read_sector_metadata: 780 tickers loaded
 2026-07-05 03:19:00 | ERROR    | database                  | write_scan_results failed: SQLite error: table scan_results has no column named has_valid_zone
 2026-07-05 03:29:35 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.2295 | AUC-ROC: 0.6597 | Samples: 4508
+2026-07-05 07:09:46 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-05 07:09:49 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-05 07:09:49 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-05 07:09:49 | INFO     | database                  | read_filtered_universe: 431 tickers for 2026-07-05
+2026-07-05 07:50:35 | INFO     | database                  | write_model_metrics: volume_classifier | Precision: 0.3459 | AUC-ROC: 0.9898 | Samples: 32392
+2026-07-05 12:14:39 | INFO     | database                  | write_model_metrics: signal_ranker | Precision: 0.2890 | AUC-ROC: 0.6716 | Samples: 4504

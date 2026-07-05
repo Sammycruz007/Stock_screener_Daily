@@ -214,7 +214,7 @@ def train_signal_ranker(
     # ── Step 7: Cross-validation on TRAIN only ───────────────────────────────
     # GAP must be >= your max lookback. From config: smc min_pivot_candles=78
     
-    cv = TimeSeriesSplit(n_splits=5, gap=78)
+    cv = TimeSeriesSplit(n_splits=5, gap=131)
     cv_auc_roc = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring="roc_auc", n_jobs=-1)
     cv_pr_auc  = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring="average_precision", n_jobs=-1)
 
@@ -339,7 +339,7 @@ def score_candidates(
         candidates_df : Output of run_scanner() — unranked candidates
         prices_df     : Full OHLCV data
         indicators_df : Full indicator results
-        sentiment_df  : Sentiment data
+        sentiment_df  : Sentiment datacv
         market_ind_df : Indicator results for SPY, QQQ, DIA
         vol_scores    : Output of score_volume_signals()
         signal_date   : Today's date YYYY-MM-DD

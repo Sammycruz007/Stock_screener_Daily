@@ -8230,3 +8230,4 @@
 2026-07-05 03:18:58 | INFO     | scanner                   | Scanning 405 stocks...
 2026-07-05 03:18:58 | INFO     | scanner                   | Scanner complete | Long: 25 | Short: 50
 2026-07-05 03:18:58 | INFO     | scanner                   | Final candidates | Total: 75
+2026-07-05 07:09:47 | INFO     | scanner                   | Logger initialised → logs\scanner.log

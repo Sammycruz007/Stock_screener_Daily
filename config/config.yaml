@@ -28,7 +28,7 @@ logging:
 
 ml:
   high_probability_threshold: 0.7
-  label_forward_periods: 52 # 2 trading days. 26 gave us 2% positive labels, 52 gives us 4% positive labels
+  label_forward_periods: 130 # 5 trading days. 
   min_training_samples: 50
   model_retrain_days: 7
   backfill_stride: 4

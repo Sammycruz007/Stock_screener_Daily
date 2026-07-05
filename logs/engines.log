@@ -278,3 +278,6 @@
 2026-07-05 03:18:53 | INFO     | smc_engine                | SMC engine complete | Computed: 421 | Skipped: 2
 2026-07-05 03:18:53 | INFO     | volume_engine             | Volume engine starting | 423 tickers | Date: 2026-07-05
 2026-07-05 03:18:57 | INFO     | volume_engine             | Volume engine complete | Computed: 423 | Skipped: 0
+2026-07-05 07:09:47 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-05 07:09:47 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-05 07:09:47 | INFO     | volume_engine             | Logger initialised → logs\engines.log
