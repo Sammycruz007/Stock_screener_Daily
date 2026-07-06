@@ -45,7 +45,7 @@ with header_col1:
 with header_col2:
     st.markdown(f"<h1 style='margin-bottom:0;'>{SYSTEM_NAME}</h1>", unsafe_allow_html=True)
     st.markdown(
-        "<p style='color:#9ca3af;margin-top:0;'>LinReg Channel (200) + Smart Money Concepts Scanner — 15m</p>",
+        "<p style='color:#9ca3af;margin-top:0;'>LinReg Channel + Smart Money Concepts Scanner — 15m</p>",
         unsafe_allow_html=True,
     )
 
@@ -117,8 +117,9 @@ for i, (etf, info) in enumerate(sectors.items()):
         name  = info["name"]
         color = TILE_COLOR.get(s, "#f3f4f6")
         st.markdown(
-            f"<div style='background-color:{color};padding:10px;border-radius:6px;"
-            f"margin-bottom:8px;'><b>{etf}</b> — {name}<br>"
+            f"<div style='background-color:{color};color:#111827;padding:10px;"
+            f"border-radius:6px;margin-bottom:8px;font-weight:500;'>"
+            f"<b>{etf}</b> — {name}<br>"
             f"{BADGE.get(s,'⚪')} {s.upper()}</div>",
             unsafe_allow_html=True,
         )
@@ -166,5 +167,12 @@ else:
         with mcols[i % 2]:
             st.subheader(row["model_name"])
             st.metric("Precision", f"{row['precision_score']:.2%}")
-            st.metric("AUC-ROC", f"{row['auc_roc_score']:.3f}")
+            st.metric("AUC-ROC",   f"{row['auc_roc_score']:.3f}")
+
+            # Recall and PR-AUC — show if available
+            if "recall_score" in row and pd.notna(row["recall_score"]):
+                st.metric("Recall", f"{row['recall_score']:.2%}")
+            if "pr_auc_score" in row and pd.notna(row["pr_auc_score"]):
+                st.metric("PR-AUC", f"{row['pr_auc_score']:.3f}")
+
             st.caption(f"Trained: {row['train_date']} | Samples: {row['n_samples']}")

@@ -8231,3 +8231,135 @@
 2026-07-05 03:18:58 | INFO     | scanner                   | Scanner complete | Long: 25 | Short: 50
 2026-07-05 03:18:58 | INFO     | scanner                   | Final candidates | Total: 75
 2026-07-05 07:09:47 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 12:30:29 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 12:30:38 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-07-05 12:30:38 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-05 12:30:38 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-05 12:30:38 | INFO     | scanner                   | Overall market bias: MIXED
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-05 12:30:38 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-05 12:58:10 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 12:58:10 | INFO     | scanner                   | ============================================================
+2026-07-05 12:58:10 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-05 12:58:10 | INFO     | scanner                   | ============================================================
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector lookup loaded | Classified: 670 | Unclassified: 110
+2026-07-05 12:58:11 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-07-05 12:58:11 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-05 12:58:11 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-05 12:58:11 | INFO     | scanner                   | Overall market bias: MIXED
+2026-07-05 12:58:11 | INFO     | scanner                   | Market bias: MIXED | Scan longs: True | Scan shorts: True
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-05 12:58:11 | INFO     | scanner                   | Scanning 412 stocks...
+2026-07-05 12:58:11 | INFO     | scanner                   | Scanner complete | Long: 25 | Short: 50
+2026-07-05 12:58:11 | INFO     | scanner                   | Final candidates | Total: 75
+2026-07-05 13:17:34 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-05 13:29:44 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 14:10:28 | INFO     | scanner                   | Market | SPY: BEARISH | Slope up: False |
+2026-07-06 14:10:28 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-06 14:10:28 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-06 14:10:28 | INFO     | scanner                   | Overall market bias: MIXED
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-06 14:10:28 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-06 14:13:44 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 15:26:04 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 15:26:04 | INFO     | scanner                   | ============================================================
+2026-07-06 15:26:04 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-06 15:26:04 | INFO     | scanner                   | ============================================================
+2026-07-06 15:26:04 | INFO     | scanner                   | Sector lookup loaded | Classified: 479 | Unclassified: 301
+2026-07-06 15:26:04 | WARNING  | scanner                   | Market check: SPY not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Market check: QQQ not found in indicator results
+2026-07-06 15:26:04 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-06 15:26:04 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-06 15:26:04 | INFO     | scanner                   | Market bias: BULLISH | Scan longs: True | Scan shorts: False
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLK not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLF not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLE not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLV not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLI not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLY not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLP not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLU not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLB not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLRE not found in indicator results
+2026-07-06 15:26:04 | WARNING  | scanner                   | Sector check: XLC not found in indicator results
+2026-07-06 15:26:04 | INFO     | scanner                   | Scanning 190 stocks...
+2026-07-06 15:26:04 | INFO     | scanner                   | Scanner complete | Long: 25 | Short: 0
+2026-07-06 15:26:04 | INFO     | scanner                   | Final candidates | Total: 25
+2026-07-06 15:28:04 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 15:53:12 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 15:53:19 | WARNING  | scanner                   | Market check: SPY not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Market check: QQQ not found in indicator results
+2026-07-06 15:53:19 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-06 15:53:19 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLK not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLF not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLE not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLV not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLI not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLY not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLP not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLU not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLB not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLRE not found in indicator results
+2026-07-06 15:53:19 | WARNING  | scanner                   | Sector check: XLC not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Market check: SPY not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Market check: QQQ not found in indicator results
+2026-07-06 15:54:01 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-06 15:54:01 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLK not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLF not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLE not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLV not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLI not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLY not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLP not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLU not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLB not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLRE not found in indicator results
+2026-07-06 15:54:01 | WARNING  | scanner                   | Sector check: XLC not found in indicator results
+2026-07-06 16:33:38 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 16:36:37 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 17:01:59 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-06 17:09:14 | WARNING  | scanner                   | Market check: SPY not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Market check: QQQ not found in indicator results
+2026-07-06 17:09:14 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-06 17:09:14 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLK not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLF not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLE not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLV not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLI not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLY not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLP not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLU not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLB not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLRE not found in indicator results
+2026-07-06 17:09:14 | WARNING  | scanner                   | Sector check: XLC not found in indicator results

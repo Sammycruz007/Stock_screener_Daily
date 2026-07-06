@@ -240,9 +240,11 @@ def initialise_database() -> None:
         """
         CREATE TABLE IF NOT EXISTS model_metrics (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            model_name      TEXT NOT NULL,          -- 'volume_classifier' or 'signal_ranker'
+            model_name      TEXT NOT NULL,
             train_date      TEXT NOT NULL,
             precision_score REAL,
+            recall_score    REAL,
+            pr_auc_score    REAL,
             auc_roc_score   REAL,
             n_samples       INTEGER,
             created_at      TEXT DEFAULT (datetime('now')),
@@ -479,6 +481,8 @@ def write_model_metrics(
     precision  : float,
     auc_roc    : float,
     n_samples  : int,
+    recall     : float = 0.0,
+    pr_auc     : float = 0.0,
 ) -> None:
     """
     Write ML model performance metrics after each training run.
@@ -489,18 +493,23 @@ def write_model_metrics(
         precision  : Precision score from evaluation
         auc_roc    : AUC-ROC score from evaluation
         n_samples  : Number of training samples used
+        recall     : Recall score from evaluation
+        pr_auc     : PR-AUC score from evaluation
     """
     try:
         with get_connection() as conn:
             conn.execute("""
                 INSERT OR REPLACE INTO model_metrics
-                    (model_name, train_date, precision_score, auc_roc_score, n_samples)
-                VALUES (?, ?, ?, ?, ?)
-            """, (model_name, train_date, precision, auc_roc, n_samples))
+                    (model_name, train_date, precision_score, recall_score,
+                     pr_auc_score, auc_roc_score, n_samples)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (model_name, train_date, precision, recall, pr_auc, auc_roc, n_samples))
 
         logger.info(
             f"write_model_metrics: {model_name} | "
             f"Precision: {precision:.4f} | "
+            f"Recall: {recall:.4f} | "
+            f"PR-AUC: {pr_auc:.4f} | "
             f"AUC-ROC: {auc_roc:.4f} | "
             f"Samples: {n_samples}"
         )

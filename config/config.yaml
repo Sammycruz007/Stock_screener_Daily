@@ -14,7 +14,7 @@ filters:
   min_price: 10.0
 
 linreg:
-  period: 400
+  period: 450
   std_devs:
   - 1
   - 2

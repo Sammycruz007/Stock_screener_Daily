@@ -281,3 +281,54 @@
 2026-07-05 07:09:47 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
 2026-07-05 07:09:47 | INFO     | smc_engine                | Logger initialised → logs\engines.log
 2026-07-05 07:09:47 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-05 12:30:30 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-05 12:58:00 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-05 12:58:00 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-05 12:58:00 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-05 12:58:00 | INFO     | linreg_engine             | LinReg engine starting | 431 tickers | Date: 2026-07-05
+2026-07-05 12:58:01 | WARNING  | linreg_engine             | CCXI | Only 262 rows — need 400+ for LinReg
+2026-07-05 12:58:01 | WARNING  | linreg_engine             | ECHO | Only 182 rows — need 400+ for LinReg
+2026-07-05 12:58:01 | WARNING  | linreg_engine             | HONA | Only 104 rows — need 400+ for LinReg
+2026-07-05 12:58:01 | WARNING  | linreg_engine             | MBGL | Only 52 rows — need 400+ for LinReg
+2026-07-05 12:58:01 | WARNING  | linreg_engine             | SPCX | Only 355 rows — need 400+ for LinReg
+2026-07-05 12:58:01 | INFO     | linreg_engine             | LinReg engine complete | Computed: 426 | Skipped: 5
+2026-07-05 12:58:01 | INFO     | smc_engine                | SMC engine starting | 431 tickers | Date: 2026-07-05
+2026-07-05 12:58:03 | WARNING  | smc_engine                | ECHO | Insufficient data for SMC: 182 rows, need 234
+2026-07-05 12:58:04 | WARNING  | smc_engine                | HONA | Insufficient data for SMC: 104 rows, need 234
+2026-07-05 12:58:05 | WARNING  | smc_engine                | MBGL | Insufficient data for SMC: 52 rows, need 234
+2026-07-05 12:58:07 | INFO     | smc_engine                | SMC engine complete | Computed: 428 | Skipped: 3
+2026-07-05 12:58:07 | INFO     | volume_engine             | Volume engine starting | 431 tickers | Date: 2026-07-05
+2026-07-05 12:58:10 | INFO     | volume_engine             | Volume engine complete | Computed: 431 | Skipped: 0
+2026-07-05 13:17:34 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-05 13:17:34 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-05 13:17:34 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-05 13:29:44 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-05 13:29:44 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-05 13:29:44 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 14:13:43 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 14:13:43 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 14:13:44 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 15:25:59 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 15:25:59 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 15:25:59 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 15:25:59 | INFO     | linreg_engine             | LinReg engine starting | 193 tickers | Date: 2026-07-06
+2026-07-06 15:25:59 | WARNING  | linreg_engine             | CCXI | Only 258 rows — need 450+ for LinReg
+2026-07-06 15:25:59 | WARNING  | linreg_engine             | SPCX | Only 355 rows — need 450+ for LinReg
+2026-07-06 15:25:59 | INFO     | linreg_engine             | LinReg engine complete | Computed: 191 | Skipped: 2
+2026-07-06 15:25:59 | INFO     | smc_engine                | SMC engine starting | 193 tickers | Date: 2026-07-06
+2026-07-06 15:26:01 | INFO     | smc_engine                | SMC engine complete | Computed: 193 | Skipped: 0
+2026-07-06 15:26:01 | INFO     | volume_engine             | Volume engine starting | 193 tickers | Date: 2026-07-06
+2026-07-06 15:26:02 | INFO     | volume_engine             | Volume engine complete | Computed: 193 | Skipped: 0
+2026-07-06 15:28:04 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 15:28:04 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 15:28:04 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 15:53:13 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 16:33:38 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 16:33:38 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 16:33:38 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 16:36:37 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 16:36:37 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 16:36:37 | INFO     | volume_engine             | Logger initialised → logs\engines.log
+2026-07-06 17:01:59 | INFO     | linreg_engine             | Logger initialised → logs\engines.log
+2026-07-06 17:01:59 | INFO     | smc_engine                | Logger initialised → logs\engines.log
+2026-07-06 17:01:59 | INFO     | volume_engine             | Logger initialised → logs\engines.log

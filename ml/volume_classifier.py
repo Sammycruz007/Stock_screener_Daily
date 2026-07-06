@@ -219,7 +219,7 @@ def train_volume_classifier(
     # ── Step 5: Cut a FINAL HOLDOUT FIRST. Never touch this during CV ───────
     # Last 20% by time = walk-forward reality check
     
-    split_idx  = int(len(dates) * 0.80)
+    split_idx  = int(len(dates) * 0.70)
     train_mask = dates.index < dates.index[split_idx]
     test_mask  = dates.index >= dates.index[split_idx]
 
@@ -253,7 +253,7 @@ def train_volume_classifier(
     # ── Step 8: Compute REAL OOS metrics on HOLDOUT only ────────────────────
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.5).astype(int) 
+    y_pred       = (y_pred_proba >= 0.7).astype(int) 
 
     precision = precision_score(y_test, y_pred, zero_division=0)
     recall    = recall_score(y_test, y_pred, zero_division=0)

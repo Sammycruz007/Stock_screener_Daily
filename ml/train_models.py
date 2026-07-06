@@ -364,6 +364,8 @@ def run_training():
                     precision  = vol_metrics["precision"],
                     auc_roc    = vol_metrics["auc_roc"],
                     n_samples  = vol_metrics["n_train"] + vol_metrics["n_test"],
+                    recall     = vol_metrics.get("Recall", 0.0),
+                    pr_auc     = vol_metrics.get("pr_auc", 0.0),
                 )
             else:
                 logger.warning(
@@ -470,7 +472,10 @@ def run_training():
             precision  = sig_metrics["precision"],
             auc_roc    = sig_metrics["auc_roc"],
             n_samples  = sig_metrics["n_train"] + sig_metrics["n_test"],
+            recall     = sig_metrics.get("Recall", 0.0),
+            pr_auc     = sig_metrics.get("pr_auc", 0.0),
         )
+        
         logger.info(
             f"Signal Ranker trained | "
             f"Precision: {sig_metrics['precision']:.4f} | "
