@@ -401,6 +401,7 @@ def _build_candidate_row(
         "sector"            : sector_name,
         "sd_position"       : float(row["price_sd_position"]),
         "volume_signal"     : row["volume_signal"],
+        "has_valid_zone"    : int(row.get("has_valid_zone", 0)),
         "ml_score"          : 0.0,
         "ml_rank"           : 0,
     }

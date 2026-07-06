@@ -118,7 +118,6 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         subsample          = 0.8,
         colsample_bytree   = 0.8,
         scale_pos_weight   = scale_pos_weight,
-        use_label_encoder  = False,
         eval_metric        = "logloss",
         random_state       = 42,
         n_jobs             = -1,       # Use all CPU cores
@@ -219,7 +218,7 @@ def train_volume_classifier(
     # ── Step 5: Cut a FINAL HOLDOUT FIRST. Never touch this during CV ───────
     # Last 20% by time = walk-forward reality check
     
-    split_idx  = int(len(dates) * 0.70)
+    split_idx  = int(len(dates) * 0.80)
     train_mask = dates.index < dates.index[split_idx]
     test_mask  = dates.index >= dates.index[split_idx]
 
@@ -253,7 +252,7 @@ def train_volume_classifier(
     # ── Step 8: Compute REAL OOS metrics on HOLDOUT only ────────────────────
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.7).astype(int) 
+    y_pred       = (y_pred_proba >= 0.50).astype(int) 
 
     precision = precision_score(y_test, y_pred, zero_division=0)
     recall    = recall_score(y_test, y_pred, zero_division=0)
@@ -270,7 +269,7 @@ def train_volume_classifier(
         "model_name"     : "volume_classifier",
         "train_date"     : datetime.today().strftime("%Y-%m-%d"),
         "precision"      : round(precision, 4), # <- This is your real one
-        "Recall"         : round(recall, 4),
+        "recall"         : round(recall, 4),
         "f1"             : round(f1, 4),
         "auc_roc"        : round(auc_roc, 4),
         "pr_auc"         : round(pr_auc, 4),    # <- Target > 0.28

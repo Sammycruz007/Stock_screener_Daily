@@ -112,7 +112,6 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         colsample_bytree   = 0.8,
         min_child_weight   = 5,    # Prevents overfitting on small groups
         scale_pos_weight   = scale_pos_weight,
-        use_label_encoder  = False,
         eval_metric        = "logloss",
         random_state       = 42,
         n_jobs             = -1,
