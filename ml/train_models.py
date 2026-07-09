@@ -472,7 +472,7 @@ def run_training():
             precision  = sig_metrics["precision"],
             auc_roc    = sig_metrics["auc_roc"],
             n_samples  = sig_metrics["n_train"] + sig_metrics["n_test"],
-            recall     = sig_metrics.get("Recall", 0.0),
+            recall     = sig_metrics.get("recall", 0.0),
             pr_auc     = sig_metrics.get("pr_auc", 0.0),
         )
         

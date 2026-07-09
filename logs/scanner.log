@@ -8460,3 +8460,74 @@
 2026-07-07 00:13:04 | INFO     | scanner                   | Sector | XLRE: BEARISH
 2026-07-07 00:13:04 | INFO     | scanner                   | Sector | XLC: BEARISH
 2026-07-07 00:23:15 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-08 13:50:03 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-08 13:50:59 | INFO     | scanner                   | Market | SPY: BULLISH | Slope up: True |
+2026-07-08 13:50:59 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-08 13:50:59 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-08 13:50:59 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLK: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLB: BULLISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-08 13:50:59 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Market | SPY: BULLISH | Slope up: True |
+2026-07-08 17:17:17 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-08 17:17:17 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-08 17:17:17 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLK: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLB: BULLISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-08 17:17:17 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-08 17:52:12 | INFO     | scanner                   | Logger initialised → logs\scanner.log
+2026-07-08 17:52:12 | INFO     | scanner                   | ============================================================
+2026-07-08 17:52:12 | INFO     | scanner                   | SCANNER WATERFALL STARTING
+2026-07-08 17:52:12 | INFO     | scanner                   | ============================================================
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector lookup loaded | Classified: 674 | Unclassified: 109
+2026-07-08 17:52:13 | INFO     | scanner                   | Market | SPY: BULLISH | Slope up: True |
+2026-07-08 17:52:13 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-08 17:52:13 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-08 17:52:13 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Market bias: BULLISH | Scan longs: True | Scan shorts: False
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-08 17:52:13 | INFO     | scanner                   | Scanning 233 stocks...
+2026-07-08 17:52:13 | INFO     | scanner                   | Scanner complete | Long: 18 | Short: 0
+2026-07-08 17:52:13 | INFO     | scanner                   | Final candidates | Total: 18
+2026-07-09 16:35:11 | INFO     | scanner                   | Market | SPY: BULLISH | Slope up: True |
+2026-07-09 16:35:11 | INFO     | scanner                   | Market | QQQ: BULLISH | Slope up: True |
+2026-07-09 16:35:11 | INFO     | scanner                   | Market | DIA: BULLISH | Slope up: True |
+2026-07-09 16:35:11 | INFO     | scanner                   | Overall market bias: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLK: BEARISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLF: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLE: BEARISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLV: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLI: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLY: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLP: BEARISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLU: BULLISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLB: BEARISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLRE: BEARISH
+2026-07-09 16:35:11 | INFO     | scanner                   | Sector | XLC: BEARISH
+2026-07-09 16:38:25 | INFO     | scanner                   | Logger initialised → logs\scanner.log

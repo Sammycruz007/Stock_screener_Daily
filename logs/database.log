@@ -468,3 +468,36 @@
 2026-07-07 00:23:19 | INFO     | database                  | Initialising database at: data\scanner.db
 2026-07-07 00:23:19 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
 2026-07-07 00:23:19 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-07-07
+2026-07-08 13:50:03 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-08 13:50:56 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-08 13:50:57 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-08 13:50:59 | INFO     | database                  | read_latest_indicator_results: 271 tickers for latest date
+2026-07-08 13:51:01 | INFO     | database                  | read_latest_scan_results: 32 results returned
+2026-07-08 13:51:02 | INFO     | database                  | read_latest_scan_results: 0 results returned
+2026-07-08 17:17:06 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-08 17:17:10 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-08 17:17:17 | INFO     | database                  | read_latest_indicator_results: 271 tickers for latest date
+2026-07-08 17:17:30 | INFO     | database                  | read_latest_scan_results: 32 results returned
+2026-07-08 17:17:30 | INFO     | database                  | read_latest_scan_results: 0 results returned
+2026-07-08 17:22:05 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-08 17:22:05 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-08 17:22:05 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-08 17:49:39 | INFO     | database                  | write_raw_prices: 200634 new rows inserted
+2026-07-08 17:51:07 | INFO     | database                  | prune_old_prices: 124592 rows deleted (older than 60 days)
+2026-07-08 17:51:10 | INFO     | database                  | write_filtered_universe: 251 tickers written for 2026-07-08
+2026-07-08 17:51:39 | INFO     | database                  | write_sector_metadata: 237 tickers written
+2026-07-08 17:52:12 | INFO     | database                  | write_indicator_results: 247 rows written
+2026-07-08 17:52:13 | INFO     | database                  | read_sector_metadata: 783 tickers loaded
+2026-07-08 17:52:25 | INFO     | database                  | write_scan_results: 18 candidates written for 2026-07-08
+2026-07-09 16:34:53 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-09 16:34:55 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-09 16:35:10 | INFO     | database                  | read_latest_indicator_results: 247 tickers for latest date
+2026-07-09 16:35:30 | INFO     | database                  | read_latest_scan_results: 18 results returned
+2026-07-09 16:35:31 | INFO     | database                  | read_latest_scan_results: 0 results returned
+2026-07-09 16:38:02 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-09 16:38:38 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-09 16:38:38 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-09 16:38:38 | INFO     | database                  | read_filtered_universe: 0 tickers for 2026-07-09
+2026-07-09 16:41:40 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-09 16:41:40 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-09 16:41:40 | INFO     | database                  | Database initialised successfully — all tables and indexes ready

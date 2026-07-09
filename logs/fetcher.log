@@ -35992,3 +35992,1717 @@
 2026-07-06 23:56:02 | INFO     | fetcher                   | Stage 1 filter | Input: 3847 tickers | Passed: 274 | Filtered out: 3573
 2026-07-06 23:56:02 | INFO     | fetcher                   | Fetching sector metadata | 260 stock tickers | Excluded: 14 ETFs/indices
 2026-07-06 23:56:29 | INFO     | fetcher                   | Sector metadata complete | Total: 260 | Unclassified: 3 | Classified: 257
+2026-07-08 17:22:26 | INFO     | fetcher                   | Logger initialised → logs\fetcher.log
+2026-07-08 17:22:26 | INFO     | fetcher                   | Building full US stock universe from NASDAQ FTP...
+2026-07-08 17:22:26 | INFO     | fetcher                   | Fetching NASDAQ listed tickers from NASDAQ FTP...
+2026-07-08 17:22:29 | INFO     | fetcher                   | NASDAQ listed: 3952 tickers fetched
+2026-07-08 17:22:29 | INFO     | fetcher                   | Fetching NYSE/other listed tickers from NASDAQ FTP...
+2026-07-08 17:22:31 | INFO     | fetcher                   | NYSE/other listed: 2684 tickers fetched
+2026-07-08 17:22:31 | INFO     | fetcher                   | Full universe built | NASDAQ: 3952 | NYSE/Other: 2684 | Indices: 3 | Sectors: 11 | Total unique: 6650
+2026-07-08 17:24:35 | INFO     | fetcher                   | smart_fetch | Full fetch needed: 705 tickers | Incremental: 5945 tickers
+2026-07-08 17:24:35 | INFO     | fetcher                   | Full fetch: 2026-05-11 to 2026-07-08
+2026-07-08 17:24:35 | INFO     | fetcher                   | Fetching 705 tickers | 29 batches of 25 | Period: 2026-05-11 to 2026-07-08
+2026-07-08 17:24:35 | INFO     | fetcher                   | Batch 1/29 | 25 tickers
+2026-07-08 17:24:39 | WARNING  | fetcher                   | AAC.U | yfinance returned empty DataFrame
+2026-07-08 17:24:45 | WARNING  | fetcher                   | ABLVW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | ACONW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | ACAAW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | ADSEW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | AENTW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | AERTW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | AFRIW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | AIMDW | yfinance returned empty DataFrame
+2026-07-08 17:24:46 | WARNING  | fetcher                   | AIRJW | yfinance returned empty DataFrame
+2026-07-08 17:24:48 | WARNING  | fetcher                   | AGM.A | yfinance returned empty DataFrame
+2026-07-08 17:24:48 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['AAC.U', 'ACAA', 'ABLVW', 'AACIU', 'AACBU', 'ACONW', 'AACOU', 'ACAAW', 'AACO', 'ADACU']...
+2026-07-08 17:24:51 | INFO     | fetcher                   | Batch 2/29 | 25 tickers
+2026-07-08 17:24:52 | WARNING  | fetcher                   | ALFUW | yfinance returned empty DataFrame
+2026-07-08 17:24:52 | WARNING  | fetcher                   | AISPW | yfinance returned empty DataFrame
+2026-07-08 17:24:52 | WARNING  | fetcher                   | ALDFW | yfinance returned empty DataFrame
+2026-07-08 17:24:52 | WARNING  | fetcher                   | AKO.A | yfinance returned empty DataFrame
+2026-07-08 17:24:52 | WARNING  | fetcher                   | AKO.B | yfinance returned empty DataFrame
+2026-07-08 17:24:52 | WARNING  | fetcher                   | ALVOW | yfinance returned empty DataFrame
+2026-07-08 17:24:53 | WARNING  | fetcher                   | ANNAW | yfinance returned empty DataFrame
+2026-07-08 17:24:53 | WARNING  | fetcher                   | ANGHW | yfinance returned empty DataFrame
+2026-07-08 17:24:53 | WARNING  | fetcher                   | ANSCW | yfinance returned empty DataFrame
+2026-07-08 17:24:53 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['ALFUW', 'AISPW', 'ALFUU', 'ALDFW', 'ALDFU', 'AKO.A', 'AKO.B', 'ALOVU', 'ALOV', 'ALISU']...
+2026-07-08 17:24:53 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:24:56 | INFO     | fetcher                   | Batch 3/29 | 25 tickers
+2026-07-08 17:24:57 | WARNING  | fetcher                   | ARBEW | yfinance returned empty DataFrame
+2026-07-08 17:24:57 | WARNING  | fetcher                   | ARQQW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | ASBPW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | AUROW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | ATIIW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | BAERW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | ASTLW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | BBLGW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | BCGWW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | BDMDW | yfinance returned empty DataFrame
+2026-07-08 17:24:58 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['APURR', 'ARBEW', 'ARCIU', 'ARQQW', 'APXTU', 'ARCL', 'ARCLR', 'ARCLW', 'ARTCU', 'ASBPW']...
+2026-07-08 17:24:58 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:25:01 | INFO     | fetcher                   | Batch 4/29 | 25 tickers
+2026-07-08 17:25:02 | WARNING  | fetcher                   | BEATW | yfinance returned empty DataFrame
+2026-07-08 17:25:02 | WARNING  | fetcher                   | BETRW | yfinance returned empty DataFrame
+2026-07-08 17:25:02 | WARNING  | fetcher                   | BFRGW | yfinance returned empty DataFrame
+2026-07-08 17:25:02 | WARNING  | fetcher                   | BF.B | yfinance returned empty DataFrame
+2026-07-08 17:25:02 | WARNING  | fetcher                   | BENFW | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BF.A | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BIAFW | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BGLWW | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BFRIW | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BIO.B | yfinance returned empty DataFrame
+2026-07-08 17:25:03 | WARNING  | fetcher                   | BH.A | yfinance returned empty DataFrame
+2026-07-08 17:25:04 | WARNING  | fetcher                   | BNAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:04 | WARNING  | fetcher                   | BLUWW | yfinance returned empty DataFrame
+2026-07-08 17:25:04 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['BEATW', 'BETRW', 'BEBE', 'BFRGW', 'BF.B', 'BENFW', 'BF.A', 'BIAFW', 'BGLWW', 'BFRIW']...
+2026-07-08 17:25:07 | INFO     | fetcher                   | Batch 5/29 | 25 tickers
+2026-07-08 17:25:08 | WARNING  | fetcher                   | BNZIW | yfinance returned empty DataFrame
+2026-07-08 17:25:08 | WARNING  | fetcher                   | BRLSW | yfinance returned empty DataFrame
+2026-07-08 17:25:08 | WARNING  | fetcher                   | BRK.B | yfinance returned empty DataFrame
+2026-07-08 17:25:08 | WARNING  | fetcher                   | BRK.A | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | BZFDW | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | BULLW | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | BZAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | BTBDW | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | CCGWW | yfinance returned empty DataFrame
+2026-07-08 17:25:09 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['BPAC', 'BNZIW', 'BPACR', 'BRLSW', 'BPACU', 'BRBI', 'BSAAR', 'BRK.B', 'BRK.A', 'BZFDW']...
+2026-07-08 17:25:12 | INFO     | fetcher                   | Batch 6/29 | 25 tickers
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CCIXW | yfinance returned empty DataFrame
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CDIOW | yfinance returned empty DataFrame
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CDROW | yfinance returned empty DataFrame
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CEPL | yfinance returned empty DataFrame
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CINGW | yfinance returned empty DataFrame
+2026-07-08 17:25:13 | WARNING  | fetcher                   | CLSKW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | CIG.C | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | COCHW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | COOTW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | CNCKW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | CMIIW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | CORZW | yfinance returned empty DataFrame
+2026-07-08 17:25:14 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['CCIXW', 'CDIOW', 'CDROW', 'CHARU', 'CHEC', 'CCZ', 'CHECU', 'CHECW', 'CHPG', 'CEPL']...
+2026-07-08 17:25:17 | INFO     | fetcher                   | Batch 7/29 | 25 tickers
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CRACW | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CRD.B | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CRGOW | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CRD.A | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CUBWW | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CRMLW | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CXAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:18 | WARNING  | fetcher                   | CYCUW | yfinance returned empty DataFrame
+2026-07-08 17:25:19 | WARNING  | fetcher                   | DFLIW | yfinance returned empty DataFrame
+2026-07-08 17:25:19 | WARNING  | fetcher                   | DAVEW | yfinance returned empty DataFrame
+2026-07-08 17:25:19 | WARNING  | fetcher                   | DJTWW | yfinance returned empty DataFrame
+2026-07-08 17:25:19 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['CRANU', 'CRACW', 'CRAQU', 'CRAQR', 'CRAQ', 'CRD.B', 'CRGOW', 'CRD.A', 'CUBWW', 'CRMLW']...
+2026-07-08 17:25:22 | INFO     | fetcher                   | Batch 8/29 | 25 tickers
+2026-07-08 17:25:23 | WARNING  | fetcher                   | DRDBW | yfinance returned empty DataFrame
+2026-07-08 17:25:23 | WARNING  | fetcher                   | DRMAW | yfinance returned empty DataFrame
+2026-07-08 17:25:23 | WARNING  | fetcher                   | DRTSW | yfinance returned empty DataFrame
+2026-07-08 17:25:23 | WARNING  | fetcher                   | DSYWW | yfinance returned empty DataFrame
+2026-07-08 17:25:24 | WARNING  | fetcher                   | DSX.W | yfinance returned empty DataFrame
+2026-07-08 17:25:24 | WARNING  | fetcher                   | EFTY | yfinance returned empty DataFrame
+2026-07-08 17:25:24 | WARNING  | fetcher                   | ECXWW | yfinance returned empty DataFrame
+2026-07-08 17:25:24 | WARNING  | fetcher                   | EDBLW | yfinance returned empty DataFrame
+2026-07-08 17:25:24 | WARNING  | fetcher                   | ENGNW | yfinance returned empty DataFrame
+2026-07-08 17:25:25 | WARNING  | fetcher                   | ESLAW | yfinance returned empty DataFrame
+2026-07-08 17:25:25 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['DMAAU', 'DRDBW', 'DRMAW', 'DMIIU', 'DNMXU', 'DMIIR', 'DRDBU', 'DRTSW', 'DSACU', 'DSYWW']...
+2026-07-08 17:25:28 | INFO     | fetcher                   | Batch 9/29 | 25 tickers
+2026-07-08 17:25:29 | WARNING  | fetcher                   | EVLVW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | EUDAW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FACTW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FBYDP | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FBYDW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FFAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FGIWW | yfinance returned empty DataFrame
+2026-07-08 17:25:29 | WARNING  | fetcher                   | FDMMU | yfinance returned empty DataFrame
+2026-07-08 17:25:30 | WARNING  | fetcher                   | FLDDW | yfinance returned empty DataFrame
+2026-07-08 17:25:30 | WARNING  | fetcher                   | FMSTW | yfinance returned empty DataFrame
+2026-07-08 17:25:30 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['EVLVW', 'EUDAW', 'EURKR', 'ETSS', 'EVOXU', 'EVOXW', 'EURKU', 'FACTW', 'FBYDP', 'FACTU']...
+2026-07-08 17:25:30 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:25:33 | INFO     | fetcher                   | Batch 10/29 | 25 tickers
+2026-07-08 17:25:34 | WARNING  | fetcher                   | FOXXW | yfinance returned empty DataFrame
+2026-07-08 17:25:34 | WARNING  | fetcher                   | FUFUW | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | FTW.W | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | GCLWW | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | GEF.B | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | GDEVW | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | GGROW | yfinance returned empty DataFrame
+2026-07-08 17:25:35 | WARNING  | fetcher                   | GFAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:36 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['FSHP', 'FOXXW', 'FUFUW', 'FTHA', 'FSHPU', 'FTHAW', 'FVAV', 'FVNNR', 'FTW.W', 'FVNNU']...
+2026-07-08 17:25:39 | INFO     | fetcher                   | Batch 11/29 | 25 tickers
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GPATW | yfinance returned empty DataFrame
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GME.W | yfinance returned empty DataFrame
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GRABW | yfinance returned empty DataFrame
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GRRRW | yfinance returned empty DataFrame
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GSRVR | yfinance returned empty DataFrame
+2026-07-08 17:25:40 | WARNING  | fetcher                   | GTENW | yfinance returned empty DataFrame
+2026-07-08 17:25:41 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['GJR', 'GPACU', 'GPAC', 'GJP', 'GJT', 'GPATW', 'GME.W', 'GRABW', 'GPAT', 'GPATU']...
+2026-07-08 17:25:44 | INFO     | fetcher                   | Batch 12/29 | 25 tickers
+2026-07-08 17:25:45 | WARNING  | fetcher                   | GTN.A | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HEI.A | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HPAIW | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HOLOW | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HOVRW | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HSCSW | yfinance returned empty DataFrame
+2026-07-08 17:25:45 | WARNING  | fetcher                   | HTZWW | yfinance returned empty DataFrame
+2026-07-08 17:25:46 | WARNING  | fetcher                   | HUMAW | yfinance returned empty DataFrame
+2026-07-08 17:25:46 | WARNING  | fetcher                   | HVT.A | yfinance returned empty DataFrame
+2026-07-08 17:25:46 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['GUACW', 'HACQW', 'GUAC', 'HAVAU', 'HAVAR', 'HAVA', 'GTN.A', 'HCMAU', 'HCACU', 'HCICU']...
+2026-07-08 17:25:49 | INFO     | fetcher                   | Batch 13/29 | 25 tickers
+2026-07-08 17:25:50 | WARNING  | fetcher                   | ICUCW | yfinance returned empty DataFrame
+2026-07-08 17:25:51 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['ICUCW', 'IDAC', 'IDACW', 'IACOU', 'IACQW', 'IBACR', 'IBAC', 'IEAG', 'IEAGR', 'IEAGU']...
+2026-07-08 17:25:54 | INFO     | fetcher                   | Batch 14/29 | 25 tickers
+2026-07-08 17:25:55 | WARNING  | fetcher                   | IVDAW | yfinance returned empty DataFrame
+2026-07-08 17:25:56 | WARNING  | fetcher                   | KCA.U | yfinance returned empty DataFrame
+2026-07-08 17:25:56 | WARNING  | fetcher                   | KIDZW | yfinance returned empty DataFrame
+2026-07-08 17:25:56 | WARNING  | fetcher                   | KTTAW | yfinance returned empty DataFrame
+2026-07-08 17:25:56 | WARNING  | fetcher                   | Batch: 22 tickers failed: ['IVDAW', 'IRHOU', 'ITHAU', 'ITHAW', 'JSPRW', 'ITHA', 'JENA', 'KCHVU', 'KCA.U', 'KIDZW']...
+2026-07-08 17:25:59 | INFO     | fetcher                   | Batch 15/29 | 25 tickers
+2026-07-08 17:26:00 | WARNING  | fetcher                   | KVACW | yfinance returned empty DataFrame
+2026-07-08 17:26:00 | WARNING  | fetcher                   | LAWR | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LCFYW | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LEN.B | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LIDRW | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LNZAW | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LOTWW | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | LPAAW | yfinance returned empty DataFrame
+2026-07-08 17:26:01 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['KVACW', 'LAFA', 'LATA', 'LAFAU', 'LAFAR', 'LAWR', 'LATAW', 'LATAU', 'LCCCU', 'LCFYW']...
+2026-07-08 17:26:04 | INFO     | fetcher                   | Batch 16/29 | 25 tickers
+2026-07-08 17:26:05 | WARNING  | fetcher                   | LPBBW | yfinance returned empty DataFrame
+2026-07-08 17:26:05 | WARNING  | fetcher                   | LUCYW | yfinance returned empty DataFrame
+2026-07-08 17:26:05 | WARNING  | fetcher                   | LWACU | yfinance returned empty DataFrame
+2026-07-08 17:26:05 | WARNING  | fetcher                   | MACIW | yfinance returned empty DataFrame
+2026-07-08 17:26:06 | WARNING  | fetcher                   | LZM.W | yfinance returned empty DataFrame
+2026-07-08 17:26:06 | WARNING  | fetcher                   | MBAVW | yfinance returned empty DataFrame
+2026-07-08 17:26:06 | WARNING  | fetcher                   | MAMK | yfinance returned empty DataFrame
+2026-07-08 17:26:06 | WARNING  | fetcher                   | MAGH | yfinance returned empty DataFrame
+2026-07-08 17:26:07 | WARNING  | fetcher                   | MCTA | yfinance returned empty DataFrame
+2026-07-08 17:26:07 | WARNING  | fetcher                   | MDAIW | yfinance returned empty DataFrame
+2026-07-08 17:26:07 | WARNING  | fetcher                   | MESHW | yfinance returned empty DataFrame
+2026-07-08 17:26:07 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['LPBBW', 'LUCYW', 'LPBBU', 'LPCVW', 'LWAC', 'LPCVU', 'MACI', 'LWACU', 'MACIU', 'MACIW']...
+2026-07-08 17:26:07 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:26:10 | INFO     | fetcher                   | Batch 17/29 | 25 tickers
+2026-07-08 17:26:11 | WARNING  | fetcher                   | MKDWW | yfinance returned empty DataFrame
+2026-07-08 17:26:11 | WARNING  | fetcher                   | MLECW | yfinance returned empty DataFrame
+2026-07-08 17:26:12 | WARNING  | fetcher                   | MNTSW | yfinance returned empty DataFrame
+2026-07-08 17:26:12 | WARNING  | fetcher                   | MKC.V | yfinance returned empty DataFrame
+2026-07-08 17:26:13 | WARNING  | fetcher                   | MNYWW | yfinance returned empty DataFrame
+2026-07-08 17:26:13 | WARNING  | fetcher                   | MMTXU | yfinance returned empty DataFrame
+2026-07-08 17:26:13 | WARNING  | fetcher                   | MOBXW | yfinance returned empty DataFrame
+2026-07-08 17:26:13 | WARNING  | fetcher                   | MOBBW | yfinance returned empty DataFrame
+2026-07-08 17:26:14 | WARNING  | fetcher                   | MRNOW | yfinance returned empty DataFrame
+2026-07-08 17:26:14 | WARNING  | fetcher                   | MSAIW | yfinance returned empty DataFrame
+2026-07-08 17:26:14 | WARNING  | fetcher                   | MTEKW | yfinance returned empty DataFrame
+2026-07-08 17:26:15 | WARNING  | fetcher                   | MOG.A | yfinance returned empty DataFrame
+2026-07-08 17:26:15 | WARNING  | fetcher                   | MVSTW | yfinance returned empty DataFrame
+2026-07-08 17:26:15 | WARNING  | fetcher                   | MOG.B | yfinance returned empty DataFrame
+2026-07-08 17:26:15 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['MEVOU', 'MIACU', 'MKLYU', 'MLAAU', 'MKDWW', 'MLECW', 'MNTSW', 'MKC.V', 'MNYWW', 'MFP']...
+2026-07-08 17:26:15 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:26:18 | INFO     | fetcher                   | Batch 18/29 | 25 tickers
+2026-07-08 17:26:18 | WARNING  | fetcher                   | NAMSW | yfinance returned empty DataFrame
+2026-07-08 17:26:18 | WARNING  | fetcher                   | NCPLW | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NE.W | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NE.A | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NEOVW | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NIOBW | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NIVFW | yfinance returned empty DataFrame
+2026-07-08 17:26:19 | WARNING  | fetcher                   | NOEMW | yfinance returned empty DataFrame
+2026-07-08 17:26:20 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['NAMSW', 'MYXXW', 'NCPLW', 'NBRG', 'NBRGU', 'NE.W', 'NE.A', 'NEOVW', 'NHIVW', 'NHIV']...
+2026-07-08 17:26:23 | INFO     | fetcher                   | Batch 19/29 | 25 tickers
+2026-07-08 17:26:23 | WARNING  | fetcher                   | NTRBW | yfinance returned empty DataFrame
+2026-07-08 17:26:23 | WARNING  | fetcher                   | NTWOW | yfinance returned empty DataFrame
+2026-07-08 17:26:23 | WARNING  | fetcher                   | OABIW | yfinance returned empty DataFrame
+2026-07-08 17:26:23 | WARNING  | fetcher                   | NXGLW | yfinance returned empty DataFrame
+2026-07-08 17:26:24 | WARNING  | fetcher                   | OACCW | yfinance returned empty DataFrame
+2026-07-08 17:26:24 | WARNING  | fetcher                   | OCSAW | yfinance returned empty DataFrame
+2026-07-08 17:26:24 | WARNING  | fetcher                   | NVA.W | yfinance returned empty DataFrame
+2026-07-08 17:26:25 | WARNING  | fetcher                   | OIMAW | yfinance returned empty DataFrame
+2026-07-08 17:26:25 | WARNING  | fetcher                   | ONMDW | yfinance returned empty DataFrame
+2026-07-08 17:26:25 | WARNING  | fetcher                   | OPTXW | yfinance returned empty DataFrame
+2026-07-08 17:26:25 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['NTRBW', 'NTWOW', 'NTWOU', 'OABIW', 'NXGLW', 'NTWO', 'OACCW', 'OACCU', 'OACC', 'OBAWU']...
+2026-07-08 17:26:28 | INFO     | fetcher                   | Batch 20/29 | 25 tickers
+2026-07-08 17:26:28 | WARNING  | fetcher                   | OSRHW | yfinance returned empty DataFrame
+2026-07-08 17:26:29 | WARNING  | fetcher                   | OST | yfinance returned empty DataFrame
+2026-07-08 17:26:29 | WARNING  | fetcher                   | OXBRW | yfinance returned empty DataFrame
+2026-07-08 17:26:29 | WARNING  | fetcher                   | OXY.W | yfinance returned empty DataFrame
+2026-07-08 17:26:30 | WARNING  | fetcher                   | PBMWW | yfinance returned empty DataFrame
+2026-07-08 17:26:30 | WARNING  | fetcher                   | PC | yfinance returned empty DataFrame
+2026-07-08 17:26:31 | WARNING  | fetcher                   | PBR.A | yfinance returned empty DataFrame
+2026-07-08 17:26:31 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['ORIQU', 'OSRHW', 'OST', 'OSPRU', 'ORIQW', 'ORIQ', 'OTGAU', 'OXBRW', 'OYSE', 'OYSER']...
+2026-07-08 17:26:34 | INFO     | fetcher                   | Batch 21/29 | 25 tickers
+2026-07-08 17:26:34 | WARNING  | fetcher                   | PDYNW | yfinance returned empty DataFrame
+2026-07-08 17:26:34 | WARNING  | fetcher                   | PCTTW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PEW.W | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PGYWW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PIIIW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PLMKW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PLTS | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | POLEW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PRENW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PTACW | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | PTNM | yfinance returned empty DataFrame
+2026-07-08 17:26:35 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['PCAPW', 'PDYNW', 'PCTTW', 'PCTTU', 'PCAPU', 'PFX', 'PEW.W', 'PGYWW', 'PIIIW', 'PGACU']...
+2026-07-08 17:26:38 | INFO     | fetcher                   | Batch 22/29 | 25 tickers
+2026-07-08 17:26:39 | WARNING  | fetcher                   | QETAR | yfinance returned empty DataFrame
+2026-07-08 17:26:40 | WARNING  | fetcher                   | RCKTW | yfinance returned empty DataFrame
+2026-07-08 17:26:40 | WARNING  | fetcher                   | RAC.U | yfinance returned empty DataFrame
+2026-07-08 17:26:40 | WARNING  | fetcher                   | REVBW | yfinance returned empty DataFrame
+2026-07-08 17:26:40 | WARNING  | fetcher                   | RDZNW | yfinance returned empty DataFrame
+2026-07-08 17:26:40 | WARNING  | fetcher                   | RAC.W | yfinance returned empty DataFrame
+2026-07-08 17:26:41 | WARNING  | fetcher                   | RDAGW | yfinance returned empty DataFrame
+2026-07-08 17:26:41 | WARNING  | fetcher                   | RGTIW | yfinance returned empty DataFrame
+2026-07-08 17:26:41 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['QADR', 'QETAR', 'PYT', 'QETAU', 'QSEAU', 'QUMS', 'QUMSR', 'QUMSU', 'RANG', 'RCKTW']...
+2026-07-08 17:26:44 | INFO     | fetcher                   | Batch 23/29 | 25 tickers
+2026-07-08 17:26:44 | WARNING  | fetcher                   | RMCOW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RNWWW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RQI.R | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | SABSW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RVMDW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RVSNW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RZLVW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | RUMBW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | SATLW | yfinance returned empty DataFrame
+2026-07-08 17:26:45 | WARNING  | fetcher                   | SAIHW | yfinance returned empty DataFrame
+2026-07-08 17:26:46 | WARNING  | fetcher                   | SAC.W | yfinance returned empty DataFrame
+2026-07-08 17:26:46 | WARNING  | fetcher                   | SAC.U | yfinance returned empty DataFrame
+2026-07-08 17:26:46 | WARNING  | fetcher                   | SBFMW | yfinance returned empty DataFrame
+2026-07-08 17:26:46 | WARNING  | fetcher                   | SCLXW | yfinance returned empty DataFrame
+2026-07-08 17:26:46 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['RMCOW', 'RNWWW', 'RIBB', 'RNGTW', 'RIBBR', 'RNGTU', 'RREVW', 'RQI.R', 'SABSW', 'RSVRW']...
+2026-07-08 17:26:46 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:26:49 | INFO     | fetcher                   | Batch 24/29 | 25 tickers
+2026-07-08 17:26:50 | WARNING  | fetcher                   | SDAWW | yfinance returned empty DataFrame
+2026-07-08 17:26:50 | WARNING  | fetcher                   | SEATW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SHMDW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SIMAW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SHFSW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SES.W | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SLDPW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SMXWW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SORNW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | SOUNW | yfinance returned empty DataFrame
+2026-07-08 17:26:51 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['SDAWW', 'SEATW', 'SCPQ', 'SDHI', 'SDHIU', 'SDHIR', 'SCPQU', 'SENEB', 'SIM', 'SHMDW']...
+2026-07-08 17:26:54 | INFO     | fetcher                   | Batch 25/29 | 25 tickers
+2026-07-08 17:26:55 | WARNING  | fetcher                   | SQFTW | yfinance returned empty DataFrame
+2026-07-08 17:26:55 | WARNING  | fetcher                   | SRZNW | yfinance returned empty DataFrame
+2026-07-08 17:26:55 | WARNING  | fetcher                   | SPKLW | yfinance returned empty DataFrame
+2026-07-08 17:26:55 | WARNING  | fetcher                   | SVA | yfinance returned empty DataFrame
+2026-07-08 17:26:56 | WARNING  | fetcher                   | SVCCW | yfinance returned empty DataFrame
+2026-07-08 17:26:56 | WARNING  | fetcher                   | SVREW | yfinance returned empty DataFrame
+2026-07-08 17:26:56 | WARNING  | fetcher                   | SWVLW | yfinance returned empty DataFrame
+2026-07-08 17:26:56 | WARNING  | fetcher                   | SWAGW | yfinance returned empty DataFrame
+2026-07-08 17:26:56 | WARNING  | fetcher                   | SXTPW | yfinance returned empty DataFrame
+2026-07-08 17:26:57 | WARNING  | fetcher                   | TAP.A | yfinance returned empty DataFrame
+2026-07-08 17:26:57 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['SQFTW', 'SRZNW', 'SPKLW', 'SPEGR', 'SSACU', 'SPKLU', 'SPEGU', 'SSEAR', 'SSEAU', 'SUMAR']...
+2026-07-08 17:27:00 | INFO     | fetcher                   | Batch 26/29 | 25 tickers
+2026-07-08 17:27:00 | WARNING  | fetcher                   | TDACW | yfinance returned empty DataFrame
+2026-07-08 17:27:01 | WARNING  | fetcher                   | TE.W | yfinance returned empty DataFrame
+2026-07-08 17:27:01 | WARNING  | fetcher                   | TMCWW | yfinance returned empty DataFrame
+2026-07-08 17:27:01 | WARNING  | fetcher                   | TLSIW | yfinance returned empty DataFrame
+2026-07-08 17:27:02 | WARNING  | fetcher                   | TGE.W | yfinance returned empty DataFrame
+2026-07-08 17:27:02 | WARNING  | fetcher                   | TOIIW | yfinance returned empty DataFrame
+2026-07-08 17:27:03 | WARNING  | fetcher                   | TVACW | yfinance returned empty DataFrame
+2026-07-08 17:27:03 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['TDACW', 'TAVIU', 'TDWD', 'TDACU', 'TDWDR', 'TDWDU', 'TE.W', 'TMCWW', 'TLSIW', 'TLNCU']...
+2026-07-08 17:27:03 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:27:06 | INFO     | fetcher                   | Batch 27/29 | 25 tickers
+2026-07-08 17:27:07 | WARNING  | fetcher                   | TVGNW | yfinance returned empty DataFrame
+2026-07-08 17:27:08 | WARNING  | fetcher                   | UCFI | yfinance returned empty DataFrame
+2026-07-08 17:27:08 | WARNING  | fetcher                   | UCFIW | yfinance returned empty DataFrame
+2026-07-08 17:27:08 | WARNING  | fetcher                   | UAC.W | yfinance returned empty DataFrame
+2026-07-08 17:27:08 | WARNING  | fetcher                   | UAC.U | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VGASW | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VAL.W | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VFSWW | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | WALDW | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VSEEW | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VII.U | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | VLN.W | yfinance returned empty DataFrame
+2026-07-08 17:27:10 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['TVGNW', 'TWLV', 'UAC', 'TWLVU', 'TWLVR', 'UCFI', 'UCFIW', 'UAC.W', 'UAC.U', 'UYSCU']...
+2026-07-08 17:27:10 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:27:13 | INFO     | fetcher                   | Batch 28/29 | 25 tickers
+2026-07-08 17:27:14 | WARNING  | fetcher                   | WGSWW | yfinance returned empty DataFrame
+2026-07-08 17:27:14 | WARNING  | fetcher                   | WLDSW | yfinance returned empty DataFrame
+2026-07-08 17:27:15 | WARNING  | fetcher                   | WSO.B | yfinance returned empty DataFrame
+2026-07-08 17:27:15 | WARNING  | fetcher                   | XBPEW | yfinance returned empty DataFrame
+2026-07-08 17:27:15 | WARNING  | fetcher                   | XOSWW | yfinance returned empty DataFrame
+2026-07-08 17:27:16 | WARNING  | fetcher                   | YCY.W | yfinance returned empty DataFrame
+2026-07-08 17:27:16 | WARNING  | fetcher                   | YCY.U | yfinance returned empty DataFrame
+2026-07-08 17:27:16 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['WGSWW', 'WLDSW', 'WENNU', 'WENNW', 'WHLRL', 'WHLRD', 'WLIIU', 'WLYB', 'WSTN', 'WTG']...
+2026-07-08 17:27:16 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:27:19 | INFO     | fetcher                   | Batch 29/29 | 5 tickers
+2026-07-08 17:27:20 | WARNING  | fetcher                   | ZEOWW | yfinance returned empty DataFrame
+2026-07-08 17:27:20 | WARNING  | fetcher                   | ZOOZW | yfinance returned empty DataFrame
+2026-07-08 17:27:20 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ZEOWW', 'ZOOZW', 'ZKP', 'ZKPW', 'ZKPU']...
+2026-07-08 17:27:20 | WARNING  | fetcher                   | Batch returned no data
+2026-07-08 17:27:20 | INFO     | fetcher                   | fetch_universe complete | Total rows: 5565 | Tickers with data: 29
+2026-07-08 17:27:20 | INFO     | fetcher                   | Incremental fetch: 2026-07-03 to 2026-07-08
+2026-07-08 17:27:20 | INFO     | fetcher                   | Fetching 5945 tickers | 238 batches of 25 | Period: 2026-07-03 to 2026-07-08
+2026-07-08 17:27:20 | INFO     | fetcher                   | Batch 1/238 | 25 tickers
+2026-07-08 17:27:21 | WARNING  | fetcher                   | AACI | yfinance returned empty DataFrame
+2026-07-08 17:27:22 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['AACI', 'AACG', 'AACBR', 'AACIW', 'AACOW', 'AACPR', 'AACP', 'AACPW', 'AACPU', 'AAPG']...
+2026-07-08 17:27:25 | INFO     | fetcher                   | Batch 2/238 | 25 tickers
+2026-07-08 17:27:27 | WARNING  | fetcher                   | ACAAU | yfinance returned empty DataFrame
+2026-07-08 17:27:27 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ABTS', 'ABXL', 'ACAAU', 'ACCL', 'ACCS']...
+2026-07-08 17:27:30 | INFO     | fetcher                   | Batch 3/238 | 25 tickers
+2026-07-08 17:27:31 | WARNING  | fetcher                   | ACGC | yfinance returned empty DataFrame
+2026-07-08 17:27:31 | WARNING  | fetcher                   | ACGCU | yfinance returned empty DataFrame
+2026-07-08 17:27:32 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['ACFN', 'ACGC', 'ACGCU', 'ACET', 'ACGLN', 'ACGLO', 'ACNB', 'ACNT', 'ACOG', 'ACON']...
+2026-07-08 17:27:35 | INFO     | fetcher                   | Batch 4/238 | 25 tickers
+2026-07-08 17:27:37 | WARNING  | fetcher                   | Batch: 17 tickers failed: ['ACR', 'ACTG', 'ACTU', 'ACU', 'ACV', 'ACXP', 'AD', 'ADACW', 'ADAC', 'ADAMG']...
+2026-07-08 17:27:40 | INFO     | fetcher                   | Batch 5/238 | 25 tickers
+2026-07-08 17:27:41 | WARNING  | fetcher                   | ADXN | yfinance returned empty DataFrame
+2026-07-08 17:27:41 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ADIL', 'ADSE', 'ADV', 'ADVB', 'ADXN', 'AEAQW', 'AEC']...
+2026-07-08 17:27:44 | INFO     | fetcher                   | Batch 6/238 | 25 tickers
+2026-07-08 17:27:46 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['AEHL', 'AEFC', 'AEF', 'AEI', 'AENT', 'AEMD', 'AEON', 'AESPU', 'AEXA', 'AFCG']...
+2026-07-08 17:27:49 | INFO     | fetcher                   | Batch 7/238 | 25 tickers
+2026-07-08 17:27:50 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['AFGD', 'AFGC', 'AFGB', 'AFGE', 'AFJK', 'AFJKR', 'AFRI', 'AFYA', 'AGCC', 'AGIG']...
+2026-07-08 17:27:53 | INFO     | fetcher                   | Batch 8/238 | 25 tickers
+2026-07-08 17:27:55 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['AGNCO', 'AGNCP', 'AGNCZ', 'AGNCN', 'AHG', 'AHT', 'AIDX', 'AIFU', 'AIFF']...
+2026-07-08 17:27:58 | INFO     | fetcher                   | Batch 9/238 | 25 tickers
+2026-07-08 17:28:00 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['AIHS', 'AIIA', 'AII', 'AIIOW', 'AIIR', 'AIMD', 'AIO', 'AIOS', 'AIRE', 'AIRG']...
+2026-07-08 17:28:03 | INFO     | fetcher                   | Batch 10/238 | 25 tickers
+2026-07-08 17:28:05 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['AIXC', 'AIZN', 'AKA', 'AKTX', 'ALCO', 'ALDF', 'ALG', 'ALF', 'ALGS']...
+2026-07-08 17:28:08 | INFO     | fetcher                   | Batch 11/238 | 25 tickers
+2026-07-08 17:28:09 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ALISR', 'ALLR', 'ALOT', 'ALOVW', 'ALPXU']...
+2026-07-08 17:28:12 | INFO     | fetcher                   | Batch 12/238 | 25 tickers
+2026-07-08 17:28:14 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ALUB', 'ALTI', 'ALX', 'AMAN', 'AMBO', 'AMBR']...
+2026-07-08 17:28:17 | INFO     | fetcher                   | Batch 13/238 | 25 tickers
+2026-07-08 17:28:18 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['AMPGR', 'AMPGZ', 'AMRN', 'AMS', 'AMSS', 'AMST']...
+2026-07-08 17:28:21 | INFO     | fetcher                   | Batch 14/238 | 25 tickers
+2026-07-08 17:28:23 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['AMWL', 'AMTD', 'ANGH', 'ANIK', 'ANNA', 'ANPA']...
+2026-07-08 17:28:26 | INFO     | fetcher                   | Batch 15/238 | 25 tickers
+2026-07-08 17:28:28 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['ANTA', 'ANY', 'ANSC', 'ANTX', 'AOMD', 'AOMN', 'AOMR', 'AOUT', 'APC']...
+2026-07-08 17:28:31 | INFO     | fetcher                   | Batch 16/238 | 25 tickers
+2026-07-08 17:28:33 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['APMCU', 'APOS', 'APT', 'APVO', 'APUS', 'APWC', 'APXT', 'APXTW', 'APYX', 'AQMS']...
+2026-07-08 17:28:36 | INFO     | fetcher                   | Batch 17/238 | 25 tickers
+2026-07-08 17:28:37 | WARNING  | fetcher                   | ARCLU | yfinance returned empty DataFrame
+2026-07-08 17:28:39 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ARBK', 'ARCIW', 'ARCI', 'ARCLU', 'AREN', 'ARKR', 'ARL']...
+2026-07-08 17:28:42 | INFO     | fetcher                   | Batch 18/238 | 25 tickers
+2026-07-08 17:28:43 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['AROW', 'ARTC', 'ARTCW', 'ARTL', 'ARTNA', 'ARTW', 'ASA', 'ASBA', 'ASBP']...
+2026-07-08 17:28:46 | INFO     | fetcher                   | Batch 19/238 | 25 tickers
+2026-07-08 17:28:48 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ASG', 'ASIC', 'ASPS', 'ASPSW', 'ASPSZ', 'ASRV', 'ASTC']...
+2026-07-08 17:28:51 | INFO     | fetcher                   | Batch 20/238 | 25 tickers
+2026-07-08 17:28:53 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['ASUR', 'ATCX', 'ATGL', 'ATHE', 'ATER', 'ATHR', 'ATHS', 'ATII', 'ATIIU', 'ATLCL']...
+2026-07-08 17:28:56 | INFO     | fetcher                   | Batch 21/238 | 25 tickers
+2026-07-08 17:28:57 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['ATLO', 'ATMP', 'ATNI', 'ATNM', 'ATPC', 'ATRA', 'ATXG', 'AUBN', 'AUID', 'AUC']...
+2026-07-08 17:29:00 | INFO     | fetcher                   | Batch 22/238 | 25 tickers
+2026-07-08 17:29:03 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['AUST', 'AURE', 'AVAL', 'AVBC']...
+2026-07-08 17:29:06 | INFO     | fetcher                   | Batch 23/238 | 25 tickers
+2026-07-08 17:29:08 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['AWRE', 'AWX', 'AXG', 'AXIN', 'AXIL', 'AXINU', 'AXINR', 'AXR']...
+2026-07-08 17:29:11 | INFO     | fetcher                   | Batch 24/238 | 25 tickers
+2026-07-08 17:29:13 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['AYTU', 'AZUL', 'BACC', 'BACCR', 'BAFN', 'BALY']...
+2026-07-08 17:29:16 | INFO     | fetcher                   | Batch 25/238 | 25 tickers
+2026-07-08 17:29:17 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['BAOS', 'BANX', 'BANF', 'BARK', 'BATRA', 'BBCQU', 'BBCQ', 'BBCQW', 'BBDO']...
+2026-07-08 17:29:20 | INFO     | fetcher                   | Batch 26/238 | 25 tickers
+2026-07-08 17:29:22 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['BBLG', 'BBSI', 'BBN', 'BCAL', 'BCARW', 'BCG', 'BCHT', 'BCIC']...
+2026-07-08 17:29:25 | INFO     | fetcher                   | Batch 27/238 | 25 tickers
+2026-07-08 17:29:28 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['BCSS', 'BCML', 'BCTXZ', 'BCV', 'BDCI', 'BDCZ', 'BDMD', 'BDL', 'BDRX', 'BDSX']...
+2026-07-08 17:29:31 | INFO     | fetcher                   | Batch 28/238 | 25 tickers
+2026-07-08 17:29:33 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['BEAGR', 'BEAT', 'BEEP', 'BELFA', 'BENF', 'BEPI', 'BEPH', 'BEPJ', 'BFC']...
+2026-07-08 17:29:36 | INFO     | fetcher                   | Batch 29/238 | 25 tickers
+2026-07-08 17:29:37 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['BGIN', 'BGH', 'BGI', 'BGLC', 'BGMS', 'BGR', 'BGSF', 'BGSI', 'BGT', 'BGX']...
+2026-07-08 17:29:40 | INFO     | fetcher                   | Batch 30/238 | 25 tickers
+2026-07-08 17:29:42 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['BHFAM', 'BHFAN', 'BHFAP', 'BHFAO', 'BHM', 'BHST', 'BHV', 'BIDWU', 'BIPH', 'BIPI']...
+2026-07-08 17:29:45 | INFO     | fetcher                   | Batch 31/238 | 25 tickers
+2026-07-08 17:29:47 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['BIVIW', 'BIXIW', 'BKT', 'BKTI']...
+2026-07-08 17:29:50 | INFO     | fetcher                   | Batch 32/238 | 25 tickers
+2026-07-08 17:29:52 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['BLIV', 'BLRX', 'BLUW', 'BLZR', 'BMHL', 'BME']...
+2026-07-08 17:29:55 | INFO     | fetcher                   | Batch 33/238 | 25 tickers
+2026-07-08 17:29:57 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['BMN', 'BMNP', 'BMR', 'BMRA', 'BMM', 'BMRC', 'BNGO', 'BNJ', 'BNH', 'BNKK']...
+2026-07-08 17:30:00 | INFO     | fetcher                   | Batch 34/238 | 25 tickers
+2026-07-08 17:30:02 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['BODI', 'BOE', 'BOLD', 'BOLT', 'BOF', 'BON', 'BOSC', 'BOTJ', 'BPOPM', 'BPRN']...
+2026-07-08 17:30:05 | INFO     | fetcher                   | Batch 35/238 | 25 tickers
+2026-07-08 17:30:07 | WARNING  | fetcher                   | Batch: 17 tickers failed: ['BPYPO', 'BPYPP', 'BRAG', 'BPYPN', 'BQ', 'BRAI', 'BREZR', 'BRC', 'BRFH', 'BREZ']...
+2026-07-08 17:30:10 | INFO     | fetcher                   | Batch 36/238 | 25 tickers
+2026-07-08 17:30:12 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['BRT', 'BRUNW', 'BSBK', 'BSAA', 'BSAAU', 'BSET', 'BSL', 'BSRR', 'BSVN', 'BTBD']...
+2026-07-08 17:30:15 | INFO     | fetcher                   | Batch 37/238 | 25 tickers
+2026-07-08 17:30:17 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['BTO', 'BTSGU', 'BTTC', 'BUDA']...
+2026-07-08 17:30:20 | INFO     | fetcher                   | Batch 38/238 | 25 tickers
+2026-07-08 17:30:24 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['BUUU', 'BUSEP', 'BVC', 'BVFL', 'BWB', 'BWAY', 'BWBBP', 'BWFG', 'BWG', 'BWIV']...
+2026-07-08 17:30:27 | INFO     | fetcher                   | Batch 39/238 | 25 tickers
+2026-07-08 17:30:28 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['BYFC', 'BYSI', 'BZUN', 'CAAS', 'CAC']...
+2026-07-08 17:30:31 | INFO     | fetcher                   | Batch 40/238 | 25 tickers
+2026-07-08 17:30:34 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['CAES', 'CAF', 'CAII', 'CAIIU', 'CAIIW', 'CAPL']...
+2026-07-08 17:30:37 | INFO     | fetcher                   | Batch 41/238 | 25 tickers
+2026-07-08 17:30:40 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['CASS', 'CATO', 'CBFV', 'CBK', 'CBNA', 'CBNK']...
+2026-07-08 17:30:43 | INFO     | fetcher                   | Batch 42/238 | 25 tickers
+2026-07-08 17:30:45 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['CBU', 'CCBG', 'CCB', 'CCEC', 'CCD', 'CCEL', 'CCID', 'CCIF', 'CCII', 'CCIX']...
+2026-07-08 17:30:48 | INFO     | fetcher                   | Batch 43/238 | 25 tickers
+2026-07-08 17:30:51 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['CCM', 'CCNEP', 'CCXIW', 'CCXIU', 'CDIO', 'CDLX', 'CDRO', 'CDTG']...
+2026-07-08 17:30:54 | INFO     | fetcher                   | Batch 44/238 | 25 tickers
+2026-07-08 17:30:55 | WARNING  | fetcher                   | CEPS | yfinance returned empty DataFrame
+2026-07-08 17:30:55 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['CEE', 'CDZIP', 'CENN', 'CENT', 'CEPS', 'CEPF', 'CEPO', 'CEPV', 'CEV', 'CET']...
+2026-07-08 17:30:58 | INFO     | fetcher                   | Batch 45/238 | 25 tickers
+2026-07-08 17:31:00 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['CFBK', 'CFND', 'CFFI', 'CGABL', 'CGCFU', 'CGO', 'CHAR', 'CHARR', 'CHCI']...
+2026-07-08 17:31:03 | INFO     | fetcher                   | Batch 46/238 | 25 tickers
+2026-07-08 17:31:04 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['CHCO', 'CHMG', 'CHNR', 'CHR', 'CHSCL', 'CHSCM', 'CHSCN', 'CHSCP', 'CHSCO']...
+2026-07-08 17:31:07 | INFO     | fetcher                   | Batch 47/238 | 25 tickers
+2026-07-08 17:31:09 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['CHSN', 'CHT', 'CHW', 'CIA', 'CICB', 'CICC', 'CIIT', 'CIMO', 'CIMN', 'CIMP']...
+2026-07-08 17:31:12 | INFO     | fetcher                   | Batch 48/238 | 25 tickers
+2026-07-08 17:31:14 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['CINT', 'CITR', 'CISS', 'CIVB', 'CKX', 'CIX', 'CLAR', 'CLBR', 'CLIK', 'CLLS']...
+2026-07-08 17:31:17 | INFO     | fetcher                   | Batch 49/238 | 25 tickers
+2026-07-08 17:31:18 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['CLRB', 'CLNN', 'CLPR', 'CLST', 'CLW', 'CLWT', 'CMCM', 'CMCT', 'CMDB']...
+2026-07-08 17:31:21 | INFO     | fetcher                   | Batch 50/238 | 25 tickers
+2026-07-08 17:31:23 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['CMMB', 'CMII', 'CMND', 'CMSA', 'CMT', 'CMSD', 'CMSC', 'CMTV', 'CNCK', 'CNEY']...
+2026-07-08 17:31:26 | INFO     | fetcher                   | Batch 51/238 | 25 tickers
+2026-07-08 17:31:28 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CNOBP', 'CNSP', 'CNTY', 'CNVS', 'CNXU']...
+2026-07-08 17:31:31 | INFO     | fetcher                   | Batch 52/238 | 25 tickers
+2026-07-08 17:31:32 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['COCP', 'CODX', 'COE', 'COFS', 'CODA', 'COHN', 'COLAR', 'COOK', 'COPL']...
+2026-07-08 17:31:35 | INFO     | fetcher                   | Batch 53/238 | 25 tickers
+2026-07-08 17:31:37 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['CORZZ', 'CPAC', 'CPBI', 'CPHC', 'CPHI', 'CPIX', 'CPS']...
+2026-07-08 17:31:40 | INFO     | fetcher                   | Batch 54/238 | 25 tickers
+2026-07-08 17:31:41 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['CPSS', 'CRACR', 'CRAC', 'CRAI', 'CRANR', 'CRAN', 'CRBD', 'CRDL', 'CREX', 'CRGO']...
+2026-07-08 17:31:44 | INFO     | fetcher                   | Batch 55/238 | 25 tickers
+2026-07-08 17:31:46 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['CRNX', 'CRT', 'CRVL', 'CRWS']...
+2026-07-08 17:31:49 | INFO     | fetcher                   | Batch 56/238 | 25 tickers
+2026-07-08 17:31:51 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['CSBR', 'CSHRW', 'CSHR', 'CSPI', 'CSR', 'CSTE', 'CSV', 'CTAAR', 'CTEV', 'CTGG']...
+2026-07-08 17:31:54 | INFO     | fetcher                   | Batch 57/238 | 25 tickers
+2026-07-08 17:31:55 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['CTHH', 'CTRM', 'CTW', 'CUB', 'CUBB', 'CULP', 'CUE', 'CUPR']...
+2026-07-08 17:31:58 | INFO     | fetcher                   | Batch 58/238 | 25 tickers
+2026-07-08 17:32:00 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['CURR', 'CVKD', 'CVLG', 'CVV', 'CVR', 'CVU', 'CWCO']...
+2026-07-08 17:32:03 | INFO     | fetcher                   | Batch 59/238 | 25 tickers
+2026-07-08 17:32:05 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['CXIIU', 'CXII', 'CYCN', 'CYCU', 'CYN', 'CZNC', 'CZFS', 'CZWI']...
+2026-07-08 17:32:08 | INFO     | fetcher                   | Batch 60/238 | 25 tickers
+2026-07-08 17:32:10 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['DAAQ', 'DAC', 'DAIO', 'DARE', 'DAO', 'DBCA', 'DBL', 'DBCAW', 'DCBG']...
+2026-07-08 17:32:13 | INFO     | fetcher                   | Batch 61/238 | 25 tickers
+2026-07-08 17:32:19 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['DCBO', 'DCX', 'DDC', 'DDI', 'DDL', 'DDT', 'DERM', 'DETX', 'DCOY']...
+2026-07-08 17:32:22 | INFO     | fetcher                   | Batch 62/238 | 25 tickers
+2026-07-08 17:32:25 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['DFDVW', 'DFNSW', 'DFP', 'DFSC', 'DGICA', 'DGP', 'DGZ', 'DHCNI', 'DHCNL']...
+2026-07-08 17:32:28 | INFO     | fetcher                   | Batch 63/238 | 25 tickers
+2026-07-08 17:32:30 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['DIBS', 'DJCO', 'DJP', 'DKI', 'DKL', 'DLHC', 'DLNG', 'DLPN', 'DMA', 'DLTH']...
+2026-07-08 17:32:33 | INFO     | fetcher                   | Batch 64/238 | 25 tickers
+2026-07-08 17:32:34 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['DMAA', 'DMAAR', 'DMB', 'DMII', 'DMLP', 'DMO', 'DNMX', 'DNMXW', 'DOGZ']...
+2026-07-08 17:32:37 | INFO     | fetcher                   | Batch 65/238 | 25 tickers
+2026-07-08 17:32:39 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['DOMH', 'DPG', 'DRDB', 'DRMA', 'DRIO', 'DSAC']...
+2026-07-08 17:32:42 | INFO     | fetcher                   | Batch 66/238 | 25 tickers
+2026-07-08 17:32:45 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['DSGR', 'DSC', 'DSS', 'DSWL', 'DTB', 'DTCX', 'DTF', 'DTK', 'DTW', 'DTG']...
+2026-07-08 17:32:48 | INFO     | fetcher                   | Batch 67/238 | 25 tickers
+2026-07-08 17:32:52 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['DUKRW', 'DUKR', 'DUKB', 'DUO', 'DWTX', 'DXR', 'DXST', 'DXPE', 'DYNC', 'DYNCW']...
+2026-07-08 17:32:55 | INFO     | fetcher                   | Batch 68/238 | 25 tickers
+2026-07-08 17:32:57 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['EAI', 'EBMT', 'EBON', 'ECBK', 'ECCC', 'ECCU', 'ECCV', 'ECF']...
+2026-07-08 17:33:00 | INFO     | fetcher                   | Batch 69/238 | 25 tickers
+2026-07-08 17:33:03 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['ECOR', 'EDHL', 'EDSA', 'EDRY', 'EDTK', 'EDUC', 'EDF', 'EEA', 'EEX', 'EEIQ']...
+2026-07-08 17:33:06 | INFO     | fetcher                   | Batch 70/238 | 25 tickers
+2026-07-08 17:33:08 | WARNING  | fetcher                   | EGHAR | yfinance returned empty DataFrame
+2026-07-08 17:33:08 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['EFSCP', 'EFSI', 'EFT', 'EGG', 'EGHA', 'EGHAR', 'EHI', 'EHLD', 'EICA', 'EIIA']...
+2026-07-08 17:33:11 | INFO     | fetcher                   | Batch 71/238 | 25 tickers
+2026-07-08 17:33:13 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['ELC', 'ELLO', 'ELLA', 'ELOX', 'ELOG', 'ELTK', 'ELPW', 'ELSE', 'ELUT']...
+2026-07-08 17:33:16 | INFO     | fetcher                   | Batch 72/238 | 25 tickers
+2026-07-08 17:33:18 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['EMAT', 'ELWT', 'ELVR', 'EMF', 'EML', 'EMO', 'EMP', 'ENGS', 'ENJ']...
+2026-07-08 17:33:21 | INFO     | fetcher                   | Batch 73/238 | 25 tickers
+2026-07-08 17:33:24 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['ENRD', 'ENRDW', 'ENO', 'ENTX', 'EOD', 'ENVB', 'EOI', 'EOS', 'EOT', 'EP']...
+2026-07-08 17:33:27 | INFO     | fetcher                   | Batch 74/238 | 25 tickers
+2026-07-08 17:33:28 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['EPSM', 'EQBK', 'EQS', 'ERC', 'ERH', 'ERNA']...
+2026-07-08 17:33:31 | INFO     | fetcher                   | Batch 75/238 | 25 tickers
+2026-07-08 17:33:33 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ERNAW', 'ESBA', 'ESEA', 'ESP', 'ESQ', 'ETB']...
+2026-07-08 17:33:36 | INFO     | fetcher                   | Batch 76/238 | 25 tickers
+2026-07-08 17:33:38 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['ETO', 'ETX', 'EUDA', 'EVAX', 'EVAC', 'EVF', 'EVG', 'EVI']...
+2026-07-08 17:33:41 | INFO     | fetcher                   | Batch 77/238 | 25 tickers
+2026-07-08 17:33:43 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['EVOX', 'EVO', 'EVT', 'EXOZ', 'EXOD']...
+2026-07-08 17:33:46 | INFO     | fetcher                   | Batch 78/238 | 25 tickers
+2026-07-08 17:33:48 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['EXYNW', 'EZGO', 'EZRA', 'FACT', 'FACWW', 'FATN', 'FAX']...
+2026-07-08 17:33:51 | INFO     | fetcher                   | Batch 79/238 | 25 tickers
+2026-07-08 17:33:52 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['FBIZ', 'FBIOP', 'FBLA', 'FBLG', 'FCBC', 'FCAP', 'FCBM', 'FCCO', 'FCNCN', 'FCNCO']...
+2026-07-08 17:33:55 | INFO     | fetcher                   | Batch 80/238 | 25 tickers
+2026-07-08 17:33:57 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['FCUV', 'FDSB', 'FDBC', 'FEBO', 'FEAM', 'FEED', 'FEMY', 'FENG', 'FERAR', 'FERA']...
+2026-07-08 17:34:00 | INFO     | fetcher                   | Batch 81/238 | 25 tickers
+2026-07-08 17:34:02 | WARNING  | fetcher                   | FGMCU | yfinance returned empty DataFrame
+2026-07-08 17:34:02 | WARNING  | fetcher                   | Batch: 15 tickers failed: ['FFA', 'FFC', 'FGBI', 'FGBIP', 'FGI', 'FGII', 'FGMC', 'FGL', 'FGMCU', 'FGNX']...
+2026-07-08 17:34:05 | INFO     | fetcher                   | Batch 82/238 | 25 tickers
+2026-07-08 17:34:06 | WARNING  | fetcher                   | FIGX | yfinance returned empty DataFrame
+2026-07-08 17:34:07 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['FIGX', 'FINW', 'FINS', 'FIRY', 'FLC', 'FKWL', 'FLD']...
+2026-07-08 17:34:10 | INFO     | fetcher                   | Batch 83/238 | 25 tickers
+2026-07-08 17:34:12 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['FLNA', 'FLL', 'FLNT', 'FLUX', 'FLXS', 'FLYE', 'FLZH', 'FMAC', 'FMACU', 'FMAO']...
+2026-07-08 17:34:15 | INFO     | fetcher                   | Batch 84/238 | 25 tickers
+2026-07-08 17:34:17 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['FMY', 'FNGO', 'FNGR', 'FNLC', 'FNRN', 'FNUC', 'FNWB', 'FNWD', 'FOA', 'FOF']...
+2026-07-08 17:34:20 | INFO     | fetcher                   | Batch 85/238 | 25 tickers
+2026-07-08 17:34:21 | WARNING  | fetcher                   | FRMEP | yfinance returned empty DataFrame
+2026-07-08 17:34:22 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['FORR', 'FOXX', 'FPF', 'FPH', 'FRAF', 'FRBA', 'FRBT', 'FRD', 'FRGT', 'FRMEP']...
+2026-07-08 17:34:25 | INFO     | fetcher                   | Batch 86/238 | 25 tickers
+2026-07-08 17:34:27 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['FRPH', 'FRSX', 'FSBW', 'FSBC', 'FSI', 'FSHPR', 'FSEA', 'FSTR', 'FT']...
+2026-07-08 17:34:30 | INFO     | fetcher                   | Batch 87/238 | 25 tickers
+2026-07-08 17:34:31 | WARNING  | fetcher                   | FTHAU | yfinance returned empty DataFrame
+2026-07-08 17:34:33 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['FTAIM', 'FTCI', 'FTFT', 'FTF', 'FTEK', 'FTHAU', 'FTH', 'FTHY', 'FTLF', 'FTW']...
+2026-07-08 17:34:36 | INFO     | fetcher                   | Batch 88/238 | 25 tickers
+2026-07-08 17:34:38 | WARNING  | fetcher                   | FUSEW | yfinance returned empty DataFrame
+2026-07-08 17:34:41 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['FUND', 'FUSEW', 'FUNC', 'FURY', 'FVCB', 'FUSB', 'FVR', 'FWACU', 'FXNC', 'FXACU']...
+2026-07-08 17:34:44 | INFO     | fetcher                   | Batch 89/238 | 25 tickers
+2026-07-08 17:34:48 | WARNING  | fetcher                   | GCGRU | yfinance returned empty DataFrame
+2026-07-08 17:34:48 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['GAM', 'GASS', 'GATX', 'GBAB', 'GBFH', 'GBR', 'GBLI', 'GCDT', 'GCBC', 'GCGRU']...
+2026-07-08 17:34:51 | INFO     | fetcher                   | Batch 90/238 | 25 tickers
+2026-07-08 17:34:53 | WARNING  | fetcher                   | GEGGL | yfinance returned empty DataFrame
+2026-07-08 17:34:54 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['GDEV', 'GDHG', 'GDL', 'GDTC', 'GECCG', 'GECC', 'GECCH', 'GEGGL', 'GECCI', 'GEG']...
+2026-07-08 17:34:57 | INFO     | fetcher                   | Batch 91/238 | 25 tickers
+2026-07-08 17:34:59 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['GENVR', 'GENK', 'GEOS', 'GF', 'GFR', 'GGR', 'GHG', 'GGZ']...
+2026-07-08 17:35:02 | INFO     | fetcher                   | Batch 92/238 | 25 tickers
+2026-07-08 17:35:04 | WARNING  | fetcher                   | GJH | yfinance returned empty DataFrame
+2026-07-08 17:35:05 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['GIBO', 'GHY', 'GHXIU', 'GHI', 'GIC', 'GIFT', 'GIGM', 'GJH', 'GITS', 'GIXXR']...
+2026-07-08 17:35:08 | INFO     | fetcher                   | Batch 93/238 | 25 tickers
+2026-07-08 17:35:10 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['GLBS', 'GLIBA', 'GLED', 'GLNDW', 'GLP', 'GLOO', 'GLU', 'GLV', 'GLXG']...
+2026-07-08 17:35:13 | INFO     | fetcher                   | Batch 94/238 | 25 tickers
+2026-07-08 17:35:15 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['GMHS', 'GMM', 'GMTL', 'GNE', 'GNLN', 'GNLX', 'GNT', 'GNSS', 'GNTA', 'GOAI']...
+2026-07-08 17:35:18 | INFO     | fetcher                   | Batch 95/238 | 25 tickers
+2026-07-08 17:35:21 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['GOODO', 'GOODN', 'GOOGN', 'GPMT', 'GPJA']...
+2026-07-08 17:35:24 | INFO     | fetcher                   | Batch 96/238 | 25 tickers
+2026-07-08 17:35:26 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['GRAF', 'GRCE', 'GRAN', 'GRDX', 'GRF', 'GRI', 'GRMLW', 'GRNQ', 'GROW', 'GROV']...
+2026-07-08 17:35:29 | INFO     | fetcher                   | Batch 97/238 | 25 tickers
+2026-07-08 17:35:30 | WARNING  | fetcher                   | GSHRW | yfinance returned empty DataFrame
+2026-07-08 17:35:30 | WARNING  | fetcher                   | GSRF | yfinance returned empty DataFrame
+2026-07-08 17:35:31 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['GSHRW', 'GSBC', 'GSIW', 'GSRF', 'GSRFR', 'GSRVU', 'GTEN', 'GTIM']...
+2026-07-08 17:35:34 | INFO     | fetcher                   | Batch 98/238 | 25 tickers
+2026-07-08 17:35:37 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['GUG', 'GUACU', 'GVH', 'GWRS', 'GYRO', 'HACQ', 'HAO', 'HACQU']...
+2026-07-08 17:35:40 | INFO     | fetcher                   | Batch 99/238 | 25 tickers
+2026-07-08 17:35:42 | WARNING  | fetcher                   | HCHL | yfinance returned empty DataFrame
+2026-07-08 17:35:43 | WARNING  | fetcher                   | HCIC | yfinance returned empty DataFrame
+2026-07-08 17:35:43 | WARNING  | fetcher                   | Batch: 15 tickers failed: ['HBANP', 'HBANM', 'HBANZ', 'HBANL', 'HBIO', 'HBB', 'HBCP', 'HBNB', 'HCHL', 'HCAI']...
+2026-07-08 17:35:46 | INFO     | fetcher                   | Batch 100/238 | 25 tickers
+2026-07-08 17:35:46 | WARNING  | fetcher                   | HCMAW | yfinance returned empty DataFrame
+2026-07-08 17:35:48 | WARNING  | fetcher                   | Batch: 15 tickers failed: ['HCMAW', 'HCXY', 'HCWB', 'HCTI', 'HCWC', 'HCMA', 'HDRN', 'HDRNW', 'HEQ', 'HERE']...
+2026-07-08 17:35:51 | INFO     | fetcher                   | Batch 101/238 | 25 tickers
+2026-07-08 17:35:53 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['HGBL', 'HHS', 'HGLB', 'HGTY', 'HIFS', 'HIND', 'HIT', 'HITI', 'HIX', 'HKD']...
+2026-07-08 17:35:56 | INFO     | fetcher                   | Batch 102/238 | 25 tickers
+2026-07-08 17:35:58 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['HMH', 'HLXC', 'HMR', 'HNNA', 'HOFT', 'HNVR']...
+2026-07-08 17:36:01 | INFO     | fetcher                   | Batch 103/238 | 25 tickers
+2026-07-08 17:36:04 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['HOUR', 'HOVNP', 'HOV', 'HPAI', 'HPI', 'HPF', 'HPS', 'HQWWW', 'HQI']...
+2026-07-08 17:36:07 | INFO     | fetcher                   | Batch 104/238 | 25 tickers
+2026-07-08 17:36:10 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['HSCS', 'HSDT', 'HTFC', 'HTCO', 'HTD', 'HTCR', 'HTB']...
+2026-07-08 17:36:13 | INFO     | fetcher                   | Batch 105/238 | 25 tickers
+2026-07-08 17:36:15 | WARNING  | fetcher                   | HVII | yfinance returned empty DataFrame
+2026-07-08 17:36:15 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['HTT', 'HTOO', 'HTLM', 'HUDI', 'HUHU', 'HURA', 'HUIZ', 'HVII', 'HURC', 'HVIIR']...
+2026-07-08 17:36:18 | INFO     | fetcher                   | Batch 106/238 | 25 tickers
+2026-07-08 17:36:19 | WARNING  | fetcher                   | IACO | yfinance returned empty DataFrame
+2026-07-08 17:36:20 | WARNING  | fetcher                   | IACQU | yfinance returned empty DataFrame
+2026-07-08 17:36:21 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['HWKN', 'HY', 'HYNE', 'IACO', 'IACOW', 'IACQ', 'IACQU', 'IAE', 'IAF', 'IBEX']...
+2026-07-08 17:36:24 | INFO     | fetcher                   | Batch 107/238 | 25 tickers
+2026-07-08 17:36:26 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['IBO', 'ICCC', 'ICFI', 'ICG', 'ICMB', 'ICU', 'IDAI', 'IDACU', 'IDE']...
+2026-07-08 17:36:29 | INFO     | fetcher                   | Batch 108/238 | 25 tickers
+2026-07-08 17:36:31 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['IFBD', 'IGA', 'IFS', 'IGI', 'IH', 'IHD', 'IGIC']...
+2026-07-08 17:36:34 | INFO     | fetcher                   | Batch 109/238 | 25 tickers
+2026-07-08 17:36:36 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['IHT', 'IIF', 'IIM', 'III', 'ILAG', 'ILLRW', 'IMA', 'IMDX', 'IMKTA', 'IMNN']...
+2026-07-08 17:36:39 | INFO     | fetcher                   | Batch 110/238 | 25 tickers
+2026-07-08 17:36:42 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['IMRN', 'IMSRW', 'INBK', 'INAB', 'INBKZ', 'IMXI', 'INBS', 'INDP']...
+2026-07-08 17:36:45 | INFO     | fetcher                   | Batch 111/238 | 25 tickers
+2026-07-08 17:36:45 | WARNING  | fetcher                   | INHD | yfinance returned empty DataFrame
+2026-07-08 17:36:47 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['INHD', 'INM', 'INKT', 'INLX', 'INSE', 'INTG', 'INTS', 'INTJ']...
+2026-07-08 17:36:50 | INFO     | fetcher                   | Batch 112/238 | 25 tickers
+2026-07-08 17:36:52 | WARNING  | fetcher                   | IOR | yfinance returned empty DataFrame
+2026-07-08 17:36:53 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['IOR', 'IONR', 'IOTR', 'IOSP', 'IPCX', 'IPCXR', 'IPEX', 'IPFXU', 'IPFXW', 'IPFX']...
+2026-07-08 17:36:56 | INFO     | fetcher                   | Batch 113/238 | 25 tickers
+2026-07-08 17:36:57 | WARNING  | fetcher                   | IPVVU | yfinance returned empty DataFrame
+2026-07-08 17:36:58 | WARNING  | fetcher                   | IRHOR | yfinance returned empty DataFrame
+2026-07-08 17:36:58 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['IPHA', 'IPVVU', 'IPM', 'IPST', 'IQI', 'IRHO', 'IRHOR', 'IRIX', 'IRMD']...
+2026-07-08 17:37:01 | INFO     | fetcher                   | Batch 114/238 | 25 tickers
+2026-07-08 17:37:03 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ISBA', 'ISD', 'ISPR', 'ISNRU', 'ITP', 'ITIC']...
+2026-07-08 17:37:06 | INFO     | fetcher                   | Batch 115/238 | 25 tickers
+2026-07-08 17:37:09 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['IZEA', 'JABRU', 'JAGU', 'JATT', 'JAGX', 'JACS', 'JBK', 'JBSS']...
+2026-07-08 17:37:12 | INFO     | fetcher                   | Batch 116/238 | 25 tickers
+2026-07-08 17:37:13 | WARNING  | fetcher                   | JDZG | yfinance returned empty DataFrame
+2026-07-08 17:37:14 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['JCE', 'JCSE', 'JDZG', 'JCTC', 'JF', 'JFIN', 'JG', 'JFU', 'JHI', 'JHS']...
+2026-07-08 17:37:17 | INFO     | fetcher                   | Batch 117/238 | 25 tickers
+2026-07-08 17:37:19 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['JLS', 'JMSB', 'JMM', 'JOF', 'JOB', 'JOUT', 'JRSH', 'JRI', 'JSM', 'JTAI']...
+2026-07-08 17:37:22 | INFO     | fetcher                   | Batch 118/238 | 25 tickers
+2026-07-08 17:37:24 | WARNING  | fetcher                   | KBONW | yfinance returned empty DataFrame
+2026-07-08 17:37:25 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['JYNT', 'JYD', 'KALA', 'JZ', 'JZXN', 'KAPA', 'KAZR', 'KBONU', 'KBON', 'KBONW']...
+2026-07-08 17:37:28 | INFO     | fetcher                   | Batch 119/238 | 25 tickers
+2026-07-08 17:37:36 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['KELYB', 'KEN', 'KEQU', 'KF', 'KFFB', 'KEYYU', 'KG']...
+2026-07-08 17:37:39 | INFO     | fetcher                   | Batch 120/238 | 25 tickers
+2026-07-08 17:37:42 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['KKRS', 'KKRT', 'KLRS', 'KLTR', 'KMDA', 'KLXE', 'KMPB', 'KMRK', 'KNOP', 'KNRX']...
+2026-07-08 17:37:45 | INFO     | fetcher                   | Batch 121/238 | 25 tickers
+2026-07-08 17:37:47 | WARNING  | fetcher                   | KRAQU | yfinance returned empty DataFrame
+2026-07-08 17:37:47 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['KOSS', 'KORE', 'KOYN', 'KPLT', 'KRAQU', 'KRAQ', 'KRAQW', 'KPRX', 'KRKR']...
+2026-07-08 17:37:50 | INFO     | fetcher                   | Batch 122/238 | 25 tickers
+2026-07-08 17:37:53 | WARNING  | fetcher                   | KTWO | yfinance returned empty DataFrame
+2026-07-08 17:37:53 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['KRNT', 'KRMD', 'KRSP', 'KRT', 'KTWO', 'KTF', 'KTN', 'KTCC', 'KTH']...
+2026-07-08 17:37:56 | INFO     | fetcher                   | Batch 123/238 | 25 tickers
+2026-07-08 17:37:57 | WARNING  | fetcher                   | KWMWW | yfinance returned empty DataFrame
+2026-07-08 17:37:59 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['KWMWW', 'KWY', 'KXIN', 'KZIA', 'KYIVW', 'LAKE', 'LANDO']...
+2026-07-08 17:38:02 | INFO     | fetcher                   | Batch 124/238 | 25 tickers
+2026-07-08 17:38:04 | WARNING  | fetcher                   | LCCC | yfinance returned empty DataFrame
+2026-07-08 17:38:04 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['LANDP', 'LANV', 'LARK', 'LBRDP', 'LBGJ', 'LBTYB', 'LCCC', 'LCCCR', 'LCFY']...
+2026-07-08 17:38:07 | INFO     | fetcher                   | Batch 125/238 | 25 tickers
+2026-07-08 17:38:10 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['LCNB', 'LDP', 'LEGH', 'LEE', 'LEGO', 'LFMDP', 'LFS']...
+2026-07-08 17:38:13 | INFO     | fetcher                   | Batch 126/238 | 25 tickers
+2026-07-08 17:38:15 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['LGCY', 'LFWD', 'LGHL', 'LGI', 'LGL', 'LIEN']...
+2026-07-08 17:38:18 | INFO     | fetcher                   | Batch 127/238 | 25 tickers
+2026-07-08 17:38:20 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['LINK', 'LITB', 'LITS', 'LIQT', 'LIVE', 'LKSPR', 'LKFN', 'LMB', 'LMNR']...
+2026-07-08 17:38:23 | INFO     | fetcher                   | Batch 128/238 | 25 tickers
+2026-07-08 17:38:25 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['LNAI', 'LNKS', 'LND', 'LNSR', 'LNZA', 'LOAN', 'LOCL', 'LONA', 'LOOP', 'LOT']...
+2026-07-08 17:38:28 | INFO     | fetcher                   | Batch 129/238 | 25 tickers
+2026-07-08 17:38:31 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['LPA', 'LPBB', 'LPCN', 'LPSN', 'LRE', 'LSBK', 'LSE', 'LSF', 'LSTA']...
+2026-07-08 17:38:34 | INFO     | fetcher                   | Batch 130/238 | 25 tickers
+2026-07-08 17:38:36 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['LTGRU', 'LUD', 'LUNG', 'LUXE', 'LVO', 'LWACW']...
+2026-07-08 17:38:39 | INFO     | fetcher                   | Batch 131/238 | 25 tickers
+2026-07-08 17:38:41 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['LXEH', 'LZMH', 'MAAS']...
+2026-07-08 17:38:44 | INFO     | fetcher                   | Batch 132/238 | 25 tickers
+2026-07-08 17:38:46 | WARNING  | fetcher                   | MB | yfinance returned empty DataFrame
+2026-07-08 17:38:46 | WARNING  | fetcher                   | MBAVU | yfinance returned empty DataFrame
+2026-07-08 17:38:46 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['MAKO', 'MAMO', 'MASK', 'MARPS', 'MB', 'MATH', 'MBAV', 'MBAI', 'MBAVU']...
+2026-07-08 17:38:49 | INFO     | fetcher                   | Batch 133/238 | 25 tickers
+2026-07-08 17:38:51 | WARNING  | fetcher                   | MCAHU | yfinance returned empty DataFrame
+2026-07-08 17:38:52 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['MBBC', 'MBINM', 'MBINL', 'MBIN', 'MBINN', 'MBVI', 'MBNKO', 'MBWM', 'MCAHU', 'MCBS']...
+2026-07-08 17:38:55 | INFO     | fetcher                   | Batch 134/238 | 25 tickers
+2026-07-08 17:38:57 | WARNING  | fetcher                   | MDRR | yfinance returned empty DataFrame
+2026-07-08 17:38:57 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['MCN', 'MCI', 'MCHPP', 'MCHX', 'MCRB', 'MCRI', 'MCRP', 'MDRR', 'MDBH', 'MDWD']...
+2026-07-08 17:39:00 | INFO     | fetcher                   | Batch 135/238 | 25 tickers
+2026-07-08 17:39:03 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['MEGI', 'MEGL', 'MESH', 'MENS', 'MEVO', 'METCI', 'METCB', 'METCZ', 'MEVOW', 'MFAN']...
+2026-07-08 17:39:06 | INFO     | fetcher                   | Batch 136/238 | 25 tickers
+2026-07-08 17:39:08 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['MFIN', 'MFICL', 'MFI', 'MFM', 'MGIH', 'MGF', 'MGLD', 'MGRB', 'MGRC', 'MGR']...
+2026-07-08 17:39:11 | INFO     | fetcher                   | Batch 137/238 | 25 tickers
+2026-07-08 17:39:14 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['MGYR', 'MHF', 'MHH', 'MHLA', 'MHNC', 'MI', 'MIMI', 'MINE', 'MIRA', 'MITN']...
+2026-07-08 17:39:17 | INFO     | fetcher                   | Batch 138/238 | 25 tickers
+2026-07-08 17:39:18 | WARNING  | fetcher                   | MKLYR | yfinance returned empty DataFrame
+2026-07-08 17:39:19 | WARNING  | fetcher                   | Batch: 15 tickers failed: ['MKLY', 'MITQ', 'MIY', 'MKDW', 'MKLYR', 'MKZR', 'MKTW', 'MLAAW', 'MLAA', 'MLCI']...
+2026-07-08 17:39:22 | INFO     | fetcher                   | Batch 139/238 | 25 tickers
+2026-07-08 17:39:25 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['MLR', 'MLSS', 'MMA', 'MMD', 'MMI', 'MMLP', 'MNDR', 'MNPR', 'MNOV', 'MNSB']...
+2026-07-08 17:39:28 | INFO     | fetcher                   | Batch 140/238 | 25 tickers
+2026-07-08 17:39:30 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['MNTK', 'MOB', 'MNY', 'MOBI', 'MODD', 'MOGU', 'MOLN', 'MOVE', 'MPAA', 'MPA']...
+2026-07-08 17:39:33 | INFO     | fetcher                   | Batch 141/238 | 25 tickers
+2026-07-08 17:39:36 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['MPU', 'MPTI', 'MPV', 'MRBK', 'MRDN', 'MRT']...
+2026-07-08 17:39:39 | INFO     | fetcher                   | Batch 142/238 | 25 tickers
+2026-07-08 17:39:42 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['MSAI', 'MSB', 'MSBIP', 'MSC', 'MSD', 'MSGM', 'MSLE', 'MSN', 'MSW', 'MTAL']...
+2026-07-08 17:39:45 | INFO     | fetcher                   | Batch 143/238 | 25 tickers
+2026-07-08 17:39:48 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['MTEK', 'MTLS', 'MTNE', 'MTNB', 'MTR', 'MTVA', 'MUA', 'MUJ']...
+2026-07-08 17:39:51 | INFO     | fetcher                   | Batch 144/238 | 25 tickers
+2026-07-08 17:39:52 | WARNING  | fetcher                   | MUZE | yfinance returned empty DataFrame
+2026-07-08 17:39:54 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['MVBF', 'MUZE', 'MWC', 'MWG', 'MXC', 'MXE', 'MXF', 'MYFW', 'MYN', 'MYND']...
+2026-07-08 17:39:57 | INFO     | fetcher                   | Batch 145/238 | 25 tickers
+2026-07-08 17:39:57 | WARNING  | fetcher                   | MYXXU | yfinance returned empty DataFrame
+2026-07-08 17:39:59 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['MYXXU', 'MYX', 'MZYX', 'MYSE', 'NAII', 'NAMMW', 'NATR', 'NATH', 'NAZ', 'NBB']...
+2026-07-08 17:40:02 | INFO     | fetcher                   | Batch 146/238 | 25 tickers
+2026-07-08 17:40:03 | WARNING  | fetcher                   | NBRGR | yfinance returned empty DataFrame
+2026-07-08 17:40:04 | WARNING  | fetcher                   | NCL | yfinance returned empty DataFrame
+2026-07-08 17:40:05 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['NBH', 'NBN', 'NBRGR', 'NBTX', 'NC', 'NCA', 'NCDL', 'NCL', 'NCEL', 'NCEW']...
+2026-07-08 17:40:08 | INFO     | fetcher                   | Batch 147/238 | 25 tickers
+2026-07-08 17:40:10 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['NCV', 'NCTY', 'NCZ', 'NDLS', 'NECB', 'NEGG', 'NEN', 'NEON', 'NEPH', 'NEUP']...
+2026-07-08 17:40:13 | INFO     | fetcher                   | Batch 148/238 | 25 tickers
+2026-07-08 17:40:14 | WARNING  | fetcher                   | NEXRW | yfinance returned empty DataFrame
+2026-07-08 17:40:15 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['NEWTG', 'NEWTI', 'NEXM', 'NEWTH', 'NEWTP', 'NEXR', 'NEXRW', 'NGL']...
+2026-07-08 17:40:18 | INFO     | fetcher                   | Batch 149/238 | 25 tickers
+2026-07-08 17:40:19 | WARNING  | fetcher                   | NHIVU | yfinance returned empty DataFrame
+2026-07-08 17:40:20 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['NHIVU', 'NHIC', 'NHPAP', 'NHICW', 'NHPBP', 'NICM', 'NIE', 'NIC', 'NHTC', 'NINE']...
+2026-07-08 17:40:23 | INFO     | fetcher                   | Batch 150/238 | 25 tickers
+2026-07-08 17:40:27 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['NKX', 'NL', 'NMFCZ', 'NMI', 'NMT', 'NMS', 'NMTC']...
+2026-07-08 17:40:30 | INFO     | fetcher                   | Batch 151/238 | 25 tickers
+2026-07-08 17:40:33 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['NNI', 'NNY', 'NNNN', 'NOA', 'NODK', 'NOMA', 'NOVTU', 'NPAC', 'NPB', 'NPACW']...
+2026-07-08 17:40:36 | INFO     | fetcher                   | Batch 152/238 | 25 tickers
+2026-07-08 17:40:39 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['NPFD', 'NPV', 'NPT', 'NPK', 'NREF', 'NRP', 'NRT', 'NRUC', 'NRXS']...
+2026-07-08 17:40:42 | INFO     | fetcher                   | Batch 153/238 | 25 tickers
+2026-07-08 17:40:44 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['NSRX', 'NSYS', 'NSTS', 'NSPR', 'NTB', 'NTHI', 'NTIC', 'NTIP', 'NTRB', 'NTRSO']...
+2026-07-08 17:40:47 | INFO     | fetcher                   | Batch 154/238 | 25 tickers
+2026-07-08 17:40:49 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['NTWK', 'NUAIW', 'NTZ', 'NUCLW', 'NUW', 'NUWE', 'NVEC', 'NVNO']...
+2026-07-08 17:40:52 | INFO     | fetcher                   | Batch 155/238 | 25 tickers
+2026-07-08 17:40:54 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['NWAX', 'NWFL', 'NXB', 'NXDT']...
+2026-07-08 17:40:57 | INFO     | fetcher                   | Batch 156/238 | 25 tickers
+2026-07-08 17:40:59 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['NXPL', 'NXTC', 'NXTS', 'NYAX', 'NYC', 'NYXH', 'OBK', 'OBT', 'OCCI', 'OCCIM']...
+2026-07-08 17:41:02 | INFO     | fetcher                   | Batch 157/238 | 25 tickers
+2026-07-08 17:41:05 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['OCG', 'ODTX', 'ODYS', 'OESX', 'OFLX', 'OFS', 'OGEN']...
+2026-07-08 17:41:08 | INFO     | fetcher                   | Batch 158/238 | 25 tickers
+2026-07-08 17:41:09 | WARNING  | fetcher                   | OHACU | yfinance returned empty DataFrame
+2026-07-08 17:41:10 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['OHAC', 'OHACU', 'OIA', 'OIO', 'OKYO', 'OLP', 'OMAB']...
+2026-07-08 17:41:13 | INFO     | fetcher                   | Batch 159/238 | 25 tickers
+2026-07-08 17:41:17 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['OMSE', 'ONBPO', 'OMH', 'ONBPP', 'ONCH', 'ONCHW', 'ONCHU', 'ONIT', 'ONEG', 'ONEW']...
+2026-07-08 17:41:20 | INFO     | fetcher                   | Batch 160/238 | 25 tickers
+2026-07-08 17:41:22 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['OPBK', 'OPENW', 'OPENZ', 'OPHC', 'OPI', 'OPP', 'OPTH', 'OPXS', 'OPY']...
+2026-07-08 17:41:25 | INFO     | fetcher                   | Batch 161/238 | 25 tickers
+2026-07-08 17:41:27 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['ORKT', 'OTGA']...
+2026-07-08 17:41:30 | INFO     | fetcher                   | Batch 162/238 | 25 tickers
+2026-07-08 17:41:32 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['OTLY', 'OVBC', 'OWLS', 'OXBR', 'OVLY', 'OXLCG', 'OXLCI', 'OXLCL', 'OXLCM', 'OXLCN']...
+2026-07-08 17:41:35 | INFO     | fetcher                   | Batch 163/238 | 25 tickers
+2026-07-08 17:41:36 | WARNING  | fetcher                   | PACHW | yfinance returned empty DataFrame
+2026-07-08 17:41:37 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['OZ', 'OZKAP', 'PAC', 'PACH', 'PACHW', 'PAMT', 'PAI', 'PAPL']...
+2026-07-08 17:41:40 | INFO     | fetcher                   | Batch 164/238 | 25 tickers
+2026-07-08 17:41:43 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['PARK', 'PAVM', 'PASG', 'PAVS', 'PBFS', 'PBHC', 'PBM']...
+2026-07-08 17:41:46 | INFO     | fetcher                   | Batch 165/238 | 25 tickers
+2026-07-08 17:41:48 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['PCAP', 'PBT', 'PCF', 'PCB', 'PCLA', 'PCM', 'PCSA', 'PCQ', 'PCSC', 'PCYO']...
+2026-07-08 17:41:51 | INFO     | fetcher                   | Batch 166/238 | 25 tickers
+2026-07-08 17:41:53 | WARNING  | fetcher                   | PECEU | yfinance returned empty DataFrame
+2026-07-08 17:41:53 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['PDLB', 'PDPA', 'PDS', 'PDSB', 'PDT', 'PECE', 'PECEU', 'PEBK', 'PECER', 'PECEW']...
+2026-07-08 17:41:56 | INFO     | fetcher                   | Batch 167/238 | 25 tickers
+2026-07-08 17:41:59 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['PEO', 'PETS', 'PERF', 'PETZ', 'PFAI', 'PFBC', 'PFD', 'PFFL', 'PFH', 'PFIS']...
+2026-07-08 17:42:02 | INFO     | fetcher                   | Batch 168/238 | 25 tickers
+2026-07-08 17:42:04 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['PFXNZ', 'PGC', 'PGP', 'PGZ', 'PHAR', 'PHIO', 'PHOE', 'PHUN']...
+2026-07-08 17:42:07 | INFO     | fetcher                   | Batch 169/238 | 25 tickers
+2026-07-08 17:42:10 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['PIII', 'PIM', 'PKOH', 'PKBK', 'PLBC', 'PLAG', 'PLMK']...
+2026-07-08 17:42:13 | INFO     | fetcher                   | Batch 170/238 | 25 tickers
+2026-07-08 17:42:16 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['PLRZ', 'PLSM', 'PLUR', 'PLUT', 'PLYX', 'PMM', 'PMAX', 'PMO', 'PMN']...
+2026-07-08 17:42:19 | INFO     | fetcher                   | Batch 171/238 | 25 tickers
+2026-07-08 17:42:21 | WARNING  | fetcher                   | PONO | yfinance returned empty DataFrame
+2026-07-08 17:42:21 | WARNING  | fetcher                   | Batch: 16 tickers failed: ['PMTR', 'PMTRW', 'PMTU', 'PMVP', 'PMTW', 'PMTV', 'PMTS', 'PN', 'PNI', 'PNRG']...
+2026-07-08 17:42:24 | INFO     | fetcher                   | Batch 172/238 | 25 tickers
+2026-07-08 17:42:27 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['POWWP', 'PPBT', 'PPHC', 'PPT', 'PPLC', 'PPSI']...
+2026-07-08 17:42:30 | INFO     | fetcher                   | Batch 173/238 | 25 tickers
+2026-07-08 17:42:32 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['PRFX', 'PRE', 'PRH', 'PRHI', 'PRK', 'PRPO', 'PROV', 'PROF', 'PRS']...
+2026-07-08 17:42:35 | INFO     | fetcher                   | Batch 174/238 | 25 tickers
+2026-07-08 17:42:38 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['PRT', 'PRTS', 'PSF', 'PSHG', 'PSNYW', 'PSNY']...
+2026-07-08 17:42:41 | INFO     | fetcher                   | Batch 175/238 | 25 tickers
+2026-07-08 17:42:43 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['PSTV', 'PTA', 'PTACU', 'PTLE', 'PTN', 'PTHS', 'PTOR', 'PTORW', 'PTORU', 'PULM']...
+2026-07-08 17:42:46 | INFO     | fetcher                   | Batch 176/238 | 25 tickers
+2026-07-08 17:42:48 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['PVL', 'PW', 'PWRL', 'PXED', 'PXS', 'PXLW', 'QCRH', 'QADRU', 'QH']...
+2026-07-08 17:42:51 | INFO     | fetcher                   | Batch 177/238 | 25 tickers
+2026-07-08 17:42:53 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['QNRX', 'QLEP', 'QNCX', 'QNTM', 'QRED', 'QRHC', 'QSEA', 'QTEXW', 'QSEAR', 'QTI']...
+2026-07-08 17:42:56 | INFO     | fetcher                   | Batch 178/238 | 25 tickers
+2026-07-08 17:42:59 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['QUAD', 'QXL', 'RACC', 'RAC', 'RADX', 'RAND', 'RAY', 'RANGR', 'RAVE', 'RAYA']...
+2026-07-08 17:43:02 | INFO     | fetcher                   | Batch 179/238 | 25 tickers
+2026-07-08 17:43:03 | WARNING  | fetcher                   | RDACR | yfinance returned empty DataFrame
+2026-07-08 17:43:04 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['RBCAA', 'RBKB', 'RBNE', 'RCG', 'RCD', 'RCKY', 'RCMT', 'RDACR', 'RDAC', 'RCS']...
+2026-07-08 17:43:07 | INFO     | fetcher                   | Batch 180/238 | 25 tickers
+2026-07-08 17:43:09 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['RDI', 'REBN', 'RECT', 'REED', 'REGCP', 'REGCO', 'RENT']...
+2026-07-08 17:43:12 | INFO     | fetcher                   | Batch 181/238 | 25 tickers
+2026-07-08 17:43:14 | WARNING  | fetcher                   | RFAMU | yfinance returned empty DataFrame
+2026-07-08 17:43:14 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['RENX', 'REVB', 'RETO', 'REX', 'RFAMU', 'RFAIR', 'RFM', 'RFMZ', 'RGCO', 'RGNT']...
+2026-07-08 17:43:17 | INFO     | fetcher                   | Batch 182/238 | 25 tickers
+2026-07-08 17:43:20 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['RGR', 'RGT', 'RGS', 'RHLD', 'RICK', 'RIBBU', 'RILYG', 'RILYP', 'RILYZ', 'RILYT']...
+2026-07-08 17:43:23 | INFO     | fetcher                   | Batch 183/238 | 25 tickers
+2026-07-08 17:43:26 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['RJET', 'RKDA', 'RLTY', 'RLYB', 'RM', 'RMBI', 'RMCO', 'RMCF', 'RMI']...
+2026-07-08 17:43:29 | INFO     | fetcher                   | Batch 184/238 | 25 tickers
+2026-07-08 17:43:31 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['RMM', 'RMMZ', 'RMR', 'RNGT', 'RNTX', 'ROC', 'ROMA']...
+2026-07-08 17:43:34 | INFO     | fetcher                   | Batch 185/238 | 25 tickers
+2026-07-08 17:43:37 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['RPGL', 'RPID', 'RPT', 'RREV', 'RREVU', 'RRBI', 'RSF', 'RSSS']...
+2026-07-08 17:43:40 | INFO     | fetcher                   | Batch 186/238 | 25 tickers
+2026-07-08 17:43:42 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['RSVR', 'RUBI', 'RUSHB', 'RVSB', 'RVP', 'RVSN', 'RWAYL', 'RWAYI', 'RWTO', 'RWTN']...
+2026-07-08 17:43:45 | INFO     | fetcher                   | Batch 187/238 | 25 tickers
+2026-07-08 17:43:48 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['RWTS', 'RYET', 'RYDE', 'RYOJ', 'RYM', 'SAAQ', 'SAAQU', 'RZC', 'SAAQW', 'SABA']...
+2026-07-08 17:43:51 | INFO     | fetcher                   | Batch 188/238 | 25 tickers
+2026-07-08 17:43:53 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['SAFT', 'SACH', 'SAC', 'SAGT', 'SAGU', 'SAIH', 'SAMG', 'SAJ', 'SANG', 'SAT']...
+2026-07-08 17:43:56 | INFO     | fetcher                   | Batch 189/238 | 25 tickers
+2026-07-08 17:43:58 | WARNING  | fetcher                   | SCAGW | yfinance returned empty DataFrame
+2026-07-08 17:43:58 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['SAV', 'SAZ', 'SAY', 'SBFM', 'SBFG', 'SBI', 'SBR', 'SBXD', 'SCAGW']...
+2026-07-08 17:44:01 | INFO     | fetcher                   | Batch 190/238 | 25 tickers
+2026-07-08 17:44:02 | WARNING  | fetcher                   | SCPQW | yfinance returned empty DataFrame
+2026-07-08 17:44:02 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['SCD', 'SCCF', 'SCCG', 'SCCD', 'SCCE', 'SCL', 'SCPQW', 'SCOR', 'SCWO', 'SCYX']...
+2026-07-08 17:44:05 | INFO     | fetcher                   | Batch 191/238 | 25 tickers
+2026-07-08 17:44:08 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['SEAT', 'SEB', 'SEG', 'SEED', 'SELF', 'SENEA', 'SERA', 'SER', 'SFB', 'SFBC']...
+2026-07-08 17:44:11 | INFO     | fetcher                   | Batch 192/238 | 25 tickers
+2026-07-08 17:44:13 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['SFST', 'SFHG', 'SFWL', 'SGA', 'SGC', 'SGU']...
+2026-07-08 17:44:16 | INFO     | fetcher                   | Batch 193/238 | 25 tickers
+2026-07-08 17:44:18 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['SHIM', 'SHPH', 'SHOTU', 'SIEB', 'SIGIP', 'SIFY', 'SILO']...
+2026-07-08 17:44:21 | INFO     | fetcher                   | Batch 194/238 | 25 tickers
+2026-07-08 17:44:23 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['SIND', 'SIMA', 'SIMAU', 'SJT', 'SJ', 'SKYAW', 'SKK', 'SKYA']...
+2026-07-08 17:44:26 | INFO     | fetcher                   | Batch 195/238 | 25 tickers
+2026-07-08 17:44:29 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['SLBT', 'SLAI', 'SLE', 'SLGL', 'SLMBP', 'SLMT', 'SLND', 'SLNG', 'SLNHP']...
+2026-07-08 17:44:32 | INFO     | fetcher                   | Batch 196/238 | 25 tickers
+2026-07-08 17:44:35 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['SLSN', 'SLXN', 'SMC', 'SMCIP', 'SMBK', 'SMID', 'SMHB', 'SMP', 'SMJF', 'SMSI']...
+2026-07-08 17:44:38 | INFO     | fetcher                   | Batch 197/238 | 25 tickers
+2026-07-08 17:44:40 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['SMX', 'SNES', 'SNFCA', 'SNTG', 'SNT', 'SNWV', 'SNOA', 'SNTI']...
+2026-07-08 17:44:43 | INFO     | fetcher                   | Batch 198/238 | 25 tickers
+2026-07-08 17:44:45 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['SOGP', 'SOHU', 'SOJC', 'SOJD', 'SOJE', 'SOMN', 'SOJF', 'SORA', 'SOUL', 'SOR']...
+2026-07-08 17:44:48 | INFO     | fetcher                   | Batch 199/238 | 25 tickers
+2026-07-08 17:44:50 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['SPCB', 'SPE', 'SPFI', 'SPMC', 'SPMA', 'SPME', 'SPOK', 'SPRC', 'SPRB', 'SPPL']...
+2026-07-08 17:44:53 | INFO     | fetcher                   | Batch 200/238 | 25 tickers
+2026-07-08 17:44:56 | WARNING  | fetcher                   | SRL | yfinance returned empty DataFrame
+2026-07-08 17:44:56 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['SPWRW', 'SPWH', 'SQFT', 'SQFTP', 'SQNS', 'SRBK', 'SREA', 'SRL', 'SRJN']...
+2026-07-08 17:44:59 | INFO     | fetcher                   | Batch 201/238 | 25 tickers
+2026-07-08 17:45:00 | WARNING  | fetcher                   | SSBI | yfinance returned empty DataFrame
+2026-07-08 17:45:01 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['SRTS', 'SSAC', 'SRV', 'SSACR', 'SRXH', 'SSBI', 'SSACW', 'SSII', 'SSEA', 'SSM']...
+2026-07-08 17:45:04 | INFO     | fetcher                   | Batch 202/238 | 25 tickers
+2026-07-08 17:45:07 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['STAK', 'STEM', 'STEW', 'STFS', 'STG', 'STHO', 'STKE', 'STKH', 'STKS']...
+2026-07-08 17:45:10 | INFO     | fetcher                   | Batch 203/238 | 25 tickers
+2026-07-08 17:45:12 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['STRK', 'STRF', 'STRD', 'STRR', 'STRRP', 'STRS', 'STRT', 'STRZ', 'STRW']...
+2026-07-08 17:45:15 | INFO     | fetcher                   | Batch 204/238 | 25 tickers
+2026-07-08 17:45:18 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['SUIG', 'SUMA', 'SUNS', 'SUNE', 'SVAQ', 'SUPX', 'SVAC', 'SVAQW', 'SVACW', 'SVIV']...
+2026-07-08 17:45:21 | INFO     | fetcher                   | Batch 205/238 | 25 tickers
+2026-07-08 17:45:23 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['SWAG', 'SWKHL', 'SWVL', 'SWZ', 'SXTC', 'SY', 'SXTP', 'SYPR', 'SYNX']...
+2026-07-08 17:45:26 | INFO     | fetcher                   | Batch 206/238 | 25 tickers
+2026-07-08 17:45:26 | WARNING  | fetcher                   | SZZLR | yfinance returned empty DataFrame
+2026-07-08 17:45:28 | WARNING  | fetcher                   | TAVIR | yfinance returned empty DataFrame
+2026-07-08 17:45:28 | WARNING  | fetcher                   | Batch: 14 tickers failed: ['SZZLR', 'SZZL', 'TACO', 'TACHW', 'TACH', 'TACOU', 'TACOW', 'TACT', 'TAOP', 'TAOX']...
+2026-07-08 17:45:31 | INFO     | fetcher                   | Batch 207/238 | 25 tickers
+2026-07-08 17:45:33 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['TBLD', 'TBN', 'TCBIO', 'TCBS', 'TCBX', 'TCI', 'TCPA', 'TCX', 'TDAC']...
+2026-07-08 17:45:36 | INFO     | fetcher                   | Batch 208/238 | 25 tickers
+2026-07-08 17:45:39 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['TDF', 'TEAD', 'TEI', 'TELO']...
+2026-07-08 17:45:42 | INFO     | fetcher                   | Batch 209/238 | 25 tickers
+2026-07-08 17:45:44 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['TG', 'TGE', 'TGL', 'THCH']...
+2026-07-08 17:45:47 | INFO     | fetcher                   | Batch 210/238 | 25 tickers
+2026-07-08 17:45:49 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['TIL', 'TJGC', 'TISI', 'TKLF', 'TLIH', 'TLF']...
+2026-07-08 17:45:52 | INFO     | fetcher                   | Batch 211/238 | 25 tickers
+2026-07-08 17:45:55 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['TMCR', 'TMP', 'TMS', 'TMSWW', 'TMUSI', 'TMUSZ', 'TMUSL', 'TNC']...
+2026-07-08 17:45:58 | INFO     | fetcher                   | Batch 212/238 | 25 tickers
+2026-07-08 17:46:00 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['TOPS', 'TOUR', 'TOPP', 'TORO', 'TPCS', 'TPGXL']...
+2026-07-08 17:46:03 | INFO     | fetcher                   | Batch 213/238 | 25 tickers
+2026-07-08 17:46:06 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['TRAW', 'TRAD', 'TPTS', 'TRAK', 'TRC', 'TRINI', 'TRINZ', 'TRNS', 'TRNR']...
+2026-07-08 17:46:09 | INFO     | fetcher                   | Batch 214/238 | 25 tickers
+2026-07-08 17:46:11 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['TRSG', 'TRST', 'TRUG', 'TRVG', 'TSBK']...
+2026-07-08 17:46:14 | INFO     | fetcher                   | Batch 215/238 | 25 tickers
+2026-07-08 17:46:16 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['TSQ', 'TTRX', 'TVC', 'TULP', 'TURB', 'TVA', 'TUSK']...
+2026-07-08 17:46:19 | INFO     | fetcher                   | Batch 216/238 | 25 tickers
+2026-07-08 17:46:21 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['TVIVU', 'TWAV', 'TVRD', 'TVE', 'TWFG', 'TWG', 'TWOD', 'TWN', 'TXO', 'TXMD']...
+2026-07-08 17:46:24 | INFO     | fetcher                   | Batch 217/238 | 25 tickers
+2026-07-08 17:46:26 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['TZOO', 'UAN', 'UBCP', 'UCAR', 'UBXG', 'UCIB', 'UCL', 'UEIC']...
+2026-07-08 17:46:29 | INFO     | fetcher                   | Batch 218/238 | 25 tickers
+2026-07-08 17:46:32 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['UFCS', 'UFI', 'UG', 'UK', 'ULBI', 'ULH', 'UMBFO']...
+2026-07-08 17:46:35 | INFO     | fetcher                   | Batch 219/238 | 25 tickers
+2026-07-08 17:46:37 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['UNB', 'UNMA', 'UONE', 'UNTY', 'UONEK', 'UPC', 'UPLD']...
+2026-07-08 17:46:40 | INFO     | fetcher                   | Batch 220/238 | 25 tickers
+2026-07-08 17:46:42 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['USBC', 'USCB', 'USDEW', 'USGO', 'USEA', 'USIO', 'UTL', 'UTMD', 'UTSI']...
+2026-07-08 17:46:45 | INFO     | fetcher                   | Batch 221/238 | 25 tickers
+2026-07-08 17:46:48 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['UUU', 'UZD', 'UZE', 'VACI', 'VABK', 'UZF', 'VALN', 'VATE', 'VANI', 'VALU']...
+2026-07-08 17:46:51 | INFO     | fetcher                   | Batch 222/238 | 25 tickers
+2026-07-08 17:46:53 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['VECA', 'VCV', 'VEEE', 'VEL', 'VFL', 'VGI', 'VGAS', 'VGM']...
+2026-07-08 17:46:56 | INFO     | fetcher                   | Batch 223/238 | 25 tickers
+2026-07-08 17:46:59 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['VHUB', 'VHC', 'VHI', 'VIOT', 'VINP', 'VIDA', 'VIRC', 'VIVK', 'VKI', 'VIVS']...
+2026-07-08 17:47:02 | INFO     | fetcher                   | Batch 224/238 | 25 tickers
+2026-07-08 17:47:05 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['VLT', 'VLGEA', 'VLYPO', 'VLYPN', 'VLYPP', 'VNME']...
+2026-07-08 17:47:08 | INFO     | fetcher                   | Batch 225/238 | 25 tickers
+2026-07-08 17:47:10 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['VOC', 'VPV', 'VRM', 'VRCA', 'VRA', 'VRTS', 'VRXAW', 'VSA']...
+2026-07-08 17:47:13 | INFO     | fetcher                   | Batch 226/238 | 25 tickers
+2026-07-08 17:47:15 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['VSECU', 'VSME', 'VTMX', 'VTN', 'VTSI', 'VTVT']...
+2026-07-08 17:47:18 | INFO     | fetcher                   | Batch 227/238 | 25 tickers
+2026-07-08 17:47:21 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['VWAVW', 'VXZ', 'WAFDP', 'WAI', 'WAFU', 'WASH', 'WAVE']...
+2026-07-08 17:47:24 | INFO     | fetcher                   | Batch 228/238 | 25 tickers
+2026-07-08 17:47:26 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['WBUY', 'WCT', 'WEA', 'WDH', 'WENN', 'WENC', 'WETH', 'WETO']...
+2026-07-08 17:47:29 | INFO     | fetcher                   | Batch 229/238 | 25 tickers
+2026-07-08 17:47:32 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['WEYS', 'WFF', 'WFCF', 'WHF', 'WHFCL', 'WHG', 'WHLRP', 'WILC', 'WIA', 'WIMI']...
+2026-07-08 17:47:35 | INFO     | fetcher                   | Batch 230/238 | 25 tickers
+2026-07-08 17:47:37 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['WKHS', 'WKEY', 'WLDS', 'WLII', 'WLIIW', 'WLCOU', 'WLKP']...
+2026-07-08 17:47:40 | INFO     | fetcher                   | Batch 231/238 | 25 tickers
+2026-07-08 17:47:42 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['WNEB', 'WNW', 'WPAC', 'WPRT', 'WRLD', 'WSBCO', 'WSBK', 'WSBF']...
+2026-07-08 17:47:45 | INFO     | fetcher                   | Batch 232/238 | 25 tickers
+2026-07-08 17:47:47 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['WSHP', 'WTBA', 'WTF', 'WTFCN', 'WVVIP', 'WVVI', 'WW']...
+2026-07-08 17:47:50 | INFO     | fetcher                   | Batch 233/238 | 25 tickers
+2026-07-08 17:47:52 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['WYHG', 'XBIO', 'XBIT', 'XBP', 'XELLL', 'XELB', 'XFLH', 'XHG']...
+2026-07-08 17:47:55 | INFO     | fetcher                   | Batch 234/238 | 25 tickers
+2026-07-08 17:47:57 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['XLO', 'XOMAO', 'XOMA', 'XPEL', 'XOMAP', 'XPL']...
+2026-07-08 17:48:00 | INFO     | fetcher                   | Batch 235/238 | 25 tickers
+2026-07-08 17:48:01 | WARNING  | fetcher                   | XSLLW | yfinance returned empty DataFrame
+2026-07-08 17:48:02 | WARNING  | fetcher                   | Batch: 15 tickers failed: ['XRPNW', 'XRTX', 'XRN', 'XRPN', 'XSLL', 'XSLLW', 'XWEL', 'XRXDW', 'XTNT', 'XXII']...
+2026-07-08 17:48:05 | INFO     | fetcher                   | Batch 236/238 | 25 tickers
+2026-07-08 17:48:08 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['YDESW', 'YDKG', 'YHGJ', 'YIBO', 'YJ', 'YICCU', 'YI', 'YOUL', 'YQ', 'YSXT']...
+2026-07-08 17:48:11 | INFO     | fetcher                   | Batch 237/238 | 25 tickers
+2026-07-08 17:48:13 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['YYAI', 'ZBAO', 'ZDAI', 'ZDGE', 'ZEPP', 'ZH', 'ZIONP', 'ZJYL', 'ZJK', 'ZKH']...
+2026-07-08 17:48:16 | INFO     | fetcher                   | Batch 238/238 | 20 tickers
+2026-07-08 17:48:17 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ZKIN', 'ZNB', 'ZOOZ', 'ZSTK', 'ZTG']...
+2026-07-08 17:48:17 | INFO     | fetcher                   | fetch_universe complete | Total rows: 195069 | Tickers with data: 3762
+2026-07-08 17:48:17 | INFO     | fetcher                   | smart_fetch complete | Total rows: 200634
+2026-07-08 17:51:09 | INFO     | fetcher                   | Stage 1 filter | Input: 3791 tickers | Passed: 251 | Filtered out: 3540
+2026-07-08 17:51:10 | INFO     | fetcher                   | Fetching sector metadata | 237 stock tickers | Excluded: 14 ETFs/indices
+2026-07-08 17:51:38 | INFO     | fetcher                   | Sector metadata complete | Total: 237 | Unclassified: 3 | Classified: 234
+2026-07-09 16:41:47 | INFO     | fetcher                   | Logger initialised → logs\fetcher.log
+2026-07-09 16:41:47 | INFO     | fetcher                   | Building full US stock universe from NASDAQ FTP...
+2026-07-09 16:41:47 | INFO     | fetcher                   | Fetching NASDAQ listed tickers from NASDAQ FTP...
+2026-07-09 16:41:50 | INFO     | fetcher                   | NASDAQ listed: 3956 tickers fetched
+2026-07-09 16:41:50 | INFO     | fetcher                   | Fetching NYSE/other listed tickers from NASDAQ FTP...
+2026-07-09 16:41:52 | INFO     | fetcher                   | NYSE/other listed: 2683 tickers fetched
+2026-07-09 16:41:52 | INFO     | fetcher                   | Full universe built | NASDAQ: 3956 | NYSE/Other: 2683 | Indices: 3 | Sectors: 11 | Total unique: 6653
+2026-07-09 16:43:10 | INFO     | fetcher                   | smart_fetch | Full fetch needed: 682 tickers | Incremental: 5971 tickers
+2026-07-09 16:43:10 | INFO     | fetcher                   | Full fetch: 2026-05-12 to 2026-07-09
+2026-07-09 16:43:10 | INFO     | fetcher                   | Fetching 682 tickers | 28 batches of 25 | Period: 2026-05-12 to 2026-07-09
+2026-07-09 16:43:10 | INFO     | fetcher                   | Batch 1/28 | 25 tickers
+2026-07-09 16:43:14 | WARNING  | fetcher                   | ABLVW | yfinance returned empty DataFrame
+2026-07-09 16:43:14 | WARNING  | fetcher                   | ACONW | yfinance returned empty DataFrame
+2026-07-09 16:43:14 | WARNING  | fetcher                   | ADSEW | yfinance returned empty DataFrame
+2026-07-09 16:43:14 | WARNING  | fetcher                   | ACAAW | yfinance returned empty DataFrame
+2026-07-09 16:43:15 | WARNING  | fetcher                   | AENTW | yfinance returned empty DataFrame
+2026-07-09 16:43:15 | WARNING  | fetcher                   | AERTW | yfinance returned empty DataFrame
+2026-07-09 16:43:15 | WARNING  | fetcher                   | AFRIW | yfinance returned empty DataFrame
+2026-07-09 16:43:16 | WARNING  | fetcher                   | AIMDW | yfinance returned empty DataFrame
+2026-07-09 16:43:16 | WARNING  | fetcher                   | AIRJW | yfinance returned empty DataFrame
+2026-07-09 16:43:16 | WARNING  | fetcher                   | AISPW | yfinance returned empty DataFrame
+2026-07-09 16:43:16 | WARNING  | fetcher                   | AAC.U | yfinance returned empty DataFrame
+2026-07-09 16:43:18 | WARNING  | fetcher                   | AGM.A | yfinance returned empty DataFrame
+2026-07-09 16:43:18 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['ABLVW', 'AACBU', 'AACO', 'ACAA', 'AACOU', 'AACIU', 'ACONW', 'ADSEW', 'ACAAW', 'AENTW']...
+2026-07-09 16:43:21 | INFO     | fetcher                   | Batch 2/28 | 25 tickers
+2026-07-09 16:43:23 | WARNING  | fetcher                   | ALFUW | yfinance returned empty DataFrame
+2026-07-09 16:43:23 | WARNING  | fetcher                   | ALDFW | yfinance returned empty DataFrame
+2026-07-09 16:43:24 | WARNING  | fetcher                   | AKO.B | yfinance returned empty DataFrame
+2026-07-09 16:43:24 | WARNING  | fetcher                   | AKO.A | yfinance returned empty DataFrame
+2026-07-09 16:43:24 | WARNING  | fetcher                   | ALVOW | yfinance returned empty DataFrame
+2026-07-09 16:43:25 | WARNING  | fetcher                   | ANGHW | yfinance returned empty DataFrame
+2026-07-09 16:43:25 | WARNING  | fetcher                   | ANNAW | yfinance returned empty DataFrame
+2026-07-09 16:43:25 | WARNING  | fetcher                   | APLMW | yfinance returned empty DataFrame
+2026-07-09 16:43:25 | WARNING  | fetcher                   | ANSCW | yfinance returned empty DataFrame
+2026-07-09 16:43:25 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['ALDFU', 'ALFUW', 'ALDFW', 'ALFUU', 'AKO.B', 'ALISU', 'AKO.A', 'ALPXR', 'ALVOW', 'ALPX']...
+2026-07-09 16:43:28 | INFO     | fetcher                   | Batch 3/28 | 25 tickers
+2026-07-09 16:43:29 | WARNING  | fetcher                   | ARBEW | yfinance returned empty DataFrame
+2026-07-09 16:43:29 | WARNING  | fetcher                   | ARQQW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | ASBPW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | ASTLW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | ATIIW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | AUROW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | BAERW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | BBLGW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | BCGWW | yfinance returned empty DataFrame
+2026-07-09 16:43:30 | WARNING  | fetcher                   | BCTXL | yfinance returned empty DataFrame
+2026-07-09 16:43:31 | WARNING  | fetcher                   | BDMDW | yfinance returned empty DataFrame
+2026-07-09 16:43:31 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['APURR', 'ARBEW', 'APXTU', 'ARCLW', 'ARCLR', 'ARCL', 'ARCIU', 'ARQQW', 'ASBPW', 'ASTLW']...
+2026-07-09 16:43:34 | INFO     | fetcher                   | Batch 4/28 | 25 tickers
+2026-07-09 16:43:35 | WARNING  | fetcher                   | BETRW | yfinance returned empty DataFrame
+2026-07-09 16:43:35 | WARNING  | fetcher                   | BF.B | yfinance returned empty DataFrame
+2026-07-09 16:43:35 | WARNING  | fetcher                   | BEATW | yfinance returned empty DataFrame
+2026-07-09 16:43:35 | WARNING  | fetcher                   | BENFW | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BFRIW | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BF.A | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BFRGW | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BIAFW | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BGLWW | yfinance returned empty DataFrame
+2026-07-09 16:43:36 | WARNING  | fetcher                   | BIO.B | yfinance returned empty DataFrame
+2026-07-09 16:43:37 | WARNING  | fetcher                   | BH.A | yfinance returned empty DataFrame
+2026-07-09 16:43:37 | WARNING  | fetcher                   | BLUWW | yfinance returned empty DataFrame
+2026-07-09 16:43:38 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['BEAGU', 'BETRW', 'BF.B', 'BEATW', 'BENFW', 'BEBE', 'BFRIW', 'BF.A', 'BFRGW', 'BHAVR']...
+2026-07-09 16:43:41 | INFO     | fetcher                   | Batch 5/28 | 25 tickers
+2026-07-09 16:43:50 | WARNING  | fetcher                   | BNZIW | yfinance returned empty DataFrame
+2026-07-09 16:43:51 | WARNING  | fetcher                   | BNAIW | yfinance returned empty DataFrame
+2026-07-09 16:43:52 | WARNING  | fetcher                   | BRLSW | yfinance returned empty DataFrame
+2026-07-09 16:43:52 | WARNING  | fetcher                   | BTBDW | yfinance returned empty DataFrame
+2026-07-09 16:43:53 | WARNING  | fetcher                   | BRK.A | yfinance returned empty DataFrame
+2026-07-09 16:43:53 | WARNING  | fetcher                   | BRK.B | yfinance returned empty DataFrame
+2026-07-09 16:43:53 | WARNING  | fetcher                   | BZFDW | yfinance returned empty DataFrame
+2026-07-09 16:43:53 | WARNING  | fetcher                   | BZAIW | yfinance returned empty DataFrame
+2026-07-09 16:43:54 | WARNING  | fetcher                   | BULLW | yfinance returned empty DataFrame
+2026-07-09 16:43:54 | WARNING  | fetcher                   | CCGWW | yfinance returned empty DataFrame
+2026-07-09 16:43:55 | WARNING  | fetcher                   | CCCTU | yfinance returned empty DataFrame
+2026-07-09 16:43:55 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BPAC', 'BNZIW', 'BRBI', 'BPACR', 'BNAIW', 'BPACU', 'BRLSW', 'BTBDW', 'BSAAR', 'BRK.A']...
+2026-07-09 16:43:55 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:43:58 | INFO     | fetcher                   | Batch 6/28 | 25 tickers
+2026-07-09 16:43:59 | WARNING  | fetcher                   | CDROW | yfinance returned empty DataFrame
+2026-07-09 16:43:59 | WARNING  | fetcher                   | CDIOW | yfinance returned empty DataFrame
+2026-07-09 16:43:59 | WARNING  | fetcher                   | CCIXW | yfinance returned empty DataFrame
+2026-07-09 16:44:00 | WARNING  | fetcher                   | CLSKW | yfinance returned empty DataFrame
+2026-07-09 16:44:00 | WARNING  | fetcher                   | CINGW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | CIG.C | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | CMIIW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | COCHW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | CNCKW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | COOTW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | CORZW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | CRACW | yfinance returned empty DataFrame
+2026-07-09 16:44:01 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['CHARU', 'CCIXU', 'CDROW', 'CEPL', 'CDIOW', 'CCZ', 'CCIXW', 'CHEC', 'CHECU', 'CLSKW']...
+2026-07-09 16:44:01 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:04 | INFO     | fetcher                   | Batch 7/28 | 25 tickers
+2026-07-09 16:44:10 | WARNING  | fetcher                   | CRGOW | yfinance returned empty DataFrame
+2026-07-09 16:44:11 | WARNING  | fetcher                   | CRD.A | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | CRMLW | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | CRD.B | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | CUBWW | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | CYCUW | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | CXAIW | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | DAVEW | yfinance returned empty DataFrame
+2026-07-09 16:44:12 | WARNING  | fetcher                   | DFLIW | yfinance returned empty DataFrame
+2026-07-09 16:44:13 | WARNING  | fetcher                   | DJTWW | yfinance returned empty DataFrame
+2026-07-09 16:44:13 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['CRANU', 'CRGOW', 'CRAQ', 'CRAQU', 'CRAQR', 'CRD.A', 'CTAA', 'CRMLW', 'CUBWU', 'CRD.B']...
+2026-07-09 16:44:13 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:16 | INFO     | fetcher                   | Batch 8/28 | 25 tickers
+2026-07-09 16:44:17 | WARNING  | fetcher                   | DRDBW | yfinance returned empty DataFrame
+2026-07-09 16:44:17 | WARNING  | fetcher                   | DRMAW | yfinance returned empty DataFrame
+2026-07-09 16:44:17 | WARNING  | fetcher                   | DRTSW | yfinance returned empty DataFrame
+2026-07-09 16:44:18 | WARNING  | fetcher                   | DSYWW | yfinance returned empty DataFrame
+2026-07-09 16:44:18 | WARNING  | fetcher                   | ECXWW | yfinance returned empty DataFrame
+2026-07-09 16:44:18 | WARNING  | fetcher                   | EDBLW | yfinance returned empty DataFrame
+2026-07-09 16:44:18 | WARNING  | fetcher                   | DSX.W | yfinance returned empty DataFrame
+2026-07-09 16:44:18 | WARNING  | fetcher                   | ENGNW | yfinance returned empty DataFrame
+2026-07-09 16:44:19 | WARNING  | fetcher                   | ESLAW | yfinance returned empty DataFrame
+2026-07-09 16:44:19 | WARNING  | fetcher                   | EFTY | yfinance returned empty DataFrame
+2026-07-09 16:44:19 | WARNING  | fetcher                   | EUDAW | yfinance returned empty DataFrame
+2026-07-09 16:44:19 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['DRDBW', 'DMIIU', 'DRMAW', 'DNMXU', 'DRTSW', 'DRDBU', 'DSACU', 'DSYWW', 'DSACW', 'DYNCU']...
+2026-07-09 16:44:19 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:22 | INFO     | fetcher                   | Batch 9/28 | 25 tickers
+2026-07-09 16:44:32 | WARNING  | fetcher                   | FBYDP | yfinance returned empty DataFrame
+2026-07-09 16:44:32 | WARNING  | fetcher                   | FBYDW | yfinance returned empty DataFrame
+2026-07-09 16:44:32 | WARNING  | fetcher                   | FFAIW | yfinance returned empty DataFrame
+2026-07-09 16:44:32 | WARNING  | fetcher                   | EVLVW | yfinance returned empty DataFrame
+2026-07-09 16:44:33 | WARNING  | fetcher                   | FLDDW | yfinance returned empty DataFrame
+2026-07-09 16:44:33 | WARNING  | fetcher                   | FACTW | yfinance returned empty DataFrame
+2026-07-09 16:44:33 | WARNING  | fetcher                   | FGIWW | yfinance returned empty DataFrame
+2026-07-09 16:44:34 | WARNING  | fetcher                   | FMSTW | yfinance returned empty DataFrame
+2026-07-09 16:44:34 | WARNING  | fetcher                   | FOXXW | yfinance returned empty DataFrame
+2026-07-09 16:44:34 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['EVOXU', 'EVOXW', 'FBYDP', 'FBYDW', 'FACTU', 'FDMMU', 'FFAIW', 'FEDU', 'EVLVW', 'FERAU']...
+2026-07-09 16:44:34 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:37 | INFO     | fetcher                   | Batch 10/28 | 25 tickers
+2026-07-09 16:44:38 | WARNING  | fetcher                   | FUFUW | yfinance returned empty DataFrame
+2026-07-09 16:44:38 | WARNING  | fetcher                   | GCLWW | yfinance returned empty DataFrame
+2026-07-09 16:44:39 | WARNING  | fetcher                   | FTW.W | yfinance returned empty DataFrame
+2026-07-09 16:44:39 | WARNING  | fetcher                   | GFAIW | yfinance returned empty DataFrame
+2026-07-09 16:44:39 | WARNING  | fetcher                   | GEF.B | yfinance returned empty DataFrame
+2026-07-09 16:44:39 | WARNING  | fetcher                   | GDEVW | yfinance returned empty DataFrame
+2026-07-09 16:44:39 | WARNING  | fetcher                   | GGROW | yfinance returned empty DataFrame
+2026-07-09 16:44:40 | WARNING  | fetcher                   | GME.W | yfinance returned empty DataFrame
+2026-07-09 16:44:40 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['FXAC', 'FTHAW', 'FUFUW', 'FVNNU', 'FVAV', 'FXACW', 'GCGRW', 'FVNNR', 'GCLWW', 'FTW.W']...
+2026-07-09 16:44:40 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:43 | INFO     | fetcher                   | Batch 11/28 | 25 tickers
+2026-07-09 16:44:44 | WARNING  | fetcher                   | GPATW | yfinance returned empty DataFrame
+2026-07-09 16:44:45 | WARNING  | fetcher                   | GRABW | yfinance returned empty DataFrame
+2026-07-09 16:44:45 | WARNING  | fetcher                   | GRRRW | yfinance returned empty DataFrame
+2026-07-09 16:44:45 | WARNING  | fetcher                   | GTENW | yfinance returned empty DataFrame
+2026-07-09 16:44:46 | WARNING  | fetcher                   | GTN.A | yfinance returned empty DataFrame
+2026-07-09 16:44:47 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['GPAT', 'GPATW', 'GRABW', 'GRRRW', 'GPACW', 'GPATU', 'GRN', 'GSHRU', 'GSHR', 'GTENW']...
+2026-07-09 16:44:47 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:50 | INFO     | fetcher                   | Batch 12/28 | 25 tickers
+2026-07-09 16:44:51 | WARNING  | fetcher                   | HOLOW | yfinance returned empty DataFrame
+2026-07-09 16:44:52 | WARNING  | fetcher                   | HOVRW | yfinance returned empty DataFrame
+2026-07-09 16:44:52 | WARNING  | fetcher                   | HPAIW | yfinance returned empty DataFrame
+2026-07-09 16:44:52 | WARNING  | fetcher                   | HEI.A | yfinance returned empty DataFrame
+2026-07-09 16:44:53 | WARNING  | fetcher                   | HTZWW | yfinance returned empty DataFrame
+2026-07-09 16:44:53 | WARNING  | fetcher                   | HUMAW | yfinance returned empty DataFrame
+2026-07-09 16:44:53 | WARNING  | fetcher                   | HSCSW | yfinance returned empty DataFrame
+2026-07-09 16:44:54 | WARNING  | fetcher                   | HVT.A | yfinance returned empty DataFrame
+2026-07-09 16:44:54 | WARNING  | fetcher                   | ICUCW | yfinance returned empty DataFrame
+2026-07-09 16:44:55 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['HOLOW', 'HCICR', 'HDL', 'HOVRW', 'HPAIW', 'HCICU', 'HCMAU', 'HEI.A', 'HTZWW', 'HUMAW']...
+2026-07-09 16:44:55 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:44:58 | INFO     | fetcher                   | Batch 13/28 | 25 tickers
+2026-07-09 16:45:00 | WARNING  | fetcher                   | IVDAW | yfinance returned empty DataFrame
+2026-07-09 16:45:00 | WARNING  | fetcher                   | JSPRW | yfinance returned empty DataFrame
+2026-07-09 16:45:02 | WARNING  | fetcher                   | KCA.U | yfinance returned empty DataFrame
+2026-07-09 16:45:02 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['IGAC', 'IEAGU', 'IGACR', 'IGACU', 'ILLUU', 'ILLU', 'INACR', 'ILLUW', 'INAC', 'INACU']...
+2026-07-09 16:45:02 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:45:05 | INFO     | fetcher                   | Batch 14/28 | 25 tickers
+2026-07-09 16:45:06 | WARNING  | fetcher                   | KIDZW | yfinance returned empty DataFrame
+2026-07-09 16:45:06 | WARNING  | fetcher                   | KTTAW | yfinance returned empty DataFrame
+2026-07-09 16:45:07 | WARNING  | fetcher                   | KVACW | yfinance returned empty DataFrame
+2026-07-09 16:45:08 | WARNING  | fetcher                   | LAWR | yfinance returned empty DataFrame
+2026-07-09 16:45:08 | WARNING  | fetcher                   | LEN.B | yfinance returned empty DataFrame
+2026-07-09 16:45:08 | WARNING  | fetcher                   | LCFYW | yfinance returned empty DataFrame
+2026-07-09 16:45:09 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['KIDZW', 'KFIIU', 'KTTAW', 'KPET', 'KOYNU', 'KFIIR', 'KOYNW', 'KTWOR', 'KTWOU', 'KVACW']...
+2026-07-09 16:45:09 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:45:12 | INFO     | fetcher                   | Batch 15/28 | 25 tickers
+2026-07-09 16:45:13 | WARNING  | fetcher                   | LIDRW | yfinance returned empty DataFrame
+2026-07-09 16:45:13 | WARNING  | fetcher                   | LNZAW | yfinance returned empty DataFrame
+2026-07-09 16:45:13 | WARNING  | fetcher                   | LOTWW | yfinance returned empty DataFrame
+2026-07-09 16:45:34 | WARNING  | fetcher                   | LPBBW | yfinance returned empty DataFrame
+2026-07-09 16:45:34 | WARNING  | fetcher                   | LPAAW | yfinance returned empty DataFrame
+2026-07-09 16:45:36 | WARNING  | fetcher                   | LUCYW | yfinance returned empty DataFrame
+2026-07-09 16:45:36 | WARNING  | fetcher                   | LWACU | yfinance returned empty DataFrame
+2026-07-09 16:45:37 | WARNING  | fetcher                   | MACIW | yfinance returned empty DataFrame
+2026-07-09 16:45:37 | WARNING  | fetcher                   | LZM.W | yfinance returned empty DataFrame
+2026-07-09 16:45:37 | WARNING  | fetcher                   | MAGH | yfinance returned empty DataFrame
+2026-07-09 16:45:37 | WARNING  | fetcher                   | MAMK | yfinance returned empty DataFrame
+2026-07-09 16:45:37 | WARNING  | fetcher                   | MBAVW | yfinance returned empty DataFrame
+2026-07-09 16:45:38 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['LPAA', 'LKSPU', 'LKSP', 'LIDRW', 'LIMNW', 'LNZAW', 'LPAAU', 'LOTWW', 'LPBBW', 'LPBBU']...
+2026-07-09 16:45:38 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:45:41 | INFO     | fetcher                   | Batch 16/28 | 25 tickers
+2026-07-09 16:45:43 | WARNING  | fetcher                   | MDAIW | yfinance returned empty DataFrame
+2026-07-09 16:45:43 | WARNING  | fetcher                   | MCTA | yfinance returned empty DataFrame
+2026-07-09 16:45:45 | WARNING  | fetcher                   | MMTXU | yfinance returned empty DataFrame
+2026-07-09 16:45:45 | WARNING  | fetcher                   | MKC.V | yfinance returned empty DataFrame
+2026-07-09 16:45:45 | WARNING  | fetcher                   | MLECW | yfinance returned empty DataFrame
+2026-07-09 16:45:46 | WARNING  | fetcher                   | MNTSW | yfinance returned empty DataFrame
+2026-07-09 16:45:46 | WARNING  | fetcher                   | MOBBW | yfinance returned empty DataFrame
+2026-07-09 16:45:46 | WARNING  | fetcher                   | MNYWW | yfinance returned empty DataFrame
+2026-07-09 16:45:46 | WARNING  | fetcher                   | MOBXW | yfinance returned empty DataFrame
+2026-07-09 16:45:49 | WARNING  | fetcher                   | MOG.A | yfinance returned empty DataFrame
+2026-07-09 16:45:49 | WARNING  | fetcher                   | Batch: 23 tickers failed: ['MCAH', 'MDAIW', 'MCTA', 'MCAHR', 'MBVIU', 'MCGAU', 'MBVIW', 'MESHW', 'MKDWW', 'MEVOU']...
+2026-07-09 16:45:52 | INFO     | fetcher                   | Batch 17/28 | 25 tickers
+2026-07-09 16:45:53 | WARNING  | fetcher                   | MSAIW | yfinance returned empty DataFrame
+2026-07-09 16:45:53 | WARNING  | fetcher                   | MRNOW | yfinance returned empty DataFrame
+2026-07-09 16:45:53 | WARNING  | fetcher                   | MTEKW | yfinance returned empty DataFrame
+2026-07-09 16:45:53 | WARNING  | fetcher                   | MVSTW | yfinance returned empty DataFrame
+2026-07-09 16:45:54 | WARNING  | fetcher                   | MOG.B | yfinance returned empty DataFrame
+2026-07-09 16:45:54 | WARNING  | fetcher                   | MRCOU | yfinance returned empty DataFrame
+2026-07-09 16:45:54 | WARNING  | fetcher                   | NCPLW | yfinance returned empty DataFrame
+2026-07-09 16:45:55 | WARNING  | fetcher                   | NAMSW | yfinance returned empty DataFrame
+2026-07-09 16:45:55 | WARNING  | fetcher                   | NE.W | yfinance returned empty DataFrame
+2026-07-09 16:45:55 | WARNING  | fetcher                   | NE.A | yfinance returned empty DataFrame
+2026-07-09 16:45:56 | WARNING  | fetcher                   | NIOBW | yfinance returned empty DataFrame
+2026-07-09 16:45:56 | WARNING  | fetcher                   | NIVFW | yfinance returned empty DataFrame
+2026-07-09 16:45:56 | WARNING  | fetcher                   | Batch: 24 tickers failed: ['MSAIW', 'MRNOW', 'MTEKW', 'MVSTW', 'MUZEW', 'MUZEU', 'MYXXR', 'MYSEW', 'MOG.B', 'MRCOU']...
+2026-07-09 16:45:59 | INFO     | fetcher                   | Batch 18/28 | 25 tickers
+2026-07-09 16:46:00 | WARNING  | fetcher                   | NOEMW | yfinance returned empty DataFrame
+2026-07-09 16:46:01 | WARNING  | fetcher                   | NTRBW | yfinance returned empty DataFrame
+2026-07-09 16:46:01 | WARNING  | fetcher                   | NTWOW | yfinance returned empty DataFrame
+2026-07-09 16:46:01 | WARNING  | fetcher                   | NXGLW | yfinance returned empty DataFrame
+2026-07-09 16:46:01 | WARNING  | fetcher                   | OABIW | yfinance returned empty DataFrame
+2026-07-09 16:46:01 | WARNING  | fetcher                   | OACCW | yfinance returned empty DataFrame
+2026-07-09 16:46:02 | WARNING  | fetcher                   | NVA.W | yfinance returned empty DataFrame
+2026-07-09 16:46:03 | WARNING  | fetcher                   | OCSAW | yfinance returned empty DataFrame
+2026-07-09 16:46:03 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['NOEMW', 'NOEMU', 'NOEMR', 'NMPAU', 'NMP', 'NOEM', 'NPACU', 'NMPAR', 'NTRBW', 'NSLRL']...
+2026-07-09 16:46:03 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:46:06 | INFO     | fetcher                   | Batch 19/28 | 25 tickers
+2026-07-09 16:46:07 | WARNING  | fetcher                   | ONMDW | yfinance returned empty DataFrame
+2026-07-09 16:46:07 | WARNING  | fetcher                   | OIMAW | yfinance returned empty DataFrame
+2026-07-09 16:46:08 | WARNING  | fetcher                   | OSRHW | yfinance returned empty DataFrame
+2026-07-09 16:46:08 | WARNING  | fetcher                   | OST | yfinance returned empty DataFrame
+2026-07-09 16:46:09 | WARNING  | fetcher                   | OPTXW | yfinance returned empty DataFrame
+2026-07-09 16:46:09 | WARNING  | fetcher                   | OXBRW | yfinance returned empty DataFrame
+2026-07-09 16:46:09 | WARNING  | fetcher                   | OXY.W | yfinance returned empty DataFrame
+2026-07-09 16:46:10 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['OFSSO', 'ONMDW', 'OIMAW', 'OHACR', 'OIOWW', 'OGCP', 'OIMAU', 'OSRHW', 'OST', 'OSPRU']...
+2026-07-09 16:46:10 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:46:13 | INFO     | fetcher                   | Batch 20/28 | 25 tickers
+2026-07-09 16:46:14 | WARNING  | fetcher                   | PBMWW | yfinance returned empty DataFrame
+2026-07-09 16:46:14 | WARNING  | fetcher                   | PC | yfinance returned empty DataFrame
+2026-07-09 16:46:16 | WARNING  | fetcher                   | PDYNW | yfinance returned empty DataFrame
+2026-07-09 16:46:16 | WARNING  | fetcher                   | PBR.A | yfinance returned empty DataFrame
+2026-07-09 16:46:16 | WARNING  | fetcher                   | PCTTW | yfinance returned empty DataFrame
+2026-07-09 16:46:17 | WARNING  | fetcher                   | PEW.W | yfinance returned empty DataFrame
+2026-07-09 16:46:17 | WARNING  | fetcher                   | PGYWW | yfinance returned empty DataFrame
+2026-07-09 16:46:17 | WARNING  | fetcher                   | PLMKW | yfinance returned empty DataFrame
+2026-07-09 16:46:17 | WARNING  | fetcher                   | PLTS | yfinance returned empty DataFrame
+2026-07-09 16:46:17 | WARNING  | fetcher                   | PIIIW | yfinance returned empty DataFrame
+2026-07-09 16:46:18 | WARNING  | fetcher                   | POLEW | yfinance returned empty DataFrame
+2026-07-09 16:46:19 | WARNING  | fetcher                   | PMA | yfinance returned empty DataFrame
+2026-07-09 16:46:19 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['PBMWW', 'PALOW', 'PALOU', 'PC', 'PCAPU', 'PALO', 'PCAPW', 'PCTTU', 'PGAC', 'PDYNW']...
+2026-07-09 16:46:19 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:46:22 | INFO     | fetcher                   | Batch 21/28 | 25 tickers
+2026-07-09 16:46:26 | WARNING  | fetcher                   | QETAR | yfinance returned empty DataFrame
+2026-07-09 16:46:27 | WARNING  | fetcher                   | PRENW | yfinance returned empty DataFrame
+2026-07-09 16:46:28 | WARNING  | fetcher                   | PTNM | yfinance returned empty DataFrame
+2026-07-09 16:46:28 | WARNING  | fetcher                   | PTACW | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | RAC.U | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | RAC.W | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | RCKTW | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | RDZNW | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | RDAGW | yfinance returned empty DataFrame
+2026-07-09 16:46:30 | WARNING  | fetcher                   | REVBW | yfinance returned empty DataFrame
+2026-07-09 16:46:31 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['PTAC', 'PRHIZ', 'QADR', 'QETAR', 'PRENW', 'PONOR', 'QETAU', 'QSEAU', 'QUMS', 'QUMSR']...
+2026-07-09 16:46:31 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:46:34 | INFO     | fetcher                   | Batch 22/28 | 25 tickers
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RFAIU | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RFAI | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RGTIW | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RIBBR | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RFAMR | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RFAM | yfinance returned empty DataFrame
+2026-07-09 16:46:44 | WARNING  | fetcher                   | RIBB | yfinance returned empty DataFrame
+2026-07-09 16:46:47 | WARNING  | fetcher                   | RMCOW | yfinance returned empty DataFrame
+2026-07-09 16:46:47 | WARNING  | fetcher                   | RNWWW | yfinance returned empty DataFrame
+2026-07-09 16:46:48 | WARNING  | fetcher                   | RSVRW | yfinance returned empty DataFrame
+2026-07-09 16:46:50 | WARNING  | fetcher                   | RUMBW | yfinance returned empty DataFrame
+2026-07-09 16:46:50 | WARNING  | fetcher                   | RVMDW | yfinance returned empty DataFrame
+2026-07-09 16:46:53 | WARNING  | fetcher                   | SABSW | yfinance returned empty DataFrame
+2026-07-09 16:46:53 | WARNING  | fetcher                   | SAIHW | yfinance returned empty DataFrame
+2026-07-09 16:46:53 | WARNING  | fetcher                   | RQI.R | yfinance returned empty DataFrame
+2026-07-09 16:46:53 | WARNING  | fetcher                   | RZLVW | yfinance returned empty DataFrame
+2026-07-09 16:46:57 | WARNING  | fetcher                   | SAC.W | yfinance returned empty DataFrame
+2026-07-09 16:46:57 | WARNING  | fetcher                   | SATLW | yfinance returned empty DataFrame
+2026-07-09 16:46:57 | WARNING  | fetcher                   | SBFMW | yfinance returned empty DataFrame
+2026-07-09 16:46:57 | WARNING  | fetcher                   | SAC.U | yfinance returned empty DataFrame
+2026-07-09 16:46:57 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['RFAIU', 'RFAI', 'RGTIW', 'RIBBR', 'RFAMR', 'RFAM', 'RIBB', 'RMCOW', 'RNWWW', 'RSVRW']...
+2026-07-09 16:46:57 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:00 | INFO     | fetcher                   | Batch 23/28 | 25 tickers
+2026-07-09 16:47:06 | WARNING  | fetcher                   | SCLXW | yfinance returned empty DataFrame
+2026-07-09 16:47:07 | WARNING  | fetcher                   | SDAWW | yfinance returned empty DataFrame
+2026-07-09 16:47:07 | WARNING  | fetcher                   | SHFSW | yfinance returned empty DataFrame
+2026-07-09 16:47:07 | WARNING  | fetcher                   | SHMDW | yfinance returned empty DataFrame
+2026-07-09 16:47:07 | WARNING  | fetcher                   | SIMAW | yfinance returned empty DataFrame
+2026-07-09 16:47:08 | WARNING  | fetcher                   | SLDPW | yfinance returned empty DataFrame
+2026-07-09 16:47:08 | WARNING  | fetcher                   | SES.W | yfinance returned empty DataFrame
+2026-07-09 16:47:08 | WARNING  | fetcher                   | SMXWW | yfinance returned empty DataFrame
+2026-07-09 16:47:09 | WARNING  | fetcher                   | SEATW | yfinance returned empty DataFrame
+2026-07-09 16:47:09 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['SCII', 'SCIIR', 'SCIIU', 'SBXE', 'SCPQU', 'SCPQ', 'SCLXW', 'SDAWW', 'SDHIR', 'SDHIU']...
+2026-07-09 16:47:09 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:12 | INFO     | fetcher                   | Batch 24/28 | 25 tickers
+2026-07-09 16:47:14 | WARNING  | fetcher                   | SORNW | yfinance returned empty DataFrame
+2026-07-09 16:47:14 | WARNING  | fetcher                   | SOUNW | yfinance returned empty DataFrame
+2026-07-09 16:47:14 | WARNING  | fetcher                   | SPKLW | yfinance returned empty DataFrame
+2026-07-09 16:47:14 | WARNING  | fetcher                   | SQFTW | yfinance returned empty DataFrame
+2026-07-09 16:47:14 | WARNING  | fetcher                   | SRZNW | yfinance returned empty DataFrame
+2026-07-09 16:47:15 | WARNING  | fetcher                   | SVA | yfinance returned empty DataFrame
+2026-07-09 16:47:15 | WARNING  | fetcher                   | SVCCW | yfinance returned empty DataFrame
+2026-07-09 16:47:16 | WARNING  | fetcher                   | SVREW | yfinance returned empty DataFrame
+2026-07-09 16:47:16 | WARNING  | fetcher                   | SWAGW | yfinance returned empty DataFrame
+2026-07-09 16:47:16 | WARNING  | fetcher                   | SWVLW | yfinance returned empty DataFrame
+2026-07-09 16:47:16 | WARNING  | fetcher                   | SXTPW | yfinance returned empty DataFrame
+2026-07-09 16:47:16 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['SORNW', 'SOUNW', 'SORNU', 'SPEGU', 'SPKLU', 'SPEG', 'SPEGR', 'SPKLW', 'SQFTW', 'SRZNW']...
+2026-07-09 16:47:16 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:19 | INFO     | fetcher                   | Batch 25/28 | 25 tickers
+2026-07-09 16:47:21 | WARNING  | fetcher                   | TDACW | yfinance returned empty DataFrame
+2026-07-09 16:47:21 | WARNING  | fetcher                   | TAP.A | yfinance returned empty DataFrame
+2026-07-09 16:47:23 | WARNING  | fetcher                   | TGE.W | yfinance returned empty DataFrame
+2026-07-09 16:47:23 | WARNING  | fetcher                   | TLSIW | yfinance returned empty DataFrame
+2026-07-09 16:47:23 | WARNING  | fetcher                   | TMCWW | yfinance returned empty DataFrame
+2026-07-09 16:47:23 | WARNING  | fetcher                   | TOIIW | yfinance returned empty DataFrame
+2026-07-09 16:47:25 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['TACHU', 'SZZLU', 'TAVIU', 'TDACU', 'TDWD', 'TDACW', 'TAP.A', 'TLNCW', 'TDWDR', 'TLNCU']...
+2026-07-09 16:47:25 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:28 | INFO     | fetcher                   | Batch 26/28 | 25 tickers
+2026-07-09 16:47:30 | WARNING  | fetcher                   | TVGNW | yfinance returned empty DataFrame
+2026-07-09 16:47:30 | WARNING  | fetcher                   | UCFIW | yfinance returned empty DataFrame
+2026-07-09 16:47:31 | WARNING  | fetcher                   | UCFI | yfinance returned empty DataFrame
+2026-07-09 16:47:32 | WARNING  | fetcher                   | UAC.W | yfinance returned empty DataFrame
+2026-07-09 16:47:32 | WARNING  | fetcher                   | UAC.U | yfinance returned empty DataFrame
+2026-07-09 16:47:32 | WARNING  | fetcher                   | VFSWW | yfinance returned empty DataFrame
+2026-07-09 16:47:32 | WARNING  | fetcher                   | VAL.W | yfinance returned empty DataFrame
+2026-07-09 16:47:33 | WARNING  | fetcher                   | VGASW | yfinance returned empty DataFrame
+2026-07-09 16:47:34 | WARNING  | fetcher                   | VLN.W | yfinance returned empty DataFrame
+2026-07-09 16:47:34 | WARNING  | fetcher                   | VII.U | yfinance returned empty DataFrame
+2026-07-09 16:47:34 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['TVGNW', 'TVAIU', 'TVAIR', 'TWLVU', 'TWLV', 'TWLVR', 'UCFIW', 'UYSC', 'UAC', 'UCFI']...
+2026-07-09 16:47:34 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:37 | INFO     | fetcher                   | Batch 27/28 | 25 tickers
+2026-07-09 16:47:38 | WARNING  | fetcher                   | VSEEW | yfinance returned empty DataFrame
+2026-07-09 16:47:38 | WARNING  | fetcher                   | WALDW | yfinance returned empty DataFrame
+2026-07-09 16:47:38 | WARNING  | fetcher                   | WGSWW | yfinance returned empty DataFrame
+2026-07-09 16:47:38 | WARNING  | fetcher                   | WLDSW | yfinance returned empty DataFrame
+2026-07-09 16:47:39 | WARNING  | fetcher                   | WSO.B | yfinance returned empty DataFrame
+2026-07-09 16:47:39 | WARNING  | fetcher                   | XBPEW | yfinance returned empty DataFrame
+2026-07-09 16:47:39 | WARNING  | fetcher                   | XOSWW | yfinance returned empty DataFrame
+2026-07-09 16:47:39 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['VSEEW', 'WALDW', 'WENNW', 'WGSWW', 'WENNU', 'WLDSW', 'WHLRL', 'WHLRD', 'WLYB', 'WLIIU']...
+2026-07-09 16:47:39 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:42 | INFO     | fetcher                   | Batch 28/28 | 7 tickers
+2026-07-09 16:47:44 | WARNING  | fetcher                   | ZOOZW | yfinance returned empty DataFrame
+2026-07-09 16:47:44 | WARNING  | fetcher                   | YCY.W | yfinance returned empty DataFrame
+2026-07-09 16:47:44 | WARNING  | fetcher                   | YCY.U | yfinance returned empty DataFrame
+2026-07-09 16:47:44 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ZEOWW', 'ZKP', 'ZKPU', 'ZOOZW', 'ZKPW', 'YCY.W', 'YCY.U']...
+2026-07-09 16:47:44 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:47:45 | INFO     | fetcher                   | fetch_universe complete | Total rows: 1881 | Tickers with data: 8
+2026-07-09 16:47:45 | INFO     | fetcher                   | Incremental fetch: 2026-07-04 to 2026-07-09
+2026-07-09 16:47:45 | INFO     | fetcher                   | Fetching 5971 tickers | 239 batches of 25 | Period: 2026-07-04 to 2026-07-09
+2026-07-09 16:47:45 | INFO     | fetcher                   | Batch 1/239 | 25 tickers
+2026-07-09 16:47:48 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['AACG', 'AACOW', 'AACI', 'AACIW', 'AACBR', 'AACPR', 'AACP', 'AACPU', 'AACPW', 'AAPG']...
+2026-07-09 16:47:51 | INFO     | fetcher                   | Batch 2/239 | 25 tickers
+2026-07-09 16:47:53 | WARNING  | fetcher                   | ACAAU | yfinance returned empty DataFrame
+2026-07-09 16:47:54 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ABLV', 'ABTS', 'ABXL', 'ACCL', 'ACAAU']...
+2026-07-09 16:47:57 | INFO     | fetcher                   | Batch 3/239 | 25 tickers
+2026-07-09 16:47:58 | WARNING  | fetcher                   | ACGCU | yfinance returned empty DataFrame
+2026-07-09 16:48:00 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['ACCS', 'ACGCU', 'ACFN', 'ACGC']...
+2026-07-09 16:48:03 | INFO     | fetcher                   | Batch 4/239 | 25 tickers
+2026-07-09 16:48:05 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['ACR', 'ACU', 'ACV', 'ADAC', 'ADACW', 'ADAMG', 'ADAMI', 'ADAML', 'ADAMM', 'ADAMN']...
+2026-07-09 16:48:08 | INFO     | fetcher                   | Batch 5/239 | 25 tickers
+2026-07-09 16:48:10 | WARNING  | fetcher                   | ADXN | yfinance returned empty DataFrame
+2026-07-09 16:48:11 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ADAMZ', 'ADIL', 'ADSE', 'ADVB', 'ADXN', 'AEAQW']...
+2026-07-09 16:48:14 | INFO     | fetcher                   | Batch 6/239 | 25 tickers
+2026-07-09 16:48:15 | WARNING  | fetcher                   | AEM | yfinance returned empty DataFrame
+2026-07-09 16:48:16 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['AEI', 'AENT', 'AEM', 'AEON', 'AESPU', 'AFBI']...
+2026-07-09 16:48:19 | INFO     | fetcher                   | Batch 7/239 | 25 tickers
+2026-07-09 16:48:21 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['AFGB', 'AFGD', 'AFGE', 'AFJK', 'AFGC', 'AFJKR', 'AFRI', 'AGCC', 'AGNCL']...
+2026-07-09 16:48:24 | INFO     | fetcher                   | Batch 8/239 | 25 tickers
+2026-07-09 16:48:26 | WARNING  | fetcher                   | AGX | yfinance returned empty DataFrame
+2026-07-09 16:48:27 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['AGNCM', 'AGNCN', 'AGNCZ', 'AHG', 'AGX', 'AHT', 'AIFU']...
+2026-07-09 16:48:30 | INFO     | fetcher                   | Batch 9/239 | 25 tickers
+2026-07-09 16:48:43 | WARNING  | fetcher                   | AIHS | yfinance returned empty DataFrame
+2026-07-09 16:48:43 | WARNING  | fetcher                   | AIG | yfinance returned empty DataFrame
+2026-07-09 16:48:43 | WARNING  | fetcher                   | AII | yfinance returned empty DataFrame
+2026-07-09 16:48:43 | WARNING  | fetcher                   | AIIA | yfinance returned empty DataFrame
+2026-07-09 16:48:44 | WARNING  | fetcher                   | AIIR | yfinance returned empty DataFrame
+2026-07-09 16:48:44 | WARNING  | fetcher                   | AIIOW | yfinance returned empty DataFrame
+2026-07-09 16:48:44 | WARNING  | fetcher                   | AIIO | yfinance returned empty DataFrame
+2026-07-09 16:48:47 | WARNING  | fetcher                   | Batch: 13 tickers failed: ['AIHS', 'AIG', 'AII', 'AIIA', 'AIIR', 'AIIOW', 'AIIO', 'AIMD', 'AIOS', 'AIRE']...
+2026-07-09 16:48:50 | INFO     | fetcher                   | Batch 10/239 | 25 tickers
+2026-07-09 16:48:53 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['AIXC', 'AKA', 'AIZN', 'ALCO', 'ALDF', 'ALF']...
+2026-07-09 16:48:56 | INFO     | fetcher                   | Batch 11/239 | 25 tickers
+2026-07-09 16:49:01 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['ALISR', 'ALOVW', 'ALPXU']...
+2026-07-09 16:49:04 | INFO     | fetcher                   | Batch 12/239 | 25 tickers
+2026-07-09 16:49:43 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ALX', 'AMAN', 'ALUB', 'AMBO', 'AMBR']...
+2026-07-09 16:49:46 | INFO     | fetcher                   | Batch 13/239 | 25 tickers
+2026-07-09 16:50:03 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['AMPGZ', 'AMPGR']...
+2026-07-09 16:50:06 | INFO     | fetcher                   | Batch 14/239 | 25 tickers
+2026-07-09 16:50:15 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['AMTD', 'ANGH']...
+2026-07-09 16:50:18 | INFO     | fetcher                   | Batch 15/239 | 25 tickers
+2026-07-09 16:50:29 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['ANPA', 'ANTA', 'ANSC', 'AOMN', 'AOMD']...
+2026-07-09 16:50:32 | INFO     | fetcher                   | Batch 16/239 | 25 tickers
+2026-07-09 16:50:46 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['APLM', 'APMCU', 'APUS', 'APVO', 'APWC', 'APXTW', 'APXT', 'AQB', 'AQNB']...
+2026-07-09 16:50:49 | INFO     | fetcher                   | Batch 17/239 | 25 tickers
+2026-07-09 16:50:53 | WARNING  | fetcher                   | ARCLU | yfinance returned empty DataFrame
+2026-07-09 16:50:54 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ARBB', 'ARBK', 'ARCIW', 'ARCI', 'ARCLU', 'ARKR', 'ARL']...
+2026-07-09 16:50:57 | INFO     | fetcher                   | Batch 18/239 | 25 tickers
+2026-07-09 16:51:02 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['ARTCW', 'ARTW', 'ARTC']...
+2026-07-09 16:51:05 | INFO     | fetcher                   | Batch 19/239 | 25 tickers
+2026-07-09 16:51:09 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ASBA', 'ASBP', 'ASPSZ', 'ASPS', 'ASPSW', 'ASRV']...
+2026-07-09 16:51:12 | INFO     | fetcher                   | Batch 20/239 | 25 tickers
+2026-07-09 16:51:15 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ATCX', 'ATHE', 'ATGL', 'ATHR', 'ATIIU', 'ATLCL']...
+2026-07-09 16:51:18 | INFO     | fetcher                   | Batch 21/239 | 25 tickers
+2026-07-09 16:51:27 | WARNING  | fetcher                   | ATMP | yfinance returned empty DataFrame
+2026-07-09 16:51:27 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ATLCP', 'ATLCZ', 'ATPC', 'ATXG', 'AUBN', 'AUC', 'ATMP']...
+2026-07-09 16:51:30 | INFO     | fetcher                   | Batch 22/239 | 25 tickers
+2026-07-09 16:51:34 | WARNING  | fetcher                   | Batch: 1 tickers failed: ['AURE']...
+2026-07-09 16:51:37 | INFO     | fetcher                   | Batch 23/239 | 25 tickers
+2026-07-09 16:51:53 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['AWRE', 'AWX', 'AXG', 'AXIL', 'AXIN', 'AXINR', 'AXINU', 'AXR']...
+2026-07-09 16:51:56 | INFO     | fetcher                   | Batch 24/239 | 25 tickers
+2026-07-09 16:52:01 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['AYTU', 'AZUL', 'BACCR', 'BAFN']...
+2026-07-09 16:52:04 | INFO     | fetcher                   | Batch 25/239 | 25 tickers
+2026-07-09 16:52:08 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['BAOS', 'BARK', 'BBCQU', 'BBCQW']...
+2026-07-09 16:52:11 | INFO     | fetcher                   | Batch 26/239 | 25 tickers
+2026-07-09 16:52:15 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['BBLG', 'BCG']...
+2026-07-09 16:52:18 | INFO     | fetcher                   | Batch 27/239 | 25 tickers
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCHT | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCIC | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCML | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCPC | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCS | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCRX | yfinance returned empty DataFrame
+2026-07-09 16:52:28 | WARNING  | fetcher                   | BCO | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCSF | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCSS | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCV | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCYC | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCX | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCTX | yfinance returned empty DataFrame
+2026-07-09 16:52:38 | WARNING  | fetcher                   | BCTXZ | yfinance returned empty DataFrame
+2026-07-09 16:52:56 | WARNING  | fetcher                   | BDSX | yfinance returned empty DataFrame
+2026-07-09 16:52:56 | WARNING  | fetcher                   | Batch: 19 tickers failed: ['BCHT', 'BCIC', 'BCML', 'BCPC', 'BCS', 'BCRX', 'BCO', 'BCSF', 'BCSS', 'BCV']...
+2026-07-09 16:52:59 | INFO     | fetcher                   | Batch 28/239 | 25 tickers
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BE | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEAG | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEEM | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEAGR | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEAM | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEEP | yfinance returned empty DataFrame
+2026-07-09 16:53:09 | WARNING  | fetcher                   | BEKE | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BELFB | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BELFA | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BEN | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BEP | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BENF | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BEPC | yfinance returned empty DataFrame
+2026-07-09 16:53:19 | WARNING  | fetcher                   | BEPH | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BEPI | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BEPJ | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BETR | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BETA | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BESS | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BFC | yfinance returned empty DataFrame
+2026-07-09 16:53:29 | WARNING  | fetcher                   | BFAM | yfinance returned empty DataFrame
+2026-07-09 16:53:39 | WARNING  | fetcher                   | BFLY | yfinance returned empty DataFrame
+2026-07-09 16:53:39 | WARNING  | fetcher                   | BFH | yfinance returned empty DataFrame
+2026-07-09 16:53:39 | WARNING  | fetcher                   | BFRI | yfinance returned empty DataFrame
+2026-07-09 16:53:39 | WARNING  | fetcher                   | BFS | yfinance returned empty DataFrame
+2026-07-09 16:53:39 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BE', 'BEAG', 'BEEM', 'BEAGR', 'BEAM', 'BEEP', 'BEKE', 'BELFB', 'BELFA', 'BEN']...
+2026-07-09 16:53:39 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:53:42 | INFO     | fetcher                   | Batch 29/239 | 25 tickers
+2026-07-09 16:53:54 | WARNING  | fetcher                   | BGB | yfinance returned empty DataFrame
+2026-07-09 16:53:54 | WARNING  | fetcher                   | BG | yfinance returned empty DataFrame
+2026-07-09 16:53:54 | WARNING  | fetcher                   | BFST | yfinance returned empty DataFrame
+2026-07-09 16:53:54 | WARNING  | fetcher                   | BGDE | yfinance returned empty DataFrame
+2026-07-09 16:53:54 | WARNING  | fetcher                   | BGI | yfinance returned empty DataFrame
+2026-07-09 16:53:55 | WARNING  | fetcher                   | BGC | yfinance returned empty DataFrame
+2026-07-09 16:53:55 | WARNING  | fetcher                   | BGH | yfinance returned empty DataFrame
+2026-07-09 16:54:05 | WARNING  | fetcher                   | BGIN | yfinance returned empty DataFrame
+2026-07-09 16:54:05 | WARNING  | fetcher                   | BGLC | yfinance returned empty DataFrame
+2026-07-09 16:54:05 | WARNING  | fetcher                   | BGL | yfinance returned empty DataFrame
+2026-07-09 16:54:05 | WARNING  | fetcher                   | BGMS | yfinance returned empty DataFrame
+2026-07-09 16:54:06 | WARNING  | fetcher                   | BGR | yfinance returned empty DataFrame
+2026-07-09 16:54:06 | WARNING  | fetcher                   | BGS | yfinance returned empty DataFrame
+2026-07-09 16:54:06 | WARNING  | fetcher                   | BGSF | yfinance returned empty DataFrame
+2026-07-09 16:54:15 | WARNING  | fetcher                   | BGSI | yfinance returned empty DataFrame
+2026-07-09 16:54:15 | WARNING  | fetcher                   | BGX | yfinance returned empty DataFrame
+2026-07-09 16:54:15 | WARNING  | fetcher                   | BGT | yfinance returned empty DataFrame
+2026-07-09 16:54:16 | WARNING  | fetcher                   | BGY | yfinance returned empty DataFrame
+2026-07-09 16:54:16 | WARNING  | fetcher                   | BH | yfinance returned empty DataFrame
+2026-07-09 16:54:16 | WARNING  | fetcher                   | BHAV | yfinance returned empty DataFrame
+2026-07-09 16:54:16 | WARNING  | fetcher                   | BHAVU | yfinance returned empty DataFrame
+2026-07-09 16:54:25 | WARNING  | fetcher                   | BHB | yfinance returned empty DataFrame
+2026-07-09 16:54:25 | WARNING  | fetcher                   | BHC | yfinance returned empty DataFrame
+2026-07-09 16:54:25 | WARNING  | fetcher                   | BHE | yfinance returned empty DataFrame
+2026-07-09 16:54:26 | WARNING  | fetcher                   | BHF | yfinance returned empty DataFrame
+2026-07-09 16:54:26 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BGB', 'BG', 'BFST', 'BGDE', 'BGI', 'BGC', 'BGH', 'BGIN', 'BGLC', 'BGL']...
+2026-07-09 16:54:26 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:54:29 | INFO     | fetcher                   | Batch 30/239 | 25 tickers
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHFAL | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHFAM | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHFAP | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHFAO | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHFAN | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHK | yfinance returned empty DataFrame
+2026-07-09 16:54:39 | WARNING  | fetcher                   | BHM | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHR | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHP | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHRB | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHST | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHV | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BHVN | yfinance returned empty DataFrame
+2026-07-09 16:54:49 | WARNING  | fetcher                   | BIAF | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BIDU | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BIDWU | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BIIB | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BILI | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BILL | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BIO | yfinance returned empty DataFrame
+2026-07-09 16:54:59 | WARNING  | fetcher                   | BIOA | yfinance returned empty DataFrame
+2026-07-09 16:55:09 | WARNING  | fetcher                   | BIP | yfinance returned empty DataFrame
+2026-07-09 16:55:09 | WARNING  | fetcher                   | BIPI | yfinance returned empty DataFrame
+2026-07-09 16:55:09 | WARNING  | fetcher                   | BIPC | yfinance returned empty DataFrame
+2026-07-09 16:55:09 | WARNING  | fetcher                   | BIPH | yfinance returned empty DataFrame
+2026-07-09 16:55:10 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BHFAL', 'BHFAM', 'BHFAP', 'BHFAO', 'BHFAN', 'BHK', 'BHM', 'BHR', 'BHP', 'BHRB']...
+2026-07-09 16:55:10 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:55:13 | INFO     | fetcher                   | Batch 31/239 | 25 tickers
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIRK | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIPJ | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIRD | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIT | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIVI | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIVIW | yfinance returned empty DataFrame
+2026-07-09 16:55:23 | WARNING  | fetcher                   | BIXIW | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BIYA | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BJ | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BJDX | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BJRI | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BKD | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BKH | yfinance returned empty DataFrame
+2026-07-09 16:55:33 | WARNING  | fetcher                   | BKE | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKKT | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKNG | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKSY | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKR | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKT | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKTI | yfinance returned empty DataFrame
+2026-07-09 16:55:43 | WARNING  | fetcher                   | BKU | yfinance returned empty DataFrame
+2026-07-09 16:55:53 | WARNING  | fetcher                   | BKV | yfinance returned empty DataFrame
+2026-07-09 16:55:53 | WARNING  | fetcher                   | BKYI | yfinance returned empty DataFrame
+2026-07-09 16:55:53 | WARNING  | fetcher                   | BL | yfinance returned empty DataFrame
+2026-07-09 16:55:53 | WARNING  | fetcher                   | BLBD | yfinance returned empty DataFrame
+2026-07-09 16:55:53 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BIRK', 'BIPJ', 'BIRD', 'BIT', 'BIVI', 'BIVIW', 'BIXIW', 'BIYA', 'BJ', 'BJDX']...
+2026-07-09 16:55:53 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:55:56 | INFO     | fetcher                   | Batch 32/239 | 25 tickers
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLCO | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLDP | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLDR | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLIN | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLFS | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLIV | yfinance returned empty DataFrame
+2026-07-09 16:56:07 | WARNING  | fetcher                   | BLK | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLKB | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLLN | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLMN | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLSH | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLNE | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLRX | yfinance returned empty DataFrame
+2026-07-09 16:56:17 | WARNING  | fetcher                   | BLND | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLTE | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BMBL | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BME | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BMEA | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BMEZ | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLUW | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLX | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLW | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BMA | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLZR | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | BLZE | yfinance returned empty DataFrame
+2026-07-09 16:56:27 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BLCO', 'BLDP', 'BLDR', 'BLIN', 'BLFS', 'BLIV', 'BLK', 'BLKB', 'BLLN', 'BLMN']...
+2026-07-09 16:56:27 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:56:30 | INFO     | fetcher                   | Batch 33/239 | 25 tickers
+2026-07-09 16:56:30 | WARNING  | fetcher                   | BMHL | yfinance returned empty DataFrame
+2026-07-09 16:56:30 | WARNING  | fetcher                   | BMI | yfinance returned empty DataFrame
+2026-07-09 16:56:30 | WARNING  | fetcher                   | BMM | yfinance returned empty DataFrame
+2026-07-09 16:56:30 | WARNING  | fetcher                   | BMNR | yfinance returned empty DataFrame
+2026-07-09 16:56:30 | WARNING  | fetcher                   | BMN | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMNP | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMO | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMR | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMRC | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMRN | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMY | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BMRA | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BN | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNAI | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNED | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNGO | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNH | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNJ | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNKK | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNL | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNR | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNT | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNS | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNRG | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | BNTC | yfinance returned empty DataFrame
+2026-07-09 16:56:31 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['BMHL', 'BMI', 'BMM', 'BMNR', 'BMN', 'BMNP', 'BMO', 'BMR', 'BMRC', 'BMRN']...
+2026-07-09 16:56:31 | WARNING  | fetcher                   | Batch returned no data
+2026-07-09 16:56:34 | INFO     | fetcher                   | Batch 34/239 | 25 tickers
+2026-07-09 16:56:37 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['BODI', 'BOF', 'BON', 'BOSC', 'BOLT', 'BOTJ', 'BPOPM']...
+2026-07-09 16:56:40 | INFO     | fetcher                   | Batch 35/239 | 25 tickers
+2026-07-09 16:56:43 | WARNING  | fetcher                   | Batch: 16 tickers failed: ['BPRN', 'BPYPP', 'BPYPN', 'BPYPM', 'BPYPO', 'BRAG', 'BREZ', 'BRFH', 'BREZR', 'BRIA']...
+2026-07-09 16:56:46 | INFO     | fetcher                   | Batch 36/239 | 25 tickers
+2026-07-09 16:56:49 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['BRUNW', 'BSAAU', 'BSAA', 'BSBK', 'BSVN']...
+2026-07-09 16:56:52 | INFO     | fetcher                   | Batch 37/239 | 25 tickers
+2026-07-09 16:56:55 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['BTBD', 'BTSGU', 'BTTC', 'BUDA']...
+2026-07-09 16:56:58 | INFO     | fetcher                   | Batch 38/239 | 25 tickers
+2026-07-09 16:57:02 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['BUSEP', 'BUUU', 'BVC', 'BVFL', 'BWBBP', 'BWIV']...
+2026-07-09 16:57:05 | INFO     | fetcher                   | Batch 39/239 | 25 tickers
+2026-07-09 16:57:15 | WARNING  | fetcher                   | BWXT | yfinance returned empty DataFrame
+2026-07-09 16:57:15 | WARNING  | fetcher                   | BX | yfinance returned empty DataFrame
+2026-07-09 16:57:15 | WARNING  | fetcher                   | BXMT | yfinance returned empty DataFrame
+2026-07-09 16:57:18 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['BWNB', 'BYFC', 'BYSI', 'BWXT', 'BX', 'BXMT', 'CAAS']...
+2026-07-09 16:57:21 | INFO     | fetcher                   | Batch 40/239 | 25 tickers
+2026-07-09 16:57:23 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CAES', 'CAF', 'CAII', 'CAIIU', 'CAIIW']...
+2026-07-09 16:57:26 | INFO     | fetcher                   | Batch 41/239 | 25 tickers
+2026-07-09 16:57:28 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['CATO', 'CBFV', 'CBNK']...
+2026-07-09 16:57:31 | INFO     | fetcher                   | Batch 42/239 | 25 tickers
+2026-07-09 16:57:33 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CCEC', 'CCEL', 'CCID', 'CCII', 'CCIIW']...
+2026-07-09 16:57:36 | INFO     | fetcher                   | Batch 43/239 | 25 tickers
+2026-07-09 16:57:38 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['CCNEP', 'CCXIU', 'CCXIW']...
+2026-07-09 16:57:41 | INFO     | fetcher                   | Batch 44/239 | 25 tickers
+2026-07-09 16:57:43 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['CDRO', 'CDTG', 'CDZIP', 'CEE', 'CENN', 'CEPF', 'CEPS', 'CEPO', 'CEPV']...
+2026-07-09 16:57:46 | INFO     | fetcher                   | Batch 45/239 | 25 tickers
+2026-07-09 16:57:48 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['CEV', 'CFFI', 'CGABL', 'CFND', 'CGCFU', 'CGO']...
+2026-07-09 16:57:51 | INFO     | fetcher                   | Batch 46/239 | 25 tickers
+2026-07-09 16:57:53 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['CHARR', 'CHCI', 'CHAR', 'CHNR', 'CHR', 'CHSCL', 'CHSCM']...
+2026-07-09 16:57:56 | INFO     | fetcher                   | Batch 47/239 | 25 tickers
+2026-07-09 16:57:58 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['CHSCP', 'CHSN', 'CHSCO', 'CHSCN', 'CICB', 'CICC', 'CIMN', 'CIMO']...
+2026-07-09 16:58:01 | INFO     | fetcher                   | Batch 48/239 | 25 tickers
+2026-07-09 16:58:05 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['CIMP', 'CISS', 'CITR', 'CKX', 'CIX', 'CLBR', 'CLIR', 'CLIK']...
+2026-07-09 16:58:08 | INFO     | fetcher                   | Batch 49/239 | 25 tickers
+2026-07-09 16:58:11 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CLLS', 'CLNN', 'CLRB', 'CLST', 'CMCM']...
+2026-07-09 16:58:14 | INFO     | fetcher                   | Batch 50/239 | 25 tickers
+2026-07-09 16:58:16 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['CMCT', 'CMT', 'CMSA']...
+2026-07-09 16:58:19 | INFO     | fetcher                   | Batch 51/239 | 25 tickers
+2026-07-09 16:58:21 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CNEY', 'CNF', 'CNOBP', 'CNSP', 'CNTY']...
+2026-07-09 16:58:24 | INFO     | fetcher                   | Batch 52/239 | 25 tickers
+2026-07-09 16:58:27 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['COCP', 'COE', 'COHN', 'COLAR']...
+2026-07-09 16:58:30 | INFO     | fetcher                   | Batch 53/239 | 25 tickers
+2026-07-09 16:58:35 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['COPL', 'CORZZ', 'CPAC', 'CPBI', 'CPHC', 'CPHI', 'CPIX']...
+2026-07-09 16:58:38 | INFO     | fetcher                   | Batch 54/239 | 25 tickers
+2026-07-09 16:58:41 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['CPSS', 'CRACR', 'CRAC', 'CRAN', 'CRANR']...
+2026-07-09 16:58:44 | INFO     | fetcher                   | Batch 55/239 | 25 tickers
+2026-07-09 16:58:47 | WARNING  | fetcher                   | Batch: 1 tickers failed: ['CRT']...
+2026-07-09 16:58:50 | INFO     | fetcher                   | Batch 56/239 | 25 tickers
+2026-07-09 16:58:53 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['CSBR', 'CSHRW', 'CSPI', 'CTAAR']...
+2026-07-09 16:58:56 | INFO     | fetcher                   | Batch 57/239 | 25 tickers
+2026-07-09 16:58:59 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['CTRM', 'CTW', 'CUBB', 'CUB']...
+2026-07-09 16:59:02 | INFO     | fetcher                   | Batch 58/239 | 25 tickers
+2026-07-09 16:59:04 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['CULP', 'CVR']...
+2026-07-09 16:59:07 | INFO     | fetcher                   | Batch 59/239 | 25 tickers
+2026-07-09 16:59:11 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['CXII', 'CXIIU', 'CXIIW', 'CYCN']...
+2026-07-09 16:59:14 | INFO     | fetcher                   | Batch 60/239 | 25 tickers
+2026-07-09 16:59:16 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['CZFS', 'DAAQ', 'DBCAW', 'DBCA']...
+2026-07-09 16:59:19 | INFO     | fetcher                   | Batch 61/239 | 25 tickers
+2026-07-09 16:59:21 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['DCBG', 'DCOY', 'DDT']...
+2026-07-09 16:59:24 | INFO     | fetcher                   | Batch 62/239 | 25 tickers
+2026-07-09 16:59:27 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['DETX', 'DFDVW', 'DFNSW', 'DHCNI', 'DGZ', 'DHCNL']...
+2026-07-09 16:59:30 | INFO     | fetcher                   | Batch 63/239 | 25 tickers
+2026-07-09 16:59:32 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['DKI', 'DLHC', 'DLPN']...
+2026-07-09 16:59:35 | INFO     | fetcher                   | Batch 64/239 | 25 tickers
+2026-07-09 16:59:37 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['DMA', 'DMAA', 'DMAAR', 'DMII', 'DNMX', 'DNMXW']...
+2026-07-09 16:59:40 | INFO     | fetcher                   | Batch 65/239 | 25 tickers
+2026-07-09 16:59:42 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['DOGZ', 'DRDB', 'DRIO']...
+2026-07-09 16:59:45 | INFO     | fetcher                   | Batch 66/239 | 25 tickers
+2026-07-09 16:59:48 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['DRMA', 'DSAC', 'DSS', 'DSWL', 'DTF']...
+2026-07-09 16:59:51 | INFO     | fetcher                   | Batch 67/239 | 25 tickers
+2026-07-09 16:59:53 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['DTST', 'DUKR', 'DUO', 'DUKRW', 'DXR', 'DXST']...
+2026-07-09 16:59:56 | INFO     | fetcher                   | Batch 68/239 | 25 tickers
+2026-07-09 16:59:58 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['DYNC', 'DYNCW', 'DYOR', 'DZZ', 'EBON', 'ECBK', 'ECCC', 'ECCU']...
+2026-07-09 17:00:01 | INFO     | fetcher                   | Batch 69/239 | 25 tickers
+2026-07-09 17:00:03 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['ECCV', 'EDRY', 'EDTK', 'EDUC', 'EEA', 'EEIQ']...
+2026-07-09 17:00:06 | INFO     | fetcher                   | Batch 70/239 | 25 tickers
+2026-07-09 17:00:07 | WARNING  | fetcher                   | EGHAR | yfinance returned empty DataFrame
+2026-07-09 17:00:08 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['EFOI', 'EFSCP', 'EFT', 'EGG', 'EGHA', 'EGHAR']...
+2026-07-09 17:00:11 | INFO     | fetcher                   | Batch 71/239 | 25 tickers
+2026-07-09 17:00:13 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['EHLD', 'EIIA', 'EICA', 'ELC', 'ELLA', 'ELLO', 'ELOG', 'ELOX']...
+2026-07-09 17:00:16 | INFO     | fetcher                   | Batch 72/239 | 25 tickers
+2026-07-09 17:00:18 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['ELSE', 'ELUT', 'ELTK', 'ELWT', 'EMF', 'EML', 'EMP']...
+2026-07-09 17:00:21 | INFO     | fetcher                   | Batch 73/239 | 25 tickers
+2026-07-09 17:00:23 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['ENO', 'ENJ', 'ENRD', 'ENRDW']...
+2026-07-09 17:00:26 | INFO     | fetcher                   | Batch 74/239 | 25 tickers
+2026-07-09 17:00:28 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['EPSM', 'EQS']...
+2026-07-09 17:00:31 | INFO     | fetcher                   | Batch 75/239 | 25 tickers
+2026-07-09 17:00:33 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['ERNA', 'ESBA', 'ESLA', 'ERNAW']...
+2026-07-09 17:00:36 | INFO     | fetcher                   | Batch 76/239 | 25 tickers
+2026-07-09 17:00:38 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['ETX', 'EUDA', 'EVAX', 'EVAC']...
+2026-07-09 17:00:41 | INFO     | fetcher                   | Batch 77/239 | 25 tickers
+2026-07-09 17:00:43 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['EVF', 'EVO', 'EVOX']...
+2026-07-09 17:00:46 | INFO     | fetcher                   | Batch 78/239 | 25 tickers
+2026-07-09 17:00:48 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['EXOZ', 'EXYNW', 'FACT', 'FACWW']...
+2026-07-09 17:00:51 | INFO     | fetcher                   | Batch 79/239 | 25 tickers
+2026-07-09 17:00:53 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['FBIOP', 'FCCO', 'FCAP']...
+2026-07-09 17:00:56 | INFO     | fetcher                   | Batch 80/239 | 25 tickers
+2026-07-09 17:00:59 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['FCNCP', 'FCNCO', 'FCRS', 'FCUV', 'FDBC', 'FEBO', 'FDSB', 'FEMY']...
+2026-07-09 17:01:02 | INFO     | fetcher                   | Batch 81/239 | 25 tickers
+2026-07-09 17:01:04 | WARNING  | fetcher                   | FGMCU | yfinance returned empty DataFrame
+2026-07-09 17:01:04 | WARNING  | fetcher                   | Batch: 12 tickers failed: ['FENG', 'FERAR', 'FERA', 'FGBIP', 'FGMCR', 'FGI', 'FGL', 'FGII', 'FGMCU', 'FGNXP']...
+2026-07-09 17:01:07 | INFO     | fetcher                   | Batch 82/239 | 25 tickers
+2026-07-09 17:01:08 | WARNING  | fetcher                   | FIGX | yfinance returned empty DataFrame
+2026-07-09 17:01:09 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['FIEE', 'FIGX', 'FINW']...
+2026-07-09 17:01:12 | INFO     | fetcher                   | Batch 83/239 | 25 tickers
+2026-07-09 17:01:14 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['FKWL', 'FLC', 'FLNT', 'FLYE']...
+2026-07-09 17:01:17 | INFO     | fetcher                   | Batch 84/239 | 25 tickers
+2026-07-09 17:01:19 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['FMACU', 'FMAC', 'FMY', 'FNGO', 'FNWB', 'FNLC']...
+2026-07-09 17:01:22 | INFO     | fetcher                   | Batch 85/239 | 25 tickers
+2026-07-09 17:01:24 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['FNWD', 'FOCL', 'FRGT']...
+2026-07-09 17:01:27 | INFO     | fetcher                   | Batch 86/239 | 25 tickers
+2026-07-09 17:01:29 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['FRMEP', 'FSBW', 'FSEA', 'FSHPR', 'FSI']...
+2026-07-09 17:01:32 | INFO     | fetcher                   | Batch 87/239 | 25 tickers
+2026-07-09 17:01:36 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['FTAIM', 'FTHAU', 'FTLF']...
+2026-07-09 17:01:39 | INFO     | fetcher                   | Batch 88/239 | 25 tickers
+2026-07-09 17:01:41 | WARNING  | fetcher                   | FUSEW | yfinance returned empty DataFrame
+2026-07-09 17:01:41 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['FULTP', 'FUNC', 'FUSEW', 'FUSB', 'FWACU', 'FXACU']...
+2026-07-09 17:01:44 | INFO     | fetcher                   | Batch 89/239 | 25 tickers
+2026-07-09 17:01:46 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['GAINI', 'GAINZ', 'GAING', 'GBLI', 'GBR']...
+2026-07-09 17:01:49 | INFO     | fetcher                   | Batch 90/239 | 25 tickers
+2026-07-09 17:01:50 | WARNING  | fetcher                   | GCGRU | yfinance returned empty DataFrame
+2026-07-09 17:01:51 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['GCGR', 'GCGRU', 'GCV', 'GDEV', 'GDHG', 'GDL', 'GDTC', 'GECCH', 'GECCG', 'GECCI']...
+2026-07-09 17:01:54 | INFO     | fetcher                   | Batch 91/239 | 25 tickers
+2026-07-09 17:01:56 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['GEG', 'GEGGL', 'GENK', 'GENC', 'GENVR', 'GF']...
+2026-07-09 17:01:59 | INFO     | fetcher                   | Batch 92/239 | 25 tickers
+2026-07-09 17:02:02 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['GGR', 'GGZ', 'GHXIU', 'GIBO', 'GIGM', 'GHG', 'GITS', 'GIFT']...
+2026-07-09 17:02:05 | INFO     | fetcher                   | Batch 93/239 | 25 tickers
+2026-07-09 17:02:06 | WARNING  | fetcher                   | GJH | yfinance returned empty DataFrame
+2026-07-09 17:02:07 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['GIW', 'GIXXR', 'GIWWR', 'GJS', 'GJH', 'GLED']...
+2026-07-09 17:02:10 | INFO     | fetcher                   | Batch 94/239 | 25 tickers
+2026-07-09 17:02:12 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['GLV', 'GLU', 'GMHS', 'GNLN']...
+2026-07-09 17:02:15 | INFO     | fetcher                   | Batch 95/239 | 25 tickers
+2026-07-09 17:02:17 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['GOAI', 'GOODO', 'GOODN']...
+2026-07-09 17:02:20 | INFO     | fetcher                   | Batch 96/239 | 25 tickers
+2026-07-09 17:02:22 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['GPJA', 'GRAN', 'GRAF', 'GRF', 'GRI', 'GRMLW', 'GRNQ']...
+2026-07-09 17:02:25 | INFO     | fetcher                   | Batch 97/239 | 25 tickers
+2026-07-09 17:02:27 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['GROW', 'GROV', 'GRVY', 'GRX', 'GSHRW', 'GSIW', 'GSRF', 'GSRFR', 'GSRVU']...
+2026-07-09 17:02:30 | INFO     | fetcher                   | Batch 98/239 | 25 tickers
+2026-07-09 17:02:33 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['GTEN', 'GTERW', 'GTIM', 'GUACU', 'GYRO']...
+2026-07-09 17:02:36 | INFO     | fetcher                   | Batch 99/239 | 25 tickers
+2026-07-09 17:02:38 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['HACQ', 'HACQU', 'HBANM', 'HBANZ', 'HBNB', 'HBIO']...
+2026-07-09 17:02:41 | INFO     | fetcher                   | Batch 100/239 | 25 tickers
+2026-07-09 17:02:43 | WARNING  | fetcher                   | HCHL | yfinance returned empty DataFrame
+2026-07-09 17:02:43 | WARNING  | fetcher                   | HCMAW | yfinance returned empty DataFrame
+2026-07-09 17:02:44 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['HCACR', 'HCAI', 'HCHL', 'HCAC', 'HCIC', 'HCMA', 'HCMAW', 'HCWB', 'HCXY', 'HDRN']...
+2026-07-09 17:02:47 | INFO     | fetcher                   | Batch 101/239 | 25 tickers
+2026-07-09 17:02:51 | WARNING  | fetcher                   | HIFS | yfinance returned empty DataFrame
+2026-07-09 17:02:51 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['HERE', 'HFBL', 'HERZ', 'HGBL', 'HHS', 'HIND', 'HIFS']...
+2026-07-09 17:02:54 | INFO     | fetcher                   | Batch 102/239 | 25 tickers
+2026-07-09 17:02:57 | WARNING  | fetcher                   | Batch: 1 tickers failed: ['HLXC']...
+2026-07-09 17:03:00 | INFO     | fetcher                   | Batch 103/239 | 25 tickers
+2026-07-09 17:03:03 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['HNNA', 'HOUR', 'HOVNP']...
+2026-07-09 17:03:06 | INFO     | fetcher                   | Batch 104/239 | 25 tickers
+2026-07-09 17:03:10 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['HQI', 'HQWWW']...
+2026-07-09 17:03:13 | INFO     | fetcher                   | Batch 105/239 | 25 tickers
+2026-07-09 17:03:18 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['HTFC', 'HTLM', 'HTCR', 'HTOO', 'HUDI', 'HUHU', 'HUIZ']...
+2026-07-09 17:03:21 | INFO     | fetcher                   | Batch 106/239 | 25 tickers
+2026-07-09 17:03:26 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['HURC', 'HVIIR', 'HVII', 'HWBK', 'HWCPZ', 'HYNE']...
+2026-07-09 17:03:29 | INFO     | fetcher                   | Batch 107/239 | 25 tickers
+2026-07-09 17:03:32 | WARNING  | fetcher                   | IACO | yfinance returned empty DataFrame
+2026-07-09 17:03:33 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['IACOW', 'IACO', 'IACQU', 'IACQ', 'IAF']...
+2026-07-09 17:03:36 | INFO     | fetcher                   | Batch 108/239 | 25 tickers
+2026-07-09 17:03:38 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['ICMB', 'IDACU', 'IDAI', 'IFBD']...
+2026-07-09 17:03:41 | INFO     | fetcher                   | Batch 109/239 | 25 tickers
+2026-07-09 17:03:44 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['IH', 'IHT', 'IIF', 'IGI', 'ILLRW', 'ILAG', 'IMA']...
+2026-07-09 17:03:47 | INFO     | fetcher                   | Batch 110/239 | 25 tickers
+2026-07-09 17:03:49 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['IMPPP', 'IMSRW', 'INAB', 'INBK', 'INBKZ', 'INBS']...
+2026-07-09 17:03:52 | INFO     | fetcher                   | Batch 111/239 | 25 tickers
+2026-07-09 17:03:54 | WARNING  | fetcher                   | INHD | yfinance returned empty DataFrame
+2026-07-09 17:03:55 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['INHD', 'INKT', 'INLX', 'INM']...
+2026-07-09 17:03:58 | INFO     | fetcher                   | Batch 112/239 | 25 tickers
+2026-07-09 17:04:00 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['INTG', 'INTJ', 'IOR']...
+2026-07-09 17:04:03 | INFO     | fetcher                   | Batch 113/239 | 25 tickers
+2026-07-09 17:04:05 | WARNING  | fetcher                   | IPVVU | yfinance returned empty DataFrame
+2026-07-09 17:04:06 | WARNING  | fetcher                   | Batch: 11 tickers failed: ['IOTR', 'IPCX', 'IPCXR', 'IPEX', 'IPFXU', 'IPFX', 'IPFXW', 'IPHA', 'IPM', 'IPST']...
+2026-07-09 17:04:09 | INFO     | fetcher                   | Batch 114/239 | 25 tickers
+2026-07-09 17:04:10 | WARNING  | fetcher                   | IRHOR | yfinance returned empty DataFrame
+2026-07-09 17:04:11 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['IRHO', 'IRHOR', 'IRIX', 'ISBA', 'ISNRU']...
+2026-07-09 17:04:14 | INFO     | fetcher                   | Batch 115/239 | 25 tickers
+2026-07-09 17:04:16 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['IZEA', 'JABRU', 'JACS', 'JAGX']...
+2026-07-09 17:04:19 | INFO     | fetcher                   | Batch 116/239 | 25 tickers
+2026-07-09 17:04:21 | WARNING  | fetcher                   | JDZG | yfinance returned empty DataFrame
+2026-07-09 17:04:21 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['JBK', 'JATT', 'JCTC', 'JCSE', 'JDZG']...
+2026-07-09 17:04:24 | INFO     | fetcher                   | Batch 117/239 | 25 tickers
+2026-07-09 17:04:28 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['JF', 'JFU', 'JHI', 'JHS', 'JG', 'JL', 'JMM', 'JMSB']...
+2026-07-09 17:04:31 | INFO     | fetcher                   | Batch 118/239 | 25 tickers
+2026-07-09 17:04:34 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['JSM', 'JVA', 'JXG', 'JWEL', 'JYD']...
+2026-07-09 17:04:37 | INFO     | fetcher                   | Batch 119/239 | 25 tickers
+2026-07-09 17:04:40 | WARNING  | fetcher                   | Batch: 10 tickers failed: ['KBON', 'KBONU', 'KBONW', 'KBSX', 'KCHV', 'KCHVR', 'KDKRW', 'KEN', 'KEQU', 'KELYB']...
+2026-07-09 17:04:43 | INFO     | fetcher                   | Batch 120/239 | 25 tickers
+2026-07-09 17:04:49 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['KF', 'KG', 'KEYY', 'KEYYU', 'KFFB', 'KKRS']...
+2026-07-09 17:04:52 | INFO     | fetcher                   | Batch 121/239 | 25 tickers
+2026-07-09 17:04:57 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['KMPB', 'KMDA', 'KNRX']...
+2026-07-09 17:05:00 | INFO     | fetcher                   | Batch 122/239 | 25 tickers
+2026-07-09 17:05:02 | WARNING  | fetcher                   | KRAQU | yfinance returned empty DataFrame
+2026-07-09 17:05:03 | WARNING  | fetcher                   | Batch: 8 tickers failed: ['KOSS', 'KOYN', 'KPLT', 'KPRX', 'KRAQU', 'KRAQ', 'KRAQW', 'KRKR']...
+2026-07-09 17:05:06 | INFO     | fetcher                   | Batch 123/239 | 25 tickers
+2026-07-09 17:05:14 | WARNING  | fetcher                   | KWMWW | yfinance returned empty DataFrame
+2026-07-09 17:05:14 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['KRSP', 'KTN', 'KTCC', 'KTH', 'KTWO', 'KWMWW', 'KXIN']...
+2026-07-09 17:05:17 | INFO     | fetcher                   | Batch 124/239 | 25 tickers
+2026-07-09 17:05:21 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['KYIVW', 'LANDO', 'LANDP', 'LANV', 'LARK']...
+2026-07-09 17:05:24 | INFO     | fetcher                   | Batch 125/239 | 25 tickers
+2026-07-09 17:05:29 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['LBGJ', 'LBRDP', 'LBTYB', 'LCCC', 'LCCCR', 'LCFY', 'LCNB']...
+2026-07-09 17:05:32 | INFO     | fetcher                   | Batch 126/239 | 25 tickers
+2026-07-09 17:05:36 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['LEGO', 'LFMDP', 'LGCY']...
+2026-07-09 17:05:39 | INFO     | fetcher                   | Batch 127/239 | 25 tickers
+2026-07-09 17:05:43 | WARNING  | fetcher                   | Batch: 1 tickers failed: ['LGL']...
+2026-07-09 17:05:46 | INFO     | fetcher                   | Batch 128/239 | 25 tickers
+2026-07-09 17:05:48 | WARNING  | fetcher                   | Batch: 4 tickers failed: ['LINK', 'LIVE', 'LITB', 'LKSPR']...
+2026-07-09 17:05:51 | INFO     | fetcher                   | Batch 129/239 | 25 tickers
+2026-07-09 17:05:54 | WARNING  | fetcher                   | Batch: 6 tickers failed: ['LOCL', 'LONA', 'LOOP', 'LPA', 'LPBB', 'LPCN']...
+2026-07-09 17:05:57 | INFO     | fetcher                   | Batch 130/239 | 25 tickers
+2026-07-09 17:05:59 | WARNING  | fetcher                   | Batch: 5 tickers failed: ['LRE', 'LSBK', 'LSE', 'LSTA', 'LTGRU']...
+2026-07-09 17:06:02 | INFO     | fetcher                   | Batch 131/239 | 25 tickers
+2026-07-09 17:06:05 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['LUD', 'LWACW', 'LXEH']...
+2026-07-09 17:06:08 | INFO     | fetcher                   | Batch 132/239 | 25 tickers
+2026-07-09 17:06:10 | WARNING  | fetcher                   | Batch: 2 tickers failed: ['LZMH', 'MAMO']...
+2026-07-09 17:06:13 | INFO     | fetcher                   | Batch 133/239 | 25 tickers
+2026-07-09 17:06:15 | WARNING  | fetcher                   | MBAVU | yfinance returned empty DataFrame
+2026-07-09 17:06:15 | WARNING  | fetcher                   | Batch: 7 tickers failed: ['MARPS', 'MB', 'MBAI', 'MBAV', 'MBAVU', 'MBBC', 'MBINL']...
+2026-07-09 17:06:18 | INFO     | fetcher                   | Batch 134/239 | 25 tickers
+2026-07-09 17:06:21 | WARNING  | fetcher                   | Batch: 9 tickers failed: ['MBINM', 'MBINN', 'MBNKO', 'MBVI', 'MCAHU', 'MCGA', 'MCGAW', 'MCHPP', 'MCHX']...
+2026-07-09 17:06:24 | INFO     | fetcher                   | Batch 135/239 | 25 tickers
+2026-07-09 17:06:27 | WARNING  | fetcher                   | MDRR | yfinance returned empty DataFrame
+2026-07-09 17:06:28 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['MDBH', 'MDRR', 'MEGL']...

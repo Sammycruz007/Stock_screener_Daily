@@ -52,6 +52,7 @@ from sklearn.model_selection import TimeSeriesSplit, cross_val_score
 from sklearn.metrics import (
     precision_score, recall_score, f1_score,
       roc_auc_score, average_precision_score)
+from sklearn.metrics import make_scorer, precision_score   
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 
@@ -231,18 +232,27 @@ def train_volume_classifier(
 
     # ── Step 6: Cross-validation on TRAIN only ──────────────────────────────
     # Walk-Forward split - trains on past, test on future. gap must >= your lookback
-    cv = TimeSeriesSplit(n_splits=5, gap=131) # GAP >= LOOKBACK_DAYS
+    cv = TimeSeriesSplit(n_splits=5, gap=131)
 
-    cv_auc_roc = cross_val_score(pipeline, X_train, y_train, cv=cv, 
-                                 scoring="roc_auc", n_jobs=-1)
+    cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
+                                  scoring="roc_auc", n_jobs=-1)
+    cv_pr_auc   = cross_val_score(pipeline, X_train, y_train,
+                                  cv=cv, scoring="average_precision", n_jobs=-1)
     
-    cv_pr_auc  = cross_val_score(pipeline, X_train, y_train, 
-                                 cv=cv, scoring="average_precision", n_jobs=-1)
+        # Zero division safe precision scorer
+    precision_scorer = make_scorer(
+        precision_score,
+        zero_division=0    # returns 0 instead of warning when no positives predicted
+    )
+
+    cv_precision = cross_val_score(pipeline, X_train, y_train,
+                                   cv=cv, scoring="precision", n_jobs=-1)
 
     logger.info(
         f"Cross-validation | "
-        f"AUC-ROC: {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f} | "
-        f"PR-AUC:  {cv_pr_auc.mean():.4f} ± {cv_pr_auc.std():.4f}"
+        f"AUC-ROC:   {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f} | "
+        f"PR-AUC:    {cv_pr_auc.mean():.4f} ± {cv_pr_auc.std():.4f} | "
+        f"Precision: {cv_precision.mean():.4f} ± {cv_precision.std():.4f}"
     )
 
     # ── Step 7: Train FINAL model on TRAIN only ─────────────────────────────
@@ -277,6 +287,8 @@ def train_volume_classifier(
         "cv_auc_std"     : round(cv_auc_roc.std(), 4),
         "cv_pr_mean"     : round(cv_pr_auc.mean(), 4),
         "cv_pr_std"      : round(cv_pr_auc.std(), 4),
+        "cv_precision_mean" : round(cv_precision.mean(), 4),
+        "cv_precision_std"  : round(cv_precision.std(), 4),
         "n_train"        : len(X_train),
         "n_test"         : len(X_test),
     }
