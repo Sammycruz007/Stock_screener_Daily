@@ -1,2 +1,16 @@
-.venv
-/data/scanner.db
+# Secrets — never commit
+.streamlit/secrets.toml
+
+# Local database — too large for GitHub
+data/scanner.db
+
+# Logs
+logs/
+
+# Python cache
+__pycache__/
+*.pyc
+.venv/
+
+# Models — committed explicitly, not via wildcard
+# (we want volume_classifier.pkl and signal_ranker.pkl in repo)

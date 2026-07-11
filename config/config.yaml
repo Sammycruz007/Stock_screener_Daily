@@ -6,7 +6,7 @@ fetcher:
   max_workers: 7     # 7 Parallel connections per batch
   retry_attempts: 3
   retry_delay_seconds: 5 # was 8 — more time between retries
-  historical_days: 58
+  historical_days: 5920 # # 8 years (2018 to now)
   incremental_days: 5
   
 filters:
@@ -14,7 +14,7 @@ filters:
   min_price: 10.0
 
 linreg:
-  period: 450
+  period: 250
   std_devs:
   - 1
   - 2
@@ -28,10 +28,10 @@ logging:
 
 ml:
   high_probability_threshold: 0.7
-  label_forward_periods: 130 # 5 trading days. 
+  label_forward_periods: 60 # 3 Months. 
   min_training_samples: 50
-  model_retrain_days: 7
-  backfill_stride: 4
+  model_retrain_days: 15 # Retrain the model every 15 days (2 weeks)
+  backfill_stride: 1
 
 scanner:
   long_entry_sd_max: -3
@@ -50,7 +50,7 @@ sentiment:
 
 smc:
   choch_confirmation: close
-  min_pivot_candles: 78 # 3 trading days of 15m candles
+  min_pivot_candles: 10 # 2 weeks of market data
 universe:
   indices:
   - SPY
@@ -70,4 +70,4 @@ universe:
   - XLC
 volume:
   avg_volume_period: 20
-  lookback_days: 26
+  lookback_days: 20

@@ -56,6 +56,7 @@ from sklearn.metrics import (precision_score, recall_score,
 from sklearn.metrics import make_scorer, precision_score
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn.calibration import CalibratedClassifierCV
 
 from ml.features import (
     SIGNAL_FEATURE_COLS,
@@ -104,14 +105,13 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         sklearn Pipeline
             """
     
-    
     model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 5,
         learning_rate      = 0.05,
         subsample          = 0.8,
         colsample_bytree   = 0.8,
-        min_child_weight   = 5,    # Prevents overfitting on small groups
+        min_child_weight   = 5,
         scale_pos_weight   = scale_pos_weight,
         eval_metric        = "logloss",
         random_state       = 42,

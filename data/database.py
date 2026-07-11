@@ -225,7 +225,6 @@ def initialise_database() -> None:
             sector             TEXT,
             sd_position        REAL,
             volume_signal      TEXT,
-            volume_signal     TEXT,
             has_valid_zone    INTEGER DEFAULT 0,
             ml_score           REAL,
             ml_rank            INTEGER,
@@ -271,7 +270,7 @@ def initialise_database() -> None:
         "CREATE INDEX IF NOT EXISTS idx_raw_prices_ticker_date       ON raw_prices(ticker, date)",
         "CREATE INDEX IF NOT EXISTS idx_indicator_results_ticker_date ON indicator_results(ticker, date)",
         "CREATE INDEX IF NOT EXISTS idx_scan_results_scan_date        ON scan_results(scan_date)",
-        "CREATE INDEX IF NOT EXISTS idx_sentiment_ticker_date         ON sentiment_data(ticker, date)",
+       # "CREATE INDEX IF NOT EXISTS idx_sentiment_ticker_date         ON sentiment_data(ticker, date)",
     ]
 
     try:
@@ -856,7 +855,7 @@ def read_latest_indicator_results() -> pd.DataFrame:
     
 
 # Cleanup function
-def prune_old_prices(max_days: int = 60) -> int:
+def prune_old_prices(max_days: int = 3000) -> int:
     """Delete raw_prices rows older than max_days to keep DB size bounded."""
     cutoff = (datetime.today() - timedelta(days=max_days)).strftime("%Y-%m-%d %H:%M:%S")
     with get_connection() as conn:

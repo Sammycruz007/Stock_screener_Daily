@@ -132,7 +132,7 @@ def run_full_pipeline():
 
         logger.info("Pruning old price data...")
         from data.database import prune_old_prices
-        deleted = prune_old_prices(max_days=60)
+        deleted = prune_old_prices(max_days=3000)
         logger.info(f"✅ Pruned {deleted} old rows")
 
     except Exception as e:

@@ -55,6 +55,7 @@ from sklearn.metrics import (
 from sklearn.metrics import make_scorer, precision_score   
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn.calibration import CalibratedClassifierCV
 
 from ml.features import (
     VOLUME_FEATURE_COLS,
@@ -121,7 +122,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         scale_pos_weight   = scale_pos_weight,
         eval_metric        = "logloss",
         random_state       = 42,
-        n_jobs             = -1,       # Use all CPU cores
+        n_jobs             = -1,
     )
 
     pipeline = Pipeline([

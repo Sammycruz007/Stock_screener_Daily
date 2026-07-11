@@ -530,7 +530,7 @@ def fetch_single_ticker(
             ticker,
             start      = start_date,
             end        = end_date,
-            interval   = "15m",
+            interval   = "1d",
             auto_adjust= True,
             progress   = False,
             threads    = False,
@@ -557,7 +557,7 @@ def fetch_single_ticker(
 
         raw         = raw[required].copy()
         raw["ticker"] = ticker
-        raw["date"]   = raw["date"] = raw.index.strftime("%Y-%m-%d %H:%M:%S")
+        raw["date"]   = raw["date"] = raw.index.strftime("%Y-%m-%d")
         raw           = raw.reset_index(drop=True)
 
         # Validate
@@ -822,7 +822,7 @@ def apply_stage1_filter(
     for ticker, group in df.groupby("ticker"):
         group      = group.sort_values("date")
         last_close = group["close"].iloc[-1]
-        avg_volume = group["volume"].tail(20 * 26).sum()/20
+        avg_volume = group["volume"].tail(20).mean() # 20 daily candles = 1 month avg
 
         # Indices and sector ETFs always pass
         if ticker in protected:

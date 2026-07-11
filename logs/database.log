@@ -501,3 +501,10 @@
 2026-07-09 16:41:40 | INFO     | database                  | Logger initialised → logs\database.log
 2026-07-09 16:41:40 | INFO     | database                  | Initialising database at: data\scanner.db
 2026-07-09 16:41:40 | INFO     | database                  | Database initialised successfully — all tables and indexes ready
+2026-07-11 10:42:27 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-11 10:42:27 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-11 10:44:43 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-11 10:44:43 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-11 10:50:26 | INFO     | database                  | Logger initialised → logs\database.log
+2026-07-11 10:50:26 | INFO     | database                  | Initialising database at: data\scanner.db
+2026-07-11 10:50:26 | INFO     | database                  | Database initialised successfully — all tables and indexes ready

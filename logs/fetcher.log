@@ -37706,3 +37706,347 @@
 2026-07-09 17:06:24 | INFO     | fetcher                   | Batch 135/239 | 25 tickers
 2026-07-09 17:06:27 | WARNING  | fetcher                   | MDRR | yfinance returned empty DataFrame
 2026-07-09 17:06:28 | WARNING  | fetcher                   | Batch: 3 tickers failed: ['MDBH', 'MDRR', 'MEGL']...
+2026-07-11 10:50:33 | INFO     | fetcher                   | Logger initialised → logs\fetcher.log
+2026-07-11 10:50:33 | INFO     | fetcher                   | Building full US stock universe from NASDAQ FTP...
+2026-07-11 10:50:33 | INFO     | fetcher                   | Fetching NASDAQ listed tickers from NASDAQ FTP...
+2026-07-11 10:50:38 | INFO     | fetcher                   | NASDAQ listed: 3954 tickers fetched
+2026-07-11 10:50:38 | INFO     | fetcher                   | Fetching NYSE/other listed tickers from NASDAQ FTP...
+2026-07-11 10:50:40 | INFO     | fetcher                   | NYSE/other listed: 2683 tickers fetched
+2026-07-11 10:50:40 | INFO     | fetcher                   | Full universe built | NASDAQ: 3954 | NYSE/Other: 2683 | Indices: 3 | Sectors: 11 | Total unique: 6651
+2026-07-11 10:51:08 | INFO     | fetcher                   | smart_fetch | Full fetch needed: 6651 tickers | Incremental: 0 tickers
+2026-07-11 10:51:08 | INFO     | fetcher                   | Full fetch: 2010-04-26 to 2026-07-11
+2026-07-11 10:51:08 | INFO     | fetcher                   | Fetching 6651 tickers | 267 batches of 25 | Period: 2010-04-26 to 2026-07-11
+2026-07-11 10:51:08 | INFO     | fetcher                   | Batch 1/267 | 25 tickers
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACG | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACIU | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACIW | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACO | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACOU | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACOW | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACP | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACPR | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACPU | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AACPW | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AADX | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAL | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAMI | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAOI | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAON | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAP | yfinance returned empty DataFrame
+2026-07-11 10:51:08 | WARNING  | fetcher                   | AAPG | yfinance returned empty DataFrame
+2026-07-11 10:51:09 | WARNING  | fetcher                   | AAPL | yfinance returned empty DataFrame
+2026-07-11 10:51:09 | WARNING  | fetcher                   | AARD | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | AACBU | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | A | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | AACI | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | AA | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | AAC.U | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | AACBR | yfinance returned empty DataFrame
+2026-07-11 10:51:14 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AACG', 'AACIU', 'AACIW', 'AACO', 'AACOU', 'AACOW', 'AACP', 'AACPR', 'AACPU', 'AACPW']...
+2026-07-11 10:51:14 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:51:17 | INFO     | fetcher                   | Batch 2/267 | 25 tickers
+2026-07-11 10:51:17 | WARNING  | fetcher                   | AB | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABEO | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABEV | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABG | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABLV | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABLVW | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABM | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABNB | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABOS | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABR | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABSI | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABT | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABTC | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABTS | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABUS | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABVC | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABVX | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABX | yfinance returned empty DataFrame
+2026-07-11 10:51:17 | WARNING  | fetcher                   | ABXL | yfinance returned empty DataFrame
+2026-07-11 10:51:22 | WARNING  | fetcher                   | AAT | yfinance returned empty DataFrame
+2026-07-11 10:51:22 | WARNING  | fetcher                   | AAUC | yfinance returned empty DataFrame
+2026-07-11 10:51:22 | WARNING  | fetcher                   | ABCL | yfinance returned empty DataFrame
+2026-07-11 10:51:22 | WARNING  | fetcher                   | ABBV | yfinance returned empty DataFrame
+2026-07-11 10:51:22 | WARNING  | fetcher                   | ABAT | yfinance returned empty DataFrame
+2026-07-11 10:51:32 | WARNING  | fetcher                   | ABCB | yfinance returned empty DataFrame
+2026-07-11 10:51:32 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AB', 'ABEO', 'ABEV', 'ABG', 'ABLV', 'ABLVW', 'ABM', 'ABNB', 'ABOS', 'ABR']...
+2026-07-11 10:51:32 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:51:35 | INFO     | fetcher                   | Batch 3/267 | 25 tickers
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACAAU | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACB | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACCL | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACDC | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACCS | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACET | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACFN | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGC | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGCU | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGCW | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGL | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGLN | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACGLO | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACH | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACHC | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACHR | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACHV | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACI | yfinance returned empty DataFrame
+2026-07-11 10:51:35 | WARNING  | fetcher                   | ACIC | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACA | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACAA | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACAAW | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACAD | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACCO | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | ACEL | yfinance returned empty DataFrame
+2026-07-11 10:51:40 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['ACAAU', 'ACB', 'ACCL', 'ACDC', 'ACCS', 'ACET', 'ACFN', 'ACGC', 'ACGCU', 'ACGCW']...
+2026-07-11 10:51:40 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:51:43 | INFO     | fetcher                   | Batch 4/267 | 25 tickers
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACIW | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACM | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACMR | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACON | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACOG | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACP | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACR | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACRE | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACRS | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACRV | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACT | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACTG | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACTU | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACU | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACV | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACVA | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ACXP | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | AD | yfinance returned empty DataFrame
+2026-07-11 10:51:43 | WARNING  | fetcher                   | ADAC | yfinance returned empty DataFrame
+2026-07-11 10:51:48 | WARNING  | fetcher                   | ACIU | yfinance returned empty DataFrame
+2026-07-11 10:51:48 | WARNING  | fetcher                   | ACONW | yfinance returned empty DataFrame
+2026-07-11 10:51:58 | WARNING  | fetcher                   | ACLS | yfinance returned empty DataFrame
+2026-07-11 10:51:58 | WARNING  | fetcher                   | ACNB | yfinance returned empty DataFrame
+2026-07-11 10:51:58 | WARNING  | fetcher                   | ACN | yfinance returned empty DataFrame
+2026-07-11 10:51:58 | WARNING  | fetcher                   | ACNT | yfinance returned empty DataFrame
+2026-07-11 10:51:58 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['ACIW', 'ACM', 'ACMR', 'ACON', 'ACOG', 'ACP', 'ACR', 'ACRE', 'ACRS', 'ACRV']...
+2026-07-11 10:51:58 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:52:01 | INFO     | fetcher                   | Batch 5/267 | 25 tickers
+2026-07-11 10:52:01 | WARNING  | fetcher                   | ADAM | yfinance returned empty DataFrame
+2026-07-11 10:52:01 | WARNING  | fetcher                   | ADAMG | yfinance returned empty DataFrame
+2026-07-11 10:52:01 | WARNING  | fetcher                   | ADAML | yfinance returned empty DataFrame
+2026-07-11 10:52:01 | WARNING  | fetcher                   | ADAMN | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADAMO | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADAMZ | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADBE | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADC | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADCT | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADEA | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADI | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADIL | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADM | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADMA | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADNT | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADP | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADPT | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADSE | yfinance returned empty DataFrame
+2026-07-11 10:52:02 | WARNING  | fetcher                   | ADSEW | yfinance returned empty DataFrame
+2026-07-11 10:52:06 | WARNING  | fetcher                   | ADACU | yfinance returned empty DataFrame
+2026-07-11 10:52:07 | WARNING  | fetcher                   | ADAMH | yfinance returned empty DataFrame
+2026-07-11 10:52:07 | WARNING  | fetcher                   | ADAMI | yfinance returned empty DataFrame
+2026-07-11 10:52:07 | WARNING  | fetcher                   | ADAMM | yfinance returned empty DataFrame
+2026-07-11 10:52:17 | WARNING  | fetcher                   | ADACW | yfinance returned empty DataFrame
+2026-07-11 10:52:17 | WARNING  | fetcher                   | ADAG | yfinance returned empty DataFrame
+2026-07-11 10:52:17 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['ADAM', 'ADAMG', 'ADAML', 'ADAMN', 'ADAMO', 'ADAMZ', 'ADBE', 'ADC', 'ADCT', 'ADEA']...
+2026-07-11 10:52:17 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:52:20 | INFO     | fetcher                   | Batch 6/267 | 25 tickers
+2026-07-11 10:52:20 | WARNING  | fetcher                   | ADTN | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | ADVB | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | ADX | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | ADXN | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEAQU | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEAQW | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEBI | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEC | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEE | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEF | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEFC | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEG | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEHL | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEHR | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEI | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEIS | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEM | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AEMD | yfinance returned empty DataFrame
+2026-07-11 10:52:20 | WARNING  | fetcher                   | AENT | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | ADT | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | ADSK | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | ADV | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | ADUR | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | ADUS | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | AEAQ | yfinance returned empty DataFrame
+2026-07-11 10:52:25 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['ADTN', 'ADVB', 'ADX', 'ADXN', 'AEAQU', 'AEAQW', 'AEBI', 'AEC', 'AEE', 'AEF']...
+2026-07-11 10:52:25 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:52:28 | INFO     | fetcher                   | Batch 7/267 | 25 tickers
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AERO | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AES | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AESI | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AESP | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AESPR | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AESPU | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AESPW | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AEVA | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AEXA | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AEYE | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFB | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFBI | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFCG | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFG | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFGB | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFGC | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFGD | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFGE | yfinance returned empty DataFrame
+2026-07-11 10:52:28 | WARNING  | fetcher                   | AFJK | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AEO | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AENTW | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AEON | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AEP | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AER | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | AERTW | yfinance returned empty DataFrame
+2026-07-11 10:52:33 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AERO', 'AES', 'AESI', 'AESP', 'AESPR', 'AESPU', 'AESPW', 'AEVA', 'AEXA', 'AEYE']...
+2026-07-11 10:52:33 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:52:36 | INFO     | fetcher                   | Batch 8/267 | 25 tickers
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AFJKU | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AFL | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AG | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGBK | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGCC | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AFYA | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGEN | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGI | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGIG | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGIO | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGL | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGM | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGM.A | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGMB | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGNC | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGNCL | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGNCM | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGNCN | yfinance returned empty DataFrame
+2026-07-11 10:52:36 | WARNING  | fetcher                   | AGNCO | yfinance returned empty DataFrame
+2026-07-11 10:52:41 | WARNING  | fetcher                   | AFJKR | yfinance returned empty DataFrame
+2026-07-11 10:52:41 | WARNING  | fetcher                   | AGCO | yfinance returned empty DataFrame
+2026-07-11 10:52:41 | WARNING  | fetcher                   | AGD | yfinance returned empty DataFrame
+2026-07-11 10:52:51 | WARNING  | fetcher                   | AFRIW | yfinance returned empty DataFrame
+2026-07-11 10:52:51 | WARNING  | fetcher                   | AFRI | Batch fetch failed: AFRI fetch failed: 'AFRI'
+2026-07-11 10:52:51 | WARNING  | fetcher                   | AFRM | yfinance returned empty DataFrame
+2026-07-11 10:52:51 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AFJKU', 'AFL', 'AG', 'AGBK', 'AGCC', 'AFYA', 'AGEN', 'AGI', 'AGIG', 'AGIO']...
+2026-07-11 10:52:51 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:52:54 | INFO     | fetcher                   | Batch 9/267 | 25 tickers
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AGNT | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AGYS | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AGX | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AHG | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AHMA | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AHR | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AHRT | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AHT | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AI | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIAI | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIB | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIBZ | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIDX | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIFF | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIFU | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIG | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIHS | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AII | yfinance returned empty DataFrame
+2026-07-11 10:52:54 | WARNING  | fetcher                   | AIIA | yfinance returned empty DataFrame
+2026-07-11 10:52:59 | WARNING  | fetcher                   | AGNCP | yfinance returned empty DataFrame
+2026-07-11 10:52:59 | WARNING  | fetcher                   | AGNCZ | yfinance returned empty DataFrame
+2026-07-11 10:52:59 | WARNING  | fetcher                   | AGPU | yfinance returned empty DataFrame
+2026-07-11 10:52:59 | WARNING  | fetcher                   | AGRO | yfinance returned empty DataFrame
+2026-07-11 10:52:59 | WARNING  | fetcher                   | AHCO | yfinance returned empty DataFrame
+2026-07-11 10:53:09 | WARNING  | fetcher                   | AGO | yfinance returned empty DataFrame
+2026-07-11 10:53:09 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AGNT', 'AGYS', 'AGX', 'AHG', 'AHMA', 'AHR', 'AHRT', 'AHT', 'AI', 'AIAI']...
+2026-07-11 10:53:09 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:53:12 | INFO     | fetcher                   | Batch 10/267 | 25 tickers
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIMD | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIO | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIOS | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIOT | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIP | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIR | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRE | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRG | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRI | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRJ | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRJW | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRO | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRS | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRT | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AIRTP | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AISP | yfinance returned empty DataFrame
+2026-07-11 10:53:12 | WARNING  | fetcher                   | AISPW | yfinance returned empty DataFrame
+2026-07-11 10:53:13 | WARNING  | fetcher                   | AIT | yfinance returned empty DataFrame
+2026-07-11 10:53:13 | WARNING  | fetcher                   | AIV | yfinance returned empty DataFrame
+2026-07-11 10:53:17 | WARNING  | fetcher                   | AIIOW | yfinance returned empty DataFrame
+2026-07-11 10:53:17 | WARNING  | fetcher                   | AIM | yfinance returned empty DataFrame
+2026-07-11 10:53:17 | WARNING  | fetcher                   | AIMDW | yfinance returned empty DataFrame
+2026-07-11 10:53:17 | WARNING  | fetcher                   | AIN | yfinance returned empty DataFrame
+2026-07-11 10:53:27 | WARNING  | fetcher                   | AIIO | yfinance returned empty DataFrame
+2026-07-11 10:53:27 | WARNING  | fetcher                   | AIIR | Batch fetch failed: AIIR fetch failed: 'AIIR'
+2026-07-11 10:53:27 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AIMD', 'AIO', 'AIOS', 'AIOT', 'AIP', 'AIR', 'AIRE', 'AIRG', 'AIRI', 'AIRJ']...
+2026-07-11 10:53:27 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:53:30 | INFO     | fetcher                   | Batch 11/267 | 25 tickers
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AJG | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKBA | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKO.A | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKO.B | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKR | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKTS | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | AKTX | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALAB | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALAR | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALB | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALC | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALCO | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALDF | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALDFU | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALDFW | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALDX | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALEC | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALF | yfinance returned empty DataFrame
+2026-07-11 10:53:31 | WARNING  | fetcher                   | ALFUU | yfinance returned empty DataFrame
+2026-07-11 10:53:36 | WARNING  | fetcher                   | AIXC | yfinance returned empty DataFrame
+2026-07-11 10:53:36 | WARNING  | fetcher                   | AIZ | yfinance returned empty DataFrame
+2026-07-11 10:53:36 | WARNING  | fetcher                   | AIXI | yfinance returned empty DataFrame
+2026-07-11 10:53:36 | WARNING  | fetcher                   | AKAM | yfinance returned empty DataFrame
+2026-07-11 10:53:36 | WARNING  | fetcher                   | AKA | yfinance returned empty DataFrame
+2026-07-11 10:53:46 | WARNING  | fetcher                   | AIZN | yfinance returned empty DataFrame
+2026-07-11 10:53:46 | WARNING  | fetcher                   | Batch: 25 tickers failed: ['AJG', 'AKBA', 'AKO.A', 'AKO.B', 'AKR', 'AKTS', 'AKTX', 'ALAB', 'ALAR', 'ALB']...
+2026-07-11 10:53:46 | WARNING  | fetcher                   | Batch returned no data
+2026-07-11 10:53:49 | INFO     | fetcher                   | Batch 12/267 | 25 tickers
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALG | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALGM | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALHC | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALISR | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALISU | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALIT | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALKS | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALKT | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALL | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALLE | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALLO | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALLR | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALLT | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALLY | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALM | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALMR | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALMS | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALMU | yfinance returned empty DataFrame
+2026-07-11 10:53:49 | WARNING  | fetcher                   | ALNT | yfinance returned empty DataFrame
+2026-07-11 10:53:54 | WARNING  | fetcher                   | ALFUW | yfinance returned empty DataFrame
+2026-07-11 10:53:54 | WARNING  | fetcher                   | ALGN | yfinance returned empty DataFrame
+2026-07-11 10:53:54 | WARNING  | fetcher                   | ALK | yfinance returned empty DataFrame
+2026-07-11 10:54:04 | WARNING  | fetcher                   | ALGS | yfinance returned empty DataFrame
+2026-07-11 10:54:04 | WARNING  | fetcher                   | ALH | yfinance returned empty DataFrame
+2026-07-11 10:54:04 | WARNING  | fetcher                   | ALGT | yfinance returned empty DataFrame
