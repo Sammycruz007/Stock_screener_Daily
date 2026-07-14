@@ -6,12 +6,12 @@ fetcher:
   max_workers: 7     # 7 Parallel connections per batch
   retry_attempts: 3
   retry_delay_seconds: 5 # was 8 — more time between retries
-  historical_days: 5920 # # 8 years (2018 to now)
-  incremental_days: 5
+  historical_days: 2920  # 8 years — daily candles have no ~60-day cap like intraday did
+  incremental_days: 10   # buffer for long weekends/holiday closures on daily bars
   
 filters:
-  min_avg_volume: 500000
-  min_price: 10.0
+  min_avg_volume: 1000000
+  min_price: 15.0
 
 linreg:
   period: 250
@@ -28,10 +28,10 @@ logging:
 
 ml:
   high_probability_threshold: 0.7
-  label_forward_periods: 60 # 3 Months. 
+  label_forward_periods: 60 # 60 daily candles ≈ 3 months forward
   min_training_samples: 50
-  model_retrain_days: 15 # Retrain the model every 15 days (2 weeks)
-  backfill_stride: 1
+  model_retrain_days: 7
+  backfill_stride: 4
 
 scanner:
   long_entry_sd_max: -3
@@ -50,7 +50,7 @@ sentiment:
 
 smc:
   choch_confirmation: close
-  min_pivot_candles: 10 # 2 weeks of market data
+  min_pivot_candles: 30 # 30 daily candles ≈ 6 weeks — SMC's min_required (×3) = 90 daily candles ≈ 4.3 months, safely below LinReg's 250-day requirement
 universe:
   indices:
   - SPY
@@ -70,4 +70,4 @@ universe:
   - XLC
 volume:
   avg_volume_period: 20
-  lookback_days: 20
+  lookback_days: 26
