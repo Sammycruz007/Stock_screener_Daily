@@ -44,13 +44,29 @@ from datetime import datetime, time , timedelta
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
+import os
 import yaml
 
-from data.database import (
-    write_raw_prices,
-    get_last_fetch_date,
-    write_filtered_universe,
-)
+_is_cloud = bool(os.getenv("SUPABASE_DB_URL"))
+
+if _is_cloud:
+    from data.database_cloud import (
+        write_filtered_universe,
+        write_sector_metadata,
+        get_last_fetch_dates_bulk,
+        write_last_fetch_dates,
+    )
+    # Cloud has no per-ticker raw_prices table — prices live in Storage
+    # (see data/storage_cloud.py). write_raw_prices / get_last_fetch_date
+    # below are the LOCAL SQLite versions, kept for the local dev path.
+    from data.database import write_raw_prices, get_last_fetch_date
+else:
+    from data.database import (
+        write_raw_prices,
+        get_last_fetch_date,
+        write_filtered_universe,
+        write_sector_metadata,
+    )
 from utils.logging import get_fetcher_logger
 from utils.error_handler import (
     retry,
@@ -66,7 +82,7 @@ from curl_cffi import requests as curl_requests
 
 # Shared session with browser impersonation — fixes YFTzMissingError
 
-_YF_SESSION = curl_requests.Session(impersonate="chrome")
+#_YF_SESSION = curl_requests.Session(impersonate="chrome")
 logger = get_fetcher_logger()
 
 
@@ -363,7 +379,7 @@ SECTOR_NAME_TO_ETF = {
 
 
 @graceful(default_return=None, exceptions=(Exception,), log_level="warning")
-def _fetch_ticker_sector(ticker: str) -> Optional[dict]:
+def _fetch_ticker_sector(ticker: str, session) -> Optional[dict]:
     """
     Fetch sector information for a single ticker from yfinance.
 
@@ -380,12 +396,19 @@ def _fetch_ticker_sector(ticker: str) -> Optional[dict]:
     - Dashboard shows ⚠️ warning for these stocks
 
     Args:
-        ticker: Ticker symbol
+        ticker : Ticker symbol
+        session: Shared curl_cffi session for this fetch_sector_metadata
+                 run. Reusing one session across all tickers means one
+                 Yahoo crumb/cookie handshake for the whole run instead
+                 of one per ticker — a per-ticker session was hammering
+                 Yahoo's auth endpoint and causing "Invalid Crumb" 401s
+                 at this volume. Session lifecycle (open/close) is owned
+                 by the caller (fetch_sector_metadata), not this function.
 
     Returns:
         Dict with ticker, sector_name, sector_etf or None on failure
     """
-    tk   = yf.Ticker(ticker)
+    tk   = yf.Ticker(ticker, session=session)
     info = tk.info
 
     if not info:
@@ -424,13 +447,20 @@ def _fetch_ticker_sector(ticker: str) -> Optional[dict]:
 
 def fetch_sector_metadata(tickers: list[str]) -> pd.DataFrame:
     """
-    Fetch sector metadata for all tickers in parallel.
+    Fetch sector metadata for all tickers in parallel, batched and paced.
 
     FLOW:
     1. Exclude indices and sector ETFs — they don't have sector info
-    2. Fetch sector for each stock ticker in parallel
-    3. Collect results — every ticker gets a row even if Unclassified
-    4. Return DataFrame ready for ticker_metadata table
+    2. Open a small POOL of shared sessions (not 1, not 1-per-ticker) —
+       a single shared session across MAX_WORKERS concurrent threads
+       caused connection-pool contention (intermittent timeouts), while
+       a session per ticker caused Yahoo to reject crumbs from too many
+       simultaneous handshakes. A small pool balances both concerns.
+    3. Process stock tickers in small batches with a pause between them
+       — .info is far more rate-limit sensitive than .download(), so
+       this uses smaller batches and a longer pause than the OHLCV fetch
+    4. Collect results — every ticker gets a row even if Unclassified
+    5. Return DataFrame ready for ticker_metadata table
 
     Args:
         tickers: Full universe ticker list
@@ -450,36 +480,68 @@ def fetch_sector_metadata(tickers: list[str]) -> pd.DataFrame:
     results      = []
     unclassified = 0
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        future_to_ticker = {
-            executor.submit(_fetch_ticker_sector, ticker): ticker
-            for ticker in stock_tickers
-        }
+    SECTOR_BATCH_SIZE    = 15
+    SECTOR_SLEEP_SECONDS = 5
+    SESSION_POOL_SIZE    = 3  # small pool — fewer crumb handshakes than
+                              # 1-per-ticker, less contention than 1-total
 
-        for future in as_completed(future_to_ticker):
-            ticker = future_to_ticker[future]
-            try:
-                result = future.result()
-                if result:
-                    results.append(result)
-                    if result["sector_etf"] is None:
+    batches = [
+        stock_tickers[i : i + SECTOR_BATCH_SIZE]
+        for i in range(0, len(stock_tickers), SECTOR_BATCH_SIZE)
+    ]
+
+    session_pool = [
+        curl_requests.Session(impersonate="chrome")
+        for _ in range(SESSION_POOL_SIZE)
+    ]
+    try:
+        for batch_num, batch in enumerate(batches, 1):
+            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                future_to_ticker = {
+                    executor.submit(
+                        _fetch_ticker_sector,
+                        ticker,
+                        session_pool[i % SESSION_POOL_SIZE],
+                    ): ticker
+                    for i, ticker in enumerate(batch)
+                }
+
+                for future in as_completed(future_to_ticker):
+                    ticker = future_to_ticker[future]
+                    try:
+                        result = future.result()
+                        if result:
+                            results.append(result)
+                            if result["sector_etf"] is None:
+                                unclassified += 1
+                        else:
+                            # Even on total failure add an unclassified row
+                            results.append({
+                                "ticker"     : ticker,
+                                "sector_name": "Unclassified",
+                                "sector_etf" : None,
+                            })
+                            unclassified += 1
+                    except Exception as e:
+                        logger.warning(f"{ticker} | Sector fetch failed: {e}")
+                        results.append({
+                            "ticker"     : ticker,
+                            "sector_name": "Unclassified",
+                            "sector_etf" : None,
+                        })
                         unclassified += 1
-                else:
-                    # Even on total failure add an unclassified row
-                    results.append({
-                        "ticker"     : ticker,
-                        "sector_name": "Unclassified",
-                        "sector_etf" : None,
-                    })
-                    unclassified += 1
-            except Exception as e:
-                logger.warning(f"{ticker} | Sector fetch failed: {e}")
-                results.append({
-                    "ticker"     : ticker,
-                    "sector_name": "Unclassified",
-                    "sector_etf" : None,
-                })
-                unclassified += 1
+
+            if batch_num % 10 == 0 or batch_num == len(batches):
+                logger.info(
+                    f"Sector metadata progress: batch {batch_num}/{len(batches)} | "
+                    f"{len(results)}/{len(stock_tickers)} processed"
+                )
+
+            if batch_num < len(batches):
+                _time.sleep(SECTOR_SLEEP_SECONDS)
+    finally:
+        for s in session_pool:
+            s.close()
 
     logger.info(
         f"Sector metadata complete | "
@@ -525,6 +587,10 @@ def fetch_single_ticker(
     Returns:
         Clean OHLCV DataFrame or None if fetch/validation fails
     """
+    
+    # 1. Create a fresh, isolated session for this specific thread
+    local_session = curl_requests.Session(impersonate="chrome")
+    
     try:
         raw = yf.download(
             ticker,
@@ -534,12 +600,16 @@ def fetch_single_ticker(
             auto_adjust= True,
             progress   = False,
             threads    = False,
-            session    = _YF_SESSION,
+            session    = local_session, # 2. Use the local session
         )
+        
+        # 3. Clean up the session immediately to prevent memory leaks
+        local_session.close()
 
         if raw.empty:
             logger.warning(f"{ticker} | yfinance returned empty DataFrame")
             return None
+
 
         # Flatten MultiIndex columns if present
         if isinstance(raw.columns, pd.MultiIndex):
@@ -557,7 +627,7 @@ def fetch_single_ticker(
 
         raw         = raw[required].copy()
         raw["ticker"] = ticker
-        raw["date"]   = raw["date"] = raw.index.strftime("%Y-%m-%d")
+        raw["date"]   = raw.index.strftime("%Y-%m-%d")
         raw           = raw.reset_index(drop=True)
 
         # Validate
@@ -708,17 +778,27 @@ def fetch_universe(
 
 def smart_fetch(tickers: list[str]) -> pd.DataFrame:
     """
-    Intelligently decide full vs incremental fetch per ticker.
+    Intelligently decide full vs incremental fetch per ticker, in both
+    local (SQLite) and cloud (Supabase) modes.
 
     DECISION LOGIC per ticker:
-    - Not in database → full HISTORICAL_DAYS fetch (365 days)
-    - Already in database → incremental INCREMENTAL_DAYS fetch (5 days)
+    - Not previously tracked → full HISTORICAL_DAYS fetch (8 years)
+    - Already tracked        → incremental INCREMENTAL_DAYS fetch (buffer
+      window, not just "since yesterday" — covers weekend/holiday gaps
+      and any missed pipeline runs)
 
     This means:
-    - First ever run: downloads 365 days for all ~6,000 tickers
-      (heavy one-time cost — expect 20-40 minutes)
-    - All subsequent daily runs: only fetches 5 days per ticker
-      (fast — expect 5-10 minutes)
+    - First ever run: downloads ~8 years for the full universe
+      (heavy one-time cost, expected — this is the tradeoff for genuine
+      incremental fetching on every run after)
+    - All subsequent runs: only fetch INCREMENTAL_DAYS per ticker
+      (fast — daily bars have exactly one new row per trading day, so
+      this is a small fraction of the full-fetch cost)
+
+    Cloud mode now tracks last-fetched date per ticker via a small
+    Postgres table (fetch_tracker) instead of always forcing a full
+    re-fetch — unlike the 15m project, daily data's small per-day
+    volume makes real incremental tracking practical in the cloud.
 
     Args:
         tickers: Full universe ticker list
@@ -732,16 +812,26 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
     full_tickers        = []
     incremental_tickers = []
 
-    # Check database for each ticker's last fetch date
+    # ── Determine each ticker's last-fetched date ─────────────────────────
+    if _is_cloud:
+        # ONE bulk query for the whole universe, not one query per ticker
+        last_fetch_map = get_last_fetch_dates_bulk()
+    else:
+        last_fetch_map = None  # local path looks up per-ticker via SQLite below
+
     for ticker in tickers:
-        last_date = get_last_fetch_date(ticker)
+        if _is_cloud:
+            last_date = last_fetch_map.get(ticker)
+        else:
+            last_date = get_last_fetch_date(ticker)
+
         if last_date is None:
             full_tickers.append(ticker)
         else:
             incremental_tickers.append(ticker)
 
     logger.info(
-        f"smart_fetch | "
+        f"smart_fetch | Cloud mode: {_is_cloud} | "
         f"Full fetch needed: {len(full_tickers)} tickers | "
         f"Incremental: {len(incremental_tickers)} tickers"
     )
@@ -777,8 +867,18 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
         return pd.DataFrame()
 
     combined = pd.concat(all_data, ignore_index=True)
+
+    # ── Update the fetch tracker with what was ACTUALLY fetched ───────────
+    # Uses the real max date fetched per ticker, not just "today" — a
+    # ticker might have gaps, be delisted, or fail partway through, and
+    # we don't want to falsely mark it as caught up when it isn't.
+    if _is_cloud and not combined.empty:
+        max_dates = combined.groupby("ticker")["date"].max().astype(str).to_dict()
+        write_last_fetch_dates(max_dates)
+
     logger.info(f"smart_fetch complete | Total rows: {len(combined)}")
     return combined
+
 
 
 # =============================================================================
@@ -822,7 +922,7 @@ def apply_stage1_filter(
     for ticker, group in df.groupby("ticker"):
         group      = group.sort_values("date")
         last_close = group["close"].iloc[-1]
-        avg_volume = group["volume"].tail(20).mean() # 20 daily candles = 1 month avg
+        avg_volume = group["volume"].tail(20).mean()
 
         # Indices and sector ETFs always pass
         if ticker in protected:
@@ -922,8 +1022,7 @@ def run_data_pipeline() -> dict:
         sector_df      = fetch_sector_metadata(passed_tickers)
         summary["sector_metadata_fetched"] = len(sector_df)
 
-        # write_sector_metadata is added to database.py — see below
-        from data.database import write_sector_metadata
+        # write_sector_metadata is imported at module level (cloud/local routed)
         write_sector_metadata(sector_df, today)
 
         logger.info("=" * 60)
