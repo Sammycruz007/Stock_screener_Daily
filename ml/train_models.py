@@ -18,6 +18,7 @@ KEY FIXES vs previous version:
 """
 
 import sys
+import os
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -26,19 +27,35 @@ import pandas as pd
 import numpy as np
 import yaml
 
-from data.database import (
-    initialise_database,
-    read_filtered_universe,
-    read_raw_prices,
-    read_sector_metadata,
-    write_model_metrics,
-)
+if os.getenv("SUPABASE_DB_URL"):
+    from data.database_cloud import (
+        initialise_database,
+        read_filtered_universe,
+        read_sector_metadata,
+        write_model_metrics,
+    )
+    from data.storage_cloud import read_price_history
+    _CLOUD_MODE = True
+else:
+    from data.database import (
+        initialise_database,
+        read_filtered_universe,
+        read_raw_prices,
+        read_sector_metadata,
+        write_model_metrics,
+    )
+    _CLOUD_MODE = False
 from engines.linreg import compute_linreg_latest, PERIOD as LINREG_PERIOD
 from engines.smc    import compute_smc
 from engines.volume import compute_volume_signal
 from scanner.screener import _check_sector_health
 from ml.labeller import label_volume_patterns, label_scanner_hits
-from ml.features import build_volume_feature_matrix, build_signal_feature_matrix
+from ml.features import (
+    build_volume_feature_matrix,
+    build_signal_feature_matrix,
+    compute_volume_features,
+    VOLUME_FEATURE_COLS,
+)
 from ml.volume_classifier import (
     train_volume_classifier,
     score_volume_signals,
@@ -281,8 +298,34 @@ def run_training():
     prices_all        = []
     backfill_failed   = 0
 
+    if _CLOUD_MODE:
+        # Load the full rolling window once from Supabase Storage, then
+        # filter per ticker in memory — avoids re-downloading snapshots
+        # on every loop iteration.
+        #
+        # NOTE: no days= argument — this project needs the FULL
+        # accumulated history for regime coverage across all 8 years,
+        # not a rolling window. The 15m project used days=60 here
+        # because it only needed a recent window; that default would
+        # silently gut this project's entire purpose if carried over.
+        logger.info("Loading full price history from Supabase Storage...")
+        full_history = read_price_history()
+        logger.info(f"Loaded {len(full_history)} total rows across all snapshots")
+
+        if full_history.empty:
+            logger.error(
+                "No price history snapshots available yet. "
+                "Snapshots accumulate daily from run_pipeline_cloud.py — "
+                "wait for more daily runs before training."
+            )
+            return
+
     for n, ticker in enumerate(tickers, 1):
-        df = read_raw_prices(ticker)
+        if _CLOUD_MODE:
+            df = full_history[full_history["ticker"] == ticker].sort_values("date").reset_index(drop=True)
+        else:
+            df = read_raw_prices(ticker)
+
         if df.empty:
             backfill_failed += 1
             continue
@@ -364,7 +407,7 @@ def run_training():
                     precision  = vol_metrics["precision"],
                     auc_roc    = vol_metrics["auc_roc"],
                     n_samples  = vol_metrics["n_train"] + vol_metrics["n_test"],
-                    recall     = vol_metrics.get("Recall", 0.0),
+                    recall     = vol_metrics.get("recall", 0.0),
                     pr_auc     = vol_metrics.get("pr_auc", 0.0),
                 )
             else:
@@ -374,25 +417,57 @@ def run_training():
                 )
 
     # ── Step 5: Build vol_clf_score lookup ────────────────────────────────────
-    # Score every (ticker, date) in backfilled history using trained vol model
+    # Score every (ticker, date) in backfilled history using trained vol model.
+    #
+    # REWRITTEN FOR SPEED: the original version called score_volume_signals()
+    # once per (ticker, date) pair — with ~1,800 tickers × ~250 dates each,
+    # that's roughly 460,000 individual predict_proba() calls, each preceded
+    # by an O(n) re-filter of that ticker's ENTIRE price history from scratch
+    # (px[px["date"] <= date], repeated every iteration). That combination is
+    # what caused multi-hour runtimes. Fixed two ways:
+    #   1. np.searchsorted() for an O(log n) cutoff lookup instead of an
+    #      O(n) boolean mask re-scan on every single date.
+    #   2. Accumulate ALL feature rows first, then call predict_proba() ONCE
+    #      on the full batch — XGBoost is vectorized, so one call over many
+    #      rows is dramatically faster than many calls of one row each.
     vol_scores = {}
 
     if vol_pipeline is not None:
         logger.info("Scoring volume patterns across backfilled history...")
-        scored = 0
+
+        feature_rows = []
+        score_keys   = []
+
         for ticker, group in indicators_history_df.groupby("ticker"):
             px = prices_all_df[
                 prices_all_df["ticker"] == ticker
-            ].sort_values("date")
+            ].sort_values("date").reset_index(drop=True)
+
+            px_dates = px["date"].values
 
             for date in group["date"].unique():
-                px_slice     = px[px["date"] <= date]
-                tickers_data = {ticker: px_slice}
-                s = score_volume_signals(tickers_data, str(date), vol_pipeline)
-                vol_scores[(ticker, str(date))] = s.get(ticker, 0.5)
-                scored += 1
+                # O(log n) cutoff instead of re-filtering the whole array
+                cutoff = np.searchsorted(px_dates, date, side="right")
+                if cutoff == 0:
+                    continue
 
-        logger.info(f"Volume scoring complete: {scored} (ticker, date) pairs scored")
+                px_slice = px.iloc[:cutoff]
+                features = compute_volume_features(px_slice, str(date))
+
+                if features is None:
+                    continue
+
+                feature_rows.append(features)
+                score_keys.append((ticker, str(date)))
+
+        if feature_rows:
+            X_all = pd.DataFrame(feature_rows)[VOLUME_FEATURE_COLS]
+            probs = vol_pipeline.predict_proba(X_all)[:, 1]
+
+            for key, prob in zip(score_keys, probs):
+                vol_scores[key] = round(float(prob), 4)
+
+        logger.info(f"Volume scoring complete: {len(vol_scores)} (ticker, date) pairs scored")
     else:
         logger.warning(
             "Volume Classifier not available — "
