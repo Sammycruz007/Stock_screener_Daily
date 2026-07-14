@@ -78,13 +78,24 @@ def _load_config() -> dict:
         return yaml.safe_load(f)
 
 config = _load_config()
-ML_CFG = config["ml"]
+ML_CFG     = config["ml"]
+LINREG_CFG = config["linreg"]
 
 MIN_SAMPLES  = ML_CFG["min_training_samples"]
 HIGH_PROB_THRESHOLD = ML_CFG["high_probability_threshold"]   # 0.70
 MODEL_DIR    = Path(__file__).resolve().parents[1] / "models"
 MODEL_PATH   = MODEL_DIR / "signal_ranker.pkl"
 GAP = ML_CFG["label_forward_periods"]
+LINREG_PERIOD = LINREG_CFG["period"]
+
+# The train/test and CV gap must be AT LEAST as large as the biggest
+# feature lookback window, or validation rows can share overlapping
+# history with training rows (leakage) even though they're on
+# "different" dates. LinReg features look back up to LINREG_PERIOD
+# (450) candles — larger than the SMC lookback this gap was originally
+# sized for (previously hardcoded to 131) and larger than the label's
+# forward window (GAP/130). Use the largest of the two to be safe.
+SAFETY_GAP = max(LINREG_PERIOD, GAP)
 
 # =============================================================================
 # MODEL BUILDER
@@ -105,6 +116,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         sklearn Pipeline
             """
     
+    
     model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 5,
@@ -112,6 +124,8 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         subsample          = 0.8,
         colsample_bytree   = 0.8,
         min_child_weight   = 5,
+        reg_alpha          = 4.0,
+        reg_lambda         = 4.0,
         scale_pos_weight   = scale_pos_weight,
         eval_metric        = "logloss",
         random_state       = 42,
@@ -124,7 +138,6 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     ])
 
     return pipeline
-
 
 # =============================================================================
 # TRAINING
@@ -188,7 +201,8 @@ def train_signal_ranker(
     n_negative       = (y == 0).sum()
     n_positive       = (y == 1).sum()
     raw_ratio        = n_negative / n_positive if n_positive > 0 else 1.0
-    scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
+    scale_pos_weight = 1.5
+    #scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
 
     logger.info(
         f"Class balance | "
@@ -197,24 +211,69 @@ def train_signal_ranker(
     )
 
     # ── Step 5: Build pipeline ────────────────────────────────────────────────
-    pipeline = _build_pipeline(scale_pos_weight)
+    pipeline = _build_pipeline(scale_pos_weight) # set as one for now
 
     # ── Step 6: Cut a FINAL HOLDOUT FIRST. Never touch this during CV ───────
-    # Last 20% by time = walk-forward reality check
-   
+    # Last 30% by time = walk-forward reality check.
+    #
+    # A buffer of SAFETY_GAP rows is dropped between train and test —
+    # previously there was NO gap here at all, so test rows near the
+    # boundary could share overlapping LinReg lookback history (up to
+    # 450 candles back) with the training rows right before them. That's
+    # leakage: the model could see part of what it's later "tested" on.
     split_idx  = int(len(dates) * 0.70)
+    test_start = split_idx + SAFETY_GAP
+
+    if test_start >= len(dates):
+        logger.warning(
+            f"SAFETY_GAP ({SAFETY_GAP}) leaves no room for an OOS test set "
+            f"with only {len(dates)} samples — falling back to no gap."
+        )
+        test_start = split_idx
+
     train_mask = dates.index < dates.index[split_idx]
-    test_mask  = dates.index >= dates.index[split_idx]
+    test_mask  = dates.index >= dates.index[test_start]
 
     X_train, y_train = X[train_mask], y[train_mask]
     X_test,  y_test  = X[test_mask],  y[test_mask]
 
-    logger.info(f"Walk-Forward Split | Train: {len(X_train)} | OOS Test: {len(X_test)} | Ratio: {raw_ratio:.2f}:1")
+    logger.info(
+        f"Walk-Forward Split | Train: {len(X_train)} | "
+        f"Gap: {test_start - split_idx} rows | "
+        f"OOS Test: {len(X_test)} | Ratio: {raw_ratio:.2f}:1"
+    )
+
+    # Diagnostic: log the actual date ranges + label balance of train vs
+    # OOS test. CV folds are drawn entirely from the TRAIN window below —
+    # they never see the OOS period at all — so if these two windows cover
+    # meaningfully different market conditions (volatility, label balance),
+    # that's a real, checkable signal of regime shift rather than pure
+    # overfitting. Compare this across successive training runs to see if
+    # it's a one-off artifact of this particular OOS window or persistent.
+    if "date" in df.columns:
+        train_dates = dates[train_mask]
+        test_dates  = dates[test_mask]
+        train_pos_rate = y_train.mean() if len(y_train) > 0 else float("nan")
+        test_pos_rate  = y_test.mean()  if len(y_test)  > 0 else float("nan")
+        logger.info(
+            f"Train window | {train_dates.min()} → {train_dates.max()} | "
+            f"Positive rate: {train_pos_rate:.4f}"
+        )
+        logger.info(
+            f"OOS window   | {test_dates.min()} → {test_dates.max()} | "
+            f"Positive rate: {test_pos_rate:.4f}"
+        )
 
     # ── Step 7: Cross-validation on TRAIN only ───────────────────────────────
-    # GAP must be >= your max lookback. From config: smc min_pivot_candles=78
+    # SAFETY_GAP = max(LinReg lookback, label forward window) — previously
+    # hardcoded to 131 (sized only for SMC's lookback), which was smaller
+    # than the 450-candle LinReg lookback and allowed leakage between CV
+    # folds. NOTE: CV folds are all drawn from X_train (the oldest 70% of
+    # data) — none of them ever see the OOS test window above. A tight CV
+    # std here reflects consistency WITHIN the training period only, not
+    # agreement with the true held-out future period.
     
-    cv = TimeSeriesSplit(n_splits=5, gap=131)
+    cv = TimeSeriesSplit(n_splits=5, gap=SAFETY_GAP)
 
     cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
                                   scoring="roc_auc", n_jobs=-1)
@@ -228,7 +287,7 @@ def train_signal_ranker(
     )
 
     cv_precision = cross_val_score(pipeline, X_train, y_train,
-                                   cv=cv, scoring="precision", n_jobs=-1)
+                                   cv=cv, scoring=precision_scorer, n_jobs=-1)
 
     logger.info(
         f"Cross-validation | "
