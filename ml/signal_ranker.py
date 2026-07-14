@@ -201,8 +201,7 @@ def train_signal_ranker(
     n_negative       = (y == 0).sum()
     n_positive       = (y == 1).sum()
     raw_ratio        = n_negative / n_positive if n_positive > 0 else 1.0
-    scale_pos_weight = 1.5
-    #scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
+    scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
 
     logger.info(
         f"Class balance | "
