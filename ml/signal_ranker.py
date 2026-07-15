@@ -62,6 +62,7 @@ from ml.features import (
     SIGNAL_FEATURE_COLS,
     compute_signal_features,
 )
+from engines.relative_strength import BENCHMARK as RS_BENCHMARK
 from utils.logging import get_ml_logger
 from utils.error_handler import MLError
 
@@ -201,7 +202,8 @@ def train_signal_ranker(
     n_negative       = (y == 0).sum()
     n_positive       = (y == 1).sum()
     raw_ratio        = n_negative / n_positive if n_positive > 0 else 1.0
-    scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
+    scale_pos_weight = 1.5
+    #scale_pos_weight = min(20.0, raw_ratio) # <- CAP IT. Ranking models hate >20
 
     logger.info(
         f"Class balance | "
@@ -442,6 +444,18 @@ def score_candidates(
 
     results = []
 
+    # Extract benchmark (SPY) price series ONCE, not per candidate —
+    # same reasoning as build_signal_feature_matrix in features.py.
+    benchmark_prices_df = prices_df[
+        prices_df["ticker"] == RS_BENCHMARK
+    ].sort_values("date")
+
+    if benchmark_prices_df.empty:
+        logger.warning(
+            f"{RS_BENCHMARK} not found in today's prices_df — "
+            f"relative_strength will be 0.0 for all candidates"
+        )
+
     for _, row in candidates_df.iterrows():
         ticker    = row["ticker"]
         direction = row["direction"]
@@ -456,13 +470,14 @@ def score_candidates(
 
         try:
             features = compute_signal_features(
-                ticker        = ticker,
-                signal_date   = signal_date,
-                direction     = direction,
-                prices_df     = px,
-                indicators_df = indicators_df,
-                market_ind_df = market_ind_df,
-                vol_clf_score = vol_score,
+                ticker              = ticker,
+                signal_date         = signal_date,
+                direction           = direction,
+                prices_df           = px,
+                indicators_df       = indicators_df,
+                market_ind_df       = market_ind_df,
+                vol_clf_score       = vol_score,
+                benchmark_prices_df = benchmark_prices_df,
             )
 
             if features is None:
