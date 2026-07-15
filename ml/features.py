@@ -41,6 +41,8 @@ import yaml
 
 from utils.logging import get_ml_logger
 from utils.error_handler import graceful, MLError
+from engines.adx import compute_adx_latest
+from engines.relative_strength import compute_relative_strength_latest, BENCHMARK as RS_BENCHMARK
 
 logger = get_ml_logger()
 
@@ -189,13 +191,14 @@ def compute_volume_features(
 # =============================================================================
 
 def compute_signal_features(
-    ticker         : str,
-    signal_date    : str,
-    direction      : str,
-    prices_df      : pd.DataFrame,
-    indicators_df  : pd.DataFrame,
-    market_ind_df  : pd.DataFrame,
-    vol_clf_score  : Optional[float] = None,
+    ticker            : str,
+    signal_date       : str,
+    direction         : str,
+    prices_df         : pd.DataFrame,
+    indicators_df     : pd.DataFrame,
+    market_ind_df     : pd.DataFrame,
+    vol_clf_score     : Optional[float] = None,
+    benchmark_prices_df: Optional[pd.DataFrame] = None,
 ) -> Optional[dict]:
     """
     Compute all features for the Signal Ranker for a single ticker/date.
@@ -223,15 +226,28 @@ def compute_signal_features(
     - market_slope_avg  : Average LinReg slope of SPY + QQQ + DIA
     - market_choch_count: Number of indices with CHoCH (0, 1, 2, or 3)
 
+    GROUP 6 — ADX / trend strength (3 features, see engines/adx.py):
+    - adx_value         : Trend strength, direction-independent (0-100+)
+    - plus_di           : Bullish directional pressure
+    - minus_di          : Bearish directional pressure
+
+    GROUP 7 — Relative Strength (1 feature, see engines/relative_strength.py):
+    - relative_strength : Outperformance vs benchmark (SPY) over the
+                           configured lookback window. Positive = ticker
+                           outperformed; negative = underperformed.
+
     Args:
-        ticker        : Ticker symbol
-        signal_date   : Date of signal YYYY-MM-DD
-        direction     : 'long' or 'short'
-        prices_df     : Full OHLCV data for this ticker
-        indicators_df : Full indicator results (all tickers)
-        sentiment_df  : Sentiment data (all tickers)
-        market_ind_df : Indicator results for SPY, QQQ, DIA only
-        vol_clf_score : Output of Volume Classifier model (optional)
+        ticker             : Ticker symbol
+        signal_date         : Date of signal YYYY-MM-DD
+        direction           : 'long' or 'short'
+        prices_df           : Full OHLCV data for this ticker
+        indicators_df       : Full indicator results (all tickers)
+        sentiment_df        : Sentiment data (all tickers)
+        market_ind_df       : Indicator results for SPY, QQQ, DIA only
+        vol_clf_score       : Output of Volume Classifier model (optional)
+        benchmark_prices_df : Full OHLCV data for the RS benchmark (SPY),
+                               used for the relative_strength feature.
+                               Falls back to 0.0 if not provided.
 
     Returns:
         Dict of all features or None if insufficient data
@@ -278,18 +294,9 @@ def compute_signal_features(
         indicators_df["ticker"] == ticker
     ].sort_values("date")
 
-    slope_up_col    = ticker_ind["linreg_slope_up"].values
-    current_slope   = int(ind["linreg_slope_up"])
-    days_in_trend   = 0
+    current_slope = int(ind["linreg_slope_up"])
 
-    # Count backwards from signal date
-    for val in reversed(slope_up_col[slope_up_col != current_slope].tolist()):
-        if val == current_slope:
-            days_in_trend += 1
-        else:
-            break
-
-    # Simpler approach — count from end
+    # Count consecutive trailing candles with the same slope direction
     days_in_trend = 0
     for val in reversed(ticker_ind["linreg_slope_up"].tolist()):
         if val == current_slope:
@@ -327,9 +334,39 @@ def compute_signal_features(
     last_candle    = px.iloc[-1]
     bos_body       = abs(last_candle["close"] - last_candle["open"])
     bos_strength   = bos_body / atr14 if atr14 > 0 else 0.0
-    
 
-   
+    # ── GROUP 6: ADX (trend strength, direction-independent) ──────────────────
+    # See engines/adx.py — falls back to 0.0 if insufficient history rather
+    # than dropping the whole row, since ADX needs 2×PERIOD candles and we
+    # don't want to lose training examples for tickers still ramping up
+    # their history (e.g. recently listed, or early in the 8-year backfill).
+    adx_result = compute_adx_latest(ticker, px, signal_date)
+    if adx_result is not None:
+        adx_value = adx_result["adx_value"]
+        plus_di   = adx_result["plus_di"]
+        minus_di  = adx_result["minus_di"]
+    else:
+        adx_value = 0.0
+        plus_di   = 0.0
+        minus_di  = 0.0
+
+    # ── GROUP 7: Relative Strength vs SPY ──────────────────────────────────────
+    # See engines/relative_strength.py — same fallback reasoning as ADX above.
+    # benchmark_prices_df is None when the caller doesn't have SPY's price
+    # series available (shouldn't normally happen — SPY is always part of
+    # the fetched universe — but this keeps the function from crashing if
+    # it's ever called without it).
+    relative_strength = 0.0
+    if benchmark_prices_df is not None and not benchmark_prices_df.empty:
+        bench_slice = benchmark_prices_df[
+            benchmark_prices_df["date"] <= signal_date
+        ].sort_values("date")
+
+        rs_result = compute_relative_strength_latest(
+            ticker, px, bench_slice, signal_date
+        )
+        if rs_result is not None:
+            relative_strength = rs_result["relative_strength"]
 
     # ── GROUP 5: Market context features ────────────────────────────────────
     mkt = market_ind_df[market_ind_df["date"] == signal_date]
@@ -375,8 +412,16 @@ def compute_signal_features(
         "vol_clf_score"      : vol_clf_score if vol_clf_score is not None else np.nan,
 
         # Group 5: Market context
-         "market_slope_avg"   : round(market_slope_avg,   6),
+        "market_slope_avg"   : round(market_slope_avg,   6),
         #"market_choch_count" : market_choch_count,
+
+        # Group 6: ADX (trend strength, direction-independent)
+        "adx_value"          : adx_value,
+        "plus_di"            : plus_di,
+        "minus_di"           : minus_di,
+
+        # Group 7: Relative Strength vs benchmark (SPY)
+        "relative_strength"  : relative_strength,
 
         # Direction
         "direction_flag"     : direction_flag,
@@ -384,9 +429,6 @@ def compute_signal_features(
         "volume_signal_encoded" : volume_signal_enc,
         # Zone flag
         "has_valid_zone"        : has_valid_zone,
-        # Direction
-        "direction_flag"        : direction_flag,
-    
     }
 
     return features
@@ -478,7 +520,9 @@ def build_signal_feature_matrix(
     Build the full feature matrix for Signal Ranker training.
 
     Args:
-        prices_df    : Full OHLCV data
+        prices_df    : Full OHLCV data (must include the RS benchmark
+                        ticker, e.g. SPY, alongside all scanned tickers —
+                        extracted once internally for relative_strength)
         indicators_df: Full indicator results (all tickers)
         market_ind_df: Indicator results for SPY, QQQ, DIA only
         labels_df    : Labels from label_scanner_hits()
@@ -491,6 +535,20 @@ def build_signal_feature_matrix(
         f"Building Signal Ranker feature matrix | "
         f"{len(labels_df)} labelled examples"
     )
+
+    # Extract the benchmark's (SPY) price series ONCE, not per labelled
+    # example — used for the Relative Strength feature. If it's missing
+    # from the universe entirely, relative_strength falls back to 0.0
+    # for every row (compute_signal_features handles that gracefully).
+    benchmark_prices_df = prices_df[
+        prices_df["ticker"] == RS_BENCHMARK
+    ].sort_values("date")
+
+    if benchmark_prices_df.empty:
+        logger.warning(
+            f"{RS_BENCHMARK} not found in prices_df — relative_strength "
+            f"will be 0.0 for all training examples"
+        )
 
     rows   = []
     failed = 0
@@ -514,14 +572,14 @@ def build_signal_feature_matrix(
             continue
 
         features = compute_signal_features(
-            ticker        = ticker,
-            signal_date   = date,
-            direction     = direction,
-            prices_df     = px,
-            indicators_df = indicators_df,
-            market_ind_df = market_ind_df,
-            vol_clf_score = vol_score,
-     
+            ticker              = ticker,
+            signal_date         = date,
+            direction           = direction,
+            prices_df           = px,
+            indicators_df       = indicators_df,
+            market_ind_df       = market_ind_df,
+            vol_clf_score       = vol_score,
+            benchmark_prices_df = benchmark_prices_df,
         )
 
         if features is None:
@@ -583,13 +641,16 @@ SIGNAL_FEATURE_COLS = [
     "vol_consistency",
     "price_recovery_ratio",
     "vol_clf_score",
-   "bos_strength_vs_atr",    # BOS candle body / ATR14
-   "volume_signal_encoded",    # accumulation=2, neutral=1, distribution=0
+    "bos_strength_vs_atr",      # BOS candle body / ATR14
     "market_slope_avg",
+    # ADX — trend strength, direction-independent
+    "adx_value",
+    "plus_di",
+    "minus_di",
+    # Relative Strength vs benchmark (SPY)
+    "relative_strength",
     # Direction
     "direction_flag",
     "volume_signal_encoded",    # accumulation=2, neutral=1, distribution=0
-   "has_valid_zone",           # 1 = valid demand/supply zone exists
-    "market_slope_avg",
-    
+    "has_valid_zone",           # 1 = valid demand/supply zone exists
 ]
