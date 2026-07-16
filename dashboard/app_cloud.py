@@ -84,7 +84,7 @@ with header_col2:
     )
     st.markdown(
         "<p style='color:#9ca3af;margin-top:0;'>"
-        "LinReg Channel (400) + Smart Money Concepts Scanner — 15m"
+        "LinReg Channel + Smart Money Concepts Scanner — Daily"
         "</p>",
         unsafe_allow_html=True,
     )
