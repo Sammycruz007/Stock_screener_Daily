@@ -6,7 +6,7 @@ fetcher:
   max_workers: 7     # 7 Parallel connections per batch
   retry_attempts: 3
   retry_delay_seconds: 5 # was 8 — more time between retries
-  historical_days: 1260  #  5 years — daily candles have no ~60-day cap like intraday did
+  historical_days: 1800  #  5 years — daily candles have no ~60-day cap like intraday did
   incremental_days: 10   # buffer for long weekends/holiday closures on daily bars
   
 filters:
