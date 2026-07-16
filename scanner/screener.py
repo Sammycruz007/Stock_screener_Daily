@@ -104,7 +104,12 @@ def _load_sector_lookup() -> tuple[dict, dict]:
     Returns:
         Tuple of (ticker_to_etf dict, ticker_to_name dict)
     """
-    from data.database import read_sector_metadata
+    
+    import os
+    if os.getenv("SUPABASE_DB_URL"):
+        from data.database_cloud import read_sector_metadata
+    else:
+        from data.database import read_sector_metadata
 
     df = read_sector_metadata()
 
