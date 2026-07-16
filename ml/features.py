@@ -33,6 +33,7 @@ FEATURE ENGINEERING PRINCIPLES:
       the model sees exactly what was available that day
 """
 
+import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -43,6 +44,11 @@ from utils.logging import get_ml_logger
 from utils.error_handler import graceful, MLError
 from engines.adx import compute_adx_latest
 from engines.relative_strength import compute_relative_strength_latest, BENCHMARK as RS_BENCHMARK
+
+if bool(os.getenv("SUPABASE_DB_URL")):
+    from data.database_cloud import read_sector_metadata
+else:
+    from data.database import read_sector_metadata
 
 logger = get_ml_logger()
 
@@ -190,15 +196,56 @@ def compute_volume_features(
 # Broader feature set covering the full setup quality
 # =============================================================================
 
+def build_sector_price_cache(prices_df: pd.DataFrame) -> tuple[dict, dict]:
+    """
+    Build the two lookups needed for the Sector Relative Strength feature:
+    which sector ETF each ticker belongs to, and that ETF's own price
+    series (pre-extracted once, not per ticker/date — sector ETFs are
+    already part of the fetched universe, no new data source needed).
+
+    Reuses read_sector_metadata() — the same source scanner/screener.py
+    already relies on for sector health checks — so there's a single
+    source of truth for ticker->sector-ETF mapping across the project.
+
+    Args:
+        prices_df: Full OHLCV data (must include the sector ETF tickers
+                    alongside all scanned tickers)
+
+    Returns:
+        Tuple of:
+        - ticker_to_etf: dict mapping ticker -> sector ETF symbol (e.g. 'XLK')
+        - etf_price_cache: dict mapping ETF symbol -> its own price DataFrame
+    """
+    sector_df = read_sector_metadata()
+
+    if sector_df.empty:
+        logger.warning(
+            "build_sector_price_cache: no sector metadata available — "
+            "relative_strength_sector will be 0.0 for all rows"
+        )
+        return {}, {}
+
+    ticker_to_etf = dict(zip(sector_df["ticker"], sector_df["sector_etf"]))
+
+    etf_price_cache = {}
+    for etf in sector_df["sector_etf"].dropna().unique():
+        etf_prices = prices_df[prices_df["ticker"] == etf].sort_values("date")
+        if not etf_prices.empty:
+            etf_price_cache[etf] = etf_prices
+
+    return ticker_to_etf, etf_price_cache
+
+
 def compute_signal_features(
-    ticker            : str,
-    signal_date       : str,
-    direction         : str,
-    prices_df         : pd.DataFrame,
-    indicators_df     : pd.DataFrame,
-    market_ind_df     : pd.DataFrame,
-    vol_clf_score     : Optional[float] = None,
-    benchmark_prices_df: Optional[pd.DataFrame] = None,
+    ticker              : str,
+    signal_date         : str,
+    direction           : str,
+    prices_df           : pd.DataFrame,
+    indicators_df       : pd.DataFrame,
+    market_ind_df       : pd.DataFrame,
+    vol_clf_score       : Optional[float] = None,
+    benchmark_prices_df : Optional[pd.DataFrame] = None,
+    sector_prices_df    : Optional[pd.DataFrame] = None,
 ) -> Optional[dict]:
     """
     Compute all features for the Signal Ranker for a single ticker/date.
@@ -231,10 +278,14 @@ def compute_signal_features(
     - plus_di           : Bullish directional pressure
     - minus_di          : Bearish directional pressure
 
-    GROUP 7 — Relative Strength (1 feature, see engines/relative_strength.py):
-    - relative_strength : Outperformance vs benchmark (SPY) over the
-                           configured lookback window. Positive = ticker
-                           outperformed; negative = underperformed.
+    GROUP 7 — Relative Strength (2 features, see engines/relative_strength.py):
+    - relative_strength        : Outperformance vs benchmark (SPY) over the
+                                  configured lookback window.
+    - relative_strength_sector : Outperformance vs the ticker's OWN sector
+                                  ETF (e.g. XLK for tech) over the same
+                                  window — answers "is this a leader within
+                                  its own sector," a different question than
+                                  market-wide RS.
 
     Args:
         ticker             : Ticker symbol
@@ -247,6 +298,9 @@ def compute_signal_features(
         vol_clf_score       : Output of Volume Classifier model (optional)
         benchmark_prices_df : Full OHLCV data for the RS benchmark (SPY),
                                used for the relative_strength feature.
+                               Falls back to 0.0 if not provided.
+        sector_prices_df    : Full OHLCV data for THIS ticker's own sector
+                               ETF, used for relative_strength_sector.
                                Falls back to 0.0 if not provided.
 
     Returns:
@@ -368,6 +422,21 @@ def compute_signal_features(
         if rs_result is not None:
             relative_strength = rs_result["relative_strength"]
 
+    # ── GROUP 7b: Relative Strength vs THIS ticker's own sector ETF ───────────
+    # Same engine, different benchmark — answers "is this a leader within
+    # its own sector," a distinct question from market-wide RS above.
+    relative_strength_sector = 0.0
+    if sector_prices_df is not None and not sector_prices_df.empty:
+        sector_slice = sector_prices_df[
+            sector_prices_df["date"] <= signal_date
+        ].sort_values("date")
+
+        sector_rs_result = compute_relative_strength_latest(
+            ticker, px, sector_slice, signal_date
+        )
+        if sector_rs_result is not None:
+            relative_strength_sector = sector_rs_result["relative_strength"]
+
     # ── GROUP 5: Market context features ────────────────────────────────────
     mkt = market_ind_df[market_ind_df["date"] == signal_date]
 
@@ -420,8 +489,9 @@ def compute_signal_features(
         "plus_di"            : plus_di,
         "minus_di"           : minus_di,
 
-        # Group 7: Relative Strength vs benchmark (SPY)
-        "relative_strength"  : relative_strength,
+        # Group 7: Relative Strength vs benchmark (SPY) and own sector ETF
+        "relative_strength"        : relative_strength,
+        "relative_strength_sector" : relative_strength_sector,
 
         # Direction
         "direction_flag"     : direction_flag,
@@ -550,6 +620,10 @@ def build_signal_feature_matrix(
             f"will be 0.0 for all training examples"
         )
 
+    # Build ticker -> sector ETF mapping + each ETF's price series ONCE,
+    # for the relative_strength_sector feature. See build_sector_price_cache().
+    ticker_to_etf, etf_price_cache = build_sector_price_cache(prices_df)
+
     rows   = []
     failed = 0
 
@@ -571,6 +645,9 @@ def build_signal_feature_matrix(
             failed += 1
             continue
 
+        sector_etf        = ticker_to_etf.get(ticker)
+        sector_prices_df  = etf_price_cache.get(sector_etf) if sector_etf else None
+
         features = compute_signal_features(
             ticker              = ticker,
             signal_date         = date,
@@ -580,6 +657,7 @@ def build_signal_feature_matrix(
             market_ind_df       = market_ind_df,
             vol_clf_score       = vol_score,
             benchmark_prices_df = benchmark_prices_df,
+            sector_prices_df    = sector_prices_df,
         )
 
         if features is None:
@@ -647,8 +725,9 @@ SIGNAL_FEATURE_COLS = [
     "adx_value",
     "plus_di",
     "minus_di",
-    # Relative Strength vs benchmark (SPY)
+    # Relative Strength vs benchmark (SPY) and own sector ETF
     "relative_strength",
+    "relative_strength_sector",
     # Direction
     "direction_flag",
     "volume_signal_encoded",    # accumulation=2, neutral=1, distribution=0
