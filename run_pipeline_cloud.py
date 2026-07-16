@@ -103,16 +103,17 @@ def run_full_pipeline():
         logger.info(f"✅ Fetched {len(raw_df)} rows for {raw_df['ticker'].nunique()} tickers")
 
         # Snapshot today's fetch to Supabase Storage — this is what makes
-        # full 8-year history available to train_models.py later, since
+        # rolling 8-year history available to train_models.py later, since
         # Postgres never stores raw prices. Non-fatal if it fails —
         # pipeline continues either way.
         #
-        # Deliberately NOT calling prune_old_snapshots() here — this
-        # project keeps ALL history for full regime coverage, unlike the
-        # 15m project's rolling 60-day window. Pruning would delete
-        # exactly the data this project exists to preserve.
-        from data.storage_cloud import write_daily_snapshot
+        # Pruning keeps a ROLLING 8-year window (default max_days=2920,
+        # matching HISTORICAL_DAYS in config.yaml) — bounds Storage size
+        # indefinitely as this pipeline runs for years, while always
+        # preserving full regime coverage for training.
+        from data.storage_cloud import write_daily_snapshot, prune_old_snapshots
         write_daily_snapshot(raw_df, today)
+        prune_old_snapshots()
     except Exception as e:
         handle_critical_error(e, "Step 3: Data fetch", reraise=True)
 
