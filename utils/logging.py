@@ -199,6 +199,12 @@ def get_smc_logger()       -> logging.Logger:
 def get_volume_logger()    -> logging.Logger:
     return get_logger("volume_engine", "engines.log")
 
+def get_adx_logger()       -> logging.Logger:
+    return get_logger("adx_engine",    "engines.log")
+
+def get_relative_strength_logger() -> logging.Logger:
+    return get_logger("relative_strength_engine", "engines.log")
+
 def get_scanner_logger()   -> logging.Logger:
     return get_logger("scanner",       "scanner.log")
 
