@@ -61,6 +61,7 @@ from sklearn.calibration import CalibratedClassifierCV
 from ml.features import (
     SIGNAL_FEATURE_COLS,
     compute_signal_features,
+    build_sector_price_cache,
 )
 from engines.relative_strength import BENCHMARK as RS_BENCHMARK
 from utils.logging import get_ml_logger
@@ -444,17 +445,22 @@ def score_candidates(
 
     results = []
 
-    # Extract benchmark (SPY) price series ONCE, not per candidate —
-    # same reasoning as build_signal_feature_matrix in features.py.
+    # Extract the benchmark's (SPY) price series ONCE, not per candidate —
+    # same pattern as build_signal_feature_matrix() at training time, so
+    # live scoring and training compute relative_strength identically.
     benchmark_prices_df = prices_df[
         prices_df["ticker"] == RS_BENCHMARK
     ].sort_values("date")
 
     if benchmark_prices_df.empty:
         logger.warning(
-            f"{RS_BENCHMARK} not found in today's prices_df — "
-            f"relative_strength will be 0.0 for all candidates"
+            f"{RS_BENCHMARK} not found in prices_df — relative_strength "
+            f"will be 0.0 for all candidates this run"
         )
+
+    # Same sector-ETF price cache used at training time — see
+    # build_sector_price_cache() in ml/features.py for details.
+    ticker_to_etf, etf_price_cache = build_sector_price_cache(prices_df)
 
     for _, row in candidates_df.iterrows():
         ticker    = row["ticker"]
@@ -468,6 +474,9 @@ def score_candidates(
             prices_df["ticker"] == ticker
         ].sort_values("date")
 
+        sector_etf       = ticker_to_etf.get(ticker)
+        sector_prices_df = etf_price_cache.get(sector_etf) if sector_etf else None
+
         try:
             features = compute_signal_features(
                 ticker              = ticker,
@@ -478,6 +487,7 @@ def score_candidates(
                 market_ind_df       = market_ind_df,
                 vol_clf_score       = vol_score,
                 benchmark_prices_df = benchmark_prices_df,
+                sector_prices_df    = sector_prices_df,
             )
 
             if features is None:
