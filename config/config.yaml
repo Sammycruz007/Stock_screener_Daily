@@ -31,7 +31,7 @@ ml:
   label_forward_periods: 60 # 60 daily candles ≈ 3 months forward
   min_training_samples: 50
   model_retrain_days: 7
-  backfill_stride: 1
+  backfill_stride: 2
 
 scanner:
   long_entry_sd_max: -3
