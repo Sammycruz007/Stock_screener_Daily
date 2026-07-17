@@ -97,7 +97,7 @@ SHORT_SD_MIN = SCANNER_CFG["short_entry_sd_min"]  # +1
 SHORT_SD_MAX = SCANNER_CFG["short_entry_sd_max"]  # +3
 
 # Cap for quick test runs — set to None for full universe
-MAX_TICKERS_FOR_TRAINING = None
+MAX_TICKERS_FOR_TRAINING = 800
 
 
 # =============================================================================
