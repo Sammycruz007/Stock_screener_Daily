@@ -1,0 +1,36 @@
+# Eagle Logic System — Cloud Dependencies
+# Used by GitHub Actions runner and Streamlit Cloud
+
+# Core data
+yfinance>=0.2.60
+pandas==2.2.2
+numpy==1.26.4
+scipy==1.13.0
+curl_cffi
+requests==2.31.0
+lxml==5.2.2
+html5lib==1.1
+
+# Indicators
+ta==0.11.0
+
+# ML
+xgboost==2.0.3
+scikit-learn==1.4.2
+imbalanced-learn==0.12.3
+
+# Database – PostgreSQL for cloud
+psycopg2-binary==2.9.9
+
+# Storage – rolling raw-price snapshots for cloud ML training
+# (uses plain HTTP via requests, not the supabase package —
+# avoids client-library version ambiguity with newer API key formats)
+pyarrow==16.1.0
+
+# Dashboard
+streamlit==1.35.0
+plotly==5.22.0
+
+# Utilities
+pyyaml==6.0.1
+python-dotenv==1.0.1
