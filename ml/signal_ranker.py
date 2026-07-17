@@ -117,11 +117,11 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     Returns:
         sklearn Pipeline
             """
-    
-    
-    model = XGBClassifier(
+   
+    # 1. Define the base XGBoost model with aggressive regularization
+    base_model = XGBClassifier(
         n_estimators       = 400,
-        max_depth          = 5,
+        max_depth          = 4,
         learning_rate      = 0.05,
         subsample          = 0.8,
         colsample_bytree   = 0.8,
@@ -134,10 +134,21 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         n_jobs             = -1,
     )
 
+    # 2. Wrap the base model with Isotonic Calibration
+    # cv=5 ensures it uses out-of-fold predictions to map the probabilities 
+    # without leaking data or overfitting to the training set.
+    calibrated_model = CalibratedClassifierCV(
+        estimator=base_model,
+        method="isotonic",
+        cv=5
+    )
+
+    # 3. Build the pipeline using the calibrated model
     pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
-        ("model",   model),
+        ("model",   calibrated_model),
     ])
+
 
     return pipeline
 
