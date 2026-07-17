@@ -508,7 +508,6 @@ def compute_signal_features(
 # FEATURE MATRIX BUILDER
 # Builds the full feature matrix for model training
 # =============================================================================
-
 def build_volume_feature_matrix(
     prices_df    : pd.DataFrame,
     indicators_df: pd.DataFrame,
@@ -516,21 +515,6 @@ def build_volume_feature_matrix(
 ) -> pd.DataFrame:
     """
     Build the full feature matrix for Volume Classifier training.
-
-    FLOW:
-    1. For each labelled example (ticker, date, direction, label)
-    2. Compute volume features for that ticker on that date
-    3. Attach the label
-    4. Return combined matrix ready for model training
-
-    Args:
-        prices_df    : Full OHLCV data
-        indicators_df: Full indicator results
-        labels_df    : Labels from label_volume_patterns()
-
-    Returns:
-        DataFrame with feature columns + 'label' column
-        Ready for sklearn/XGBoost training
     """
     logger.info(
         f"Building Volume Classifier feature matrix | "
@@ -540,15 +524,20 @@ def build_volume_feature_matrix(
     rows   = []
     failed = 0
 
-    for _, label_row in labels_df.iterrows():
-        ticker = label_row["ticker"]
-        date   = label_row["date"]
-        label  = label_row["label"]
+    # ⚡ OPTIMIZATION: Group by ticker once (Instant O(1) lookups)
+    logger.info("Pre-indexing price data to prevent loop hangs...")
+    prices_dict = {t: df.sort_values("date") for t, df in prices_df.groupby("ticker")}
 
-        # Get price data for this ticker
-        px = prices_df[prices_df["ticker"] == ticker].sort_values("date")
+    # ⚡ OPTIMIZATION: Use itertuples() instead of iterrows()
+    for row in labels_df.itertuples(index=False):
+        ticker = row.ticker
+        date   = row.date
+        label  = row.label
 
-        if px.empty:
+        # Instant lookup instead of scanning the whole DataFrame
+        px = prices_dict.get(ticker)
+
+        if px is None or px.empty:
             failed += 1
             continue
 
@@ -560,14 +549,12 @@ def build_volume_feature_matrix(
             continue
 
         vol_features["label"] = label
-        rows.append({"date" : date,
-                     **vol_features,})
+        rows.append({"date" : date, **vol_features})
 
     result = pd.DataFrame(rows)
 
-    # Set chronologically - required for walk-forward method
     if "date" in result.columns:
-        result = result.sort_values("date").reset_index(drop = True)
+        result = result.sort_values("date").reset_index(drop=True)
 
     logger.info(
         f"Volume feature matrix built | "
@@ -579,6 +566,7 @@ def build_volume_feature_matrix(
     return result
 
 
+
 def build_signal_feature_matrix(
     prices_df    : pd.DataFrame,
     indicators_df: pd.DataFrame,
@@ -588,28 +576,12 @@ def build_signal_feature_matrix(
 ) -> pd.DataFrame:
     """
     Build the full feature matrix for Signal Ranker training.
-
-    Args:
-        prices_df    : Full OHLCV data (must include the RS benchmark
-                        ticker, e.g. SPY, alongside all scanned tickers —
-                        extracted once internally for relative_strength)
-        indicators_df: Full indicator results (all tickers)
-        market_ind_df: Indicator results for SPY, QQQ, DIA only
-        labels_df    : Labels from label_scanner_hits()
-        vol_scores   : Optional dict of (ticker, date) → vol_clf_score
-
-    Returns:
-        DataFrame with all feature columns + 'label' column
     """
     logger.info(
         f"Building Signal Ranker feature matrix | "
         f"{len(labels_df)} labelled examples"
     )
 
-    # Extract the benchmark's (SPY) price series ONCE, not per labelled
-    # example — used for the Relative Strength feature. If it's missing
-    # from the universe entirely, relative_strength falls back to 0.0
-    # for every row (compute_signal_features handles that gracefully).
     benchmark_prices_df = prices_df[
         prices_df["ticker"] == RS_BENCHMARK
     ].sort_values("date")
@@ -620,28 +592,28 @@ def build_signal_feature_matrix(
             f"will be 0.0 for all training examples"
         )
 
-    # Build ticker -> sector ETF mapping + each ETF's price series ONCE,
-    # for the relative_strength_sector feature. See build_sector_price_cache().
     ticker_to_etf, etf_price_cache = build_sector_price_cache(prices_df)
 
     rows   = []
     failed = 0
+    
+    # ⚡ OPTIMIZATION: Group prices once
+    prices_dict = {t: df.sort_values("date") for t, df in prices_df.groupby("ticker")}
 
-    for _, label_row in labels_df.iterrows():
-        ticker    = label_row["ticker"]
-        date      = label_row["date"]
-        direction = label_row["direction"]
-        label     = label_row["label"]
+    for row in labels_df.itertuples(index=False):
+        ticker    = row.ticker
+        date      = row.date
+        direction = row.direction
+        label     = row.label
 
-        # Get volume classifier score for this ticker/date if available
         vol_score = None
         if vol_scores:
             vol_score = vol_scores.get((ticker, date))
 
-        # Get price data for this ticker
-        px = prices_df[prices_df["ticker"] == ticker].sort_values("date")
+        # Instant lookup
+        px = prices_dict.get(ticker)
 
-        if px.empty:
+        if px is None or px.empty:
             failed += 1
             continue
 
@@ -669,9 +641,8 @@ def build_signal_feature_matrix(
 
     result = pd.DataFrame(rows)
     
-    # Set chronologically - required for walk-forward method
     if "date" in result.columns:
-        result = result.sort_values("date").reset_index(drop = True)
+        result = result.sort_values("date").reset_index(drop=True)
 
     logger.info(
         f"Signal feature matrix built | "
