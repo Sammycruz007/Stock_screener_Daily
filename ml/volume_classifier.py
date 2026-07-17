@@ -122,7 +122,6 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
         scale_pos_weight   = scale_pos_weight,
         eval_metric        = "logloss",
         random_state       = 42,
-        early_stopping_rounds = 30,
         n_jobs             = -1,
     )
 
