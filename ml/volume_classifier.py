@@ -113,22 +113,37 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     Returns:
         sklearn Pipeline ready for fit/predict
     """
-    model = XGBClassifier(
+    
+    base_model = XGBClassifier(
         n_estimators       = 300,
         max_depth          = 4,
         learning_rate      = 0.05,
         subsample          = 0.8,
         colsample_bytree   = 0.8,
+        min_child_weight   = 5,
+        reg_alpha          = 4.0,
+        reg_lambda         = 4.0,
         scale_pos_weight   = scale_pos_weight,
         eval_metric        = "logloss",
         random_state       = 42,
         n_jobs             = -1,
     )
 
+    # 2. Wrap the base model with Isotonic Calibration
+    # cv=5 ensures it uses out-of-fold predictions to map the probabilities 
+    # without leaking data or overfitting to the training set.
+    calibrated_model = CalibratedClassifierCV(
+        estimator=base_model,
+        method="isotonic",
+        cv=5
+    )
+
+    # 3. Build the pipeline using the calibrated model
     pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
-        ("model",   model),
+        ("model",   calibrated_model),
     ])
+
 
     return pipeline
 
