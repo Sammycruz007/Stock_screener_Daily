@@ -317,7 +317,7 @@ def train_signal_ranker(
 
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.7).astype(int) 
+    y_pred       = (y_pred_proba >= 0.65).astype(int) 
 
     precision = precision_score(y_test, y_pred, zero_division=0)
     recall    = recall_score(y_test, y_pred, zero_division=0)
