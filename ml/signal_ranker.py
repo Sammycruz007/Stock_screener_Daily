@@ -317,7 +317,7 @@ def train_signal_ranker(
 
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.63).astype(int)
+    y_pred       = (y_pred_proba >= 0.65).astype(int)
     logger.info(f"OOS Probability Spread | Max: {y_pred_proba.max():.4f} | Mean: {y_pred_proba.mean():.4f}")
  
 
