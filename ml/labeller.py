@@ -322,79 +322,76 @@ def label_scanner_hits(
     scan_hits_df : pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Generate labels for the Signal Ranker.
-
-    FLOW:
-    1. For each historical scanner hit (ticker + date + direction)
-    2. Get the LinReg value AT the signal date (FIXED snapshot)
-       — does not use the rolling future LinReg value
-    3. Look forward FORWARD_PERIODS candles
-    4. Check if any CLOSE price reached the fixed LinReg target
-       — uses CLOSE not HIGH/LOW to avoid near-universal positives
-    5. Label 1 = reached mean, Label 0 = did not reach
-
-    WHY FIXED LINREG (not rolling):
-    The rolling LinReg naturally moves toward price over time,
-    making the distance shrink even without a real move.
-    Fixing the target at signal date makes labels honest.
-
-    WHY CLOSE (not high/low):
-    Intraday touches of the LinReg happen constantly from noise.
-    A CLOSE at or beyond the LinReg is a meaningful confirmation.
-
-    Args:
-        prices_df    : Full OHLCV DataFrame
-        indicators_df: Full indicator results DataFrame
-        scan_hits_df : Historical scanner results [ticker, date, direction]
-
-    Returns:
-        DataFrame with columns [ticker, date, direction, label]
+    Generate labels for the Signal Ranker. (OPTIMIZED FOR SPEED)
     """
     logger.info("Generating Signal Ranker labels...")
 
+    if scan_hits_df.empty:
+        logger.warning("Signal Ranker labeller: No scan hits provided")
+        return pd.DataFrame()
+
+    # 1. BULK LOOKUP: Merge indicators to get the fixed LinReg value in one shot
+    # This replaces the slow pandas filtering inside the loop
+    hits_with_linreg = pd.merge(
+        scan_hits_df,
+        indicators_df[['ticker', 'date', 'linreg_value']],
+        on=['ticker', 'date'],
+        how='inner'
+    )
+
+    if hits_with_linreg.empty:
+        return pd.DataFrame()
+
+    # 2. PRE-PROCESS PRICES: Group by ticker into fast NumPy arrays
+    # This prevents scanning the entire prices_df for every single hit
+    logger.info("Pre-processing price data for fast lookup...")
+    price_dict = {}
+    
+    # Ensure prices are sorted once globally
+    sorted_prices = prices_df.sort_values(["ticker", "date"]).reset_index(drop=True)
+    
+    for ticker, group in sorted_prices.groupby("ticker"):
+        price_dict[ticker] = {
+            "dates": group["date"].values,
+            "closes": group["close"].values
+        }
+
     all_labels = []
 
-    for _, hit in scan_hits_df.iterrows():
-        ticker    = hit["ticker"]
-        date      = str(hit["date"] if "date" in hit else hit["scan_date"])
-        direction = hit["direction"]
+    # 3. FAST ITERATION: Use itertuples (faster than iterrows) and np.searchsorted
+    logger.info("Evaluating forward returns...")
+    for row in hits_with_linreg.itertuples():
+        ticker = row.ticker
+        date = str(row.date)
+        direction = row.direction
+        linreg_at_signal = float(row.linreg_value)
 
-        # ── Get FIXED LinReg value at signal date ─────────────────────────────
-        ind_row = indicators_df[
-            (indicators_df["ticker"] == ticker) &
-            (indicators_df["date"]   == date)
-        ]
-
-        if ind_row.empty:
+        if ticker not in price_dict:
             continue
 
-        # Fixed snapshot — not rolling future value
-        linreg_at_signal = float(ind_row.iloc[0]["linreg_value"])
+        t_dates  = price_dict[ticker]["dates"]
+        t_closes = price_dict[ticker]["closes"]
 
-        # ── Get future CLOSE prices only ──────────────────────────────────────
-        future_px = prices_df[
-            (prices_df["ticker"] == ticker) &
-            (prices_df["date"]   >  date)
-        ].sort_values("date").head(FORWARD_PERIODS)
+        # O(log n) lookup for the date index
+        idx = np.searchsorted(t_dates, date, side="right")
 
-        if len(future_px) < 1:
+        # Slice the next FORWARD_PERIODS directly from the NumPy array
+        future_closes = t_closes[idx : idx + FORWARD_PERIODS]
+
+        if len(future_closes) < 1:
             continue
 
-        # ── Check if CLOSE reached the FIXED LinReg target ───────────────────
+        # Check if CLOSE reached the FIXED LinReg target using vectorized np.any
         if direction == "long":
-            # Price needs to move UP to reach LinReg mean
-            reached = bool((future_px["close"] >= linreg_at_signal).any())
+            reached = bool(np.any(future_closes >= linreg_at_signal))
         else:
-            # Price needs to move DOWN to reach LinReg mean
-            reached = bool((future_px["close"] <= linreg_at_signal).any())
-
-        label = 1 if reached else 0
+            reached = bool(np.any(future_closes <= linreg_at_signal))
 
         all_labels.append({
             "ticker"   : ticker,
             "date"     : date,
             "direction": direction,
-            "label"    : label,
+            "label"    : 1 if reached else 0,
         })
 
     result = pd.DataFrame(all_labels)
