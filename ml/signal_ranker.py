@@ -333,6 +333,25 @@ def train_signal_ranker(
         f"F1: {f1:.4f} | AUC-ROC: {auc_roc:.4f} | PR-AUC: {pr_auc:.4f}"
     )
 
+
+    # ⚡ NEW: Calculate Precision at Top 5% of Signals
+    results_df = pd.DataFrame({
+        'true_label': y_test,
+        'probability': y_pred_proba,
+    }).sort_values('probability', ascending=False)
+    
+    # Take the top 5% most confident predictions
+    top_5_percent_cutoff = max(1, int(len(results_df) * 0.05))
+    top_signals = results_df.head(top_5_percent_cutoff)
+    
+    # Calculate how many of those top signals were actually winners
+    top_precision = top_signals['true_label'].mean()
+    
+    logger.info(f"OOS Probability Spread | Max: {y_pred_proba.max():.4f} | Mean: {y_pred_proba.mean():.4f}")
+    logger.info(f"Real Trading Metrics | Win Rate of Top 5% Signals: {top_precision:.4f} (Baseline: {y_test.mean():.4f})")
+
+   
+
     metrics = {
         "model_name"     : "signal_ranker",
         "train_date"     : datetime.today().strftime("%Y-%m-%d"),
