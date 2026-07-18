@@ -27,7 +27,7 @@ logging:
   max_file_size_mb: 10
 
 ml:
-  high_probability_threshold: 0.7
+  high_probability_threshold: 0.65
   label_forward_periods: 60 # 60 daily candles ≈ 3 months forward
   min_training_samples: 50
   model_retrain_days: 7
