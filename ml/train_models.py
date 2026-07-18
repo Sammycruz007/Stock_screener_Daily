@@ -26,6 +26,8 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import yaml
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
 
 if os.getenv("SUPABASE_DB_URL"):
     from data.database_cloud import (
@@ -293,7 +295,8 @@ def run_training():
         f"(stride={STRIDE}, linreg_period={LINREG_PERIOD})"
     )
 
-    # ── Step 2: Rolling backfill per ticker ───────────────────────────────────
+    
+    # ── Step 2: Rolling backfill per ticker (PARALLELIZED & GROUP-OPTIMIZED) ──
     indicator_history = []
     prices_all        = []
     backfill_failed   = 0
@@ -320,31 +323,60 @@ def run_training():
             )
             return
 
-    for n, ticker in enumerate(tickers, 1):
+        # OPTIMIZATION: Group and sort globally ONCE.
+        # This prevents scanning millions of rows 1,000+ times inside the loop.
+        logger.info("Pre-grouping and sorting 8-year history by ticker...")
+        grouped_history = {
+            name: group.sort_values("date").reset_index(drop=True)
+            for name, group in full_history.groupby("ticker")
+        }
+
+    # Phase A: Prepare the historical DataFrames in memory
+    logger.info("Preparing ticker datasets for parallel processing...")
+    ticker_tasks = []
+    for ticker in tickers:
         if _CLOUD_MODE:
-            df = full_history[full_history["ticker"] == ticker].sort_values("date").reset_index(drop=True)
+            df = grouped_history.get(ticker, pd.DataFrame())
         else:
             df = read_raw_prices(ticker)
 
         if df.empty:
             backfill_failed += 1
             continue
+        
+        ticker_tasks.append((ticker, df))
 
-        prices_all.append(df)
+    # Phase B: Process tasks in parallel across all available CPU cores
+    logger.info(f"Launching parallel backfill with {len(ticker_tasks)} workers...")
+    
+    with ProcessPoolExecutor() as executor:
+        futures = {
+            executor.submit(backfill_ticker, task_ticker, task_df): (task_ticker, task_df) 
+            for task_ticker, task_df in ticker_tasks
+        }
+        
+        for n, future in enumerate(as_completed(futures), 1):
+            task_ticker, task_df = futures[future]
+            
+            try:
+                hist = future.result()
+                prices_all.append(task_df)
+                
+                if hist is not None and not hist.empty:
+                    indicator_history.append(hist)
+                else:
+                    backfill_failed += 1
+            except Exception as e:
+                logger.error(f"Worker crashed processing ticker {task_ticker}: {e}")
+                backfill_failed += 1
 
-        hist = backfill_ticker(ticker, df)
-        if not hist.empty:
-            indicator_history.append(hist)
-        else:
-            backfill_failed += 1
+            if n % 50 == 0:
+                logger.info(
+                    f"Backfill progress: {n}/{len(ticker_tasks)} tickers processed | "
+                    f"History rows collected: {sum(len(h) for h in indicator_history)}"
+                )
 
-        if n % 50 == 0:
-            logger.info(
-                f"Backfill progress: {n}/{len(tickers)} tickers | "
-                f"History rows so far: "
-                f"{sum(len(h) for h in indicator_history)}"
-            )
-
+    # Clean context exit before processing results
     if not indicator_history:
         logger.error(
             "No indicator history produced — "
@@ -362,6 +394,8 @@ def run_training():
         f"Tickers with history: {indicators_history_df['ticker'].nunique()} | "
         f"Failed: {backfill_failed}"
     )
+
+
 
     # ── Step 3: Market indicator history for Signal Ranker features ───────────
     market_ind_df = indicators_history_df[
