@@ -55,6 +55,7 @@ from data.database_cloud import (
     initialise_database,
     read_latest_indicator_results,
     read_latest_scan_results,
+    read_latest_gft_watchlist_results,
     read_latest_model_metrics,
 )
 from scanner.screener  import get_market_sector_status
@@ -227,6 +228,49 @@ with tab_short:
         display_cols = [c for c in cols_to_show if c in shorts.columns]
         st.dataframe(
             shorts[display_cols].style.background_gradient(
+                subset=["ml_score"], cmap="Reds"
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+
+# =============================================================================
+# SECTION 3b — GFT WATCHLIST (15-ticker subset for GFT evaluation account)
+# =============================================================================
+# Same candidates as Scanner Results above, filtered to only the 15
+# tickers tradeable under the GFT account — written to a SEPARATE
+# table in run_pipeline_cloud.py's Step 11, so the main scan above
+# (used for Bamboo/long-term investing) stays full-universe and
+# completely unaffected by this section.
+
+st.header("GFT Watchlist")
+st.caption("Filtered to GFT's 15-ticker evaluation universe")
+
+gft_tab_long, gft_tab_short = st.tabs(["📗 Long Candidates", "📕 Short Candidates"])
+
+with gft_tab_long:
+    gft_longs = read_latest_gft_watchlist_results(direction="long")
+    if gft_longs.empty:
+        st.info("No long candidates today within GFT's ticker list.")
+    else:
+        display_cols = [c for c in cols_to_show if c in gft_longs.columns]
+        st.dataframe(
+            gft_longs[display_cols].style.background_gradient(
+                subset=["ml_score"], cmap="Greens"
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+with gft_tab_short:
+    gft_shorts = read_latest_gft_watchlist_results(direction="short")
+    if gft_shorts.empty:
+        st.info("No short candidates today within GFT's ticker list.")
+    else:
+        display_cols = [c for c in cols_to_show if c in gft_shorts.columns]
+        st.dataframe(
+            gft_shorts[display_cols].style.background_gradient(
                 subset=["ml_score"], cmap="Reds"
             ),
             use_container_width=True,
