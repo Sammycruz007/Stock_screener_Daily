@@ -43,11 +43,22 @@ from data.database_cloud import (
     initialise_database,
     write_indicator_results,
     write_scan_results,
+    write_gft_watchlist_results,
     write_filtered_universe,
     write_sector_metadata,
     read_latest_indicator_results,
     read_sector_metadata,
 )
+
+# GFT (Goat Funded Trader) evaluation universe — the only 15 tickers
+# actually tradeable under that account. This does NOT restrict the
+# main scanner (which stays full-universe for Bamboo/long-term
+# investing) — it only filters a SEPARATE output table written after
+# the main scan, so both use cases stay served from one pipeline run.
+GFT_TICKERS = [
+    "AAPL", "BA", "AMZN", "COST", "JPM", "KO", "META", "MSFT",
+    "NFLX", "NVDA", "ORCL", "PLTR", "TSLA", "UNH", "V",
+]
 # NOTE: get_last_fetch_date and prune_old_prices were imported here in
 # the 15m project's version of this file, but neither is actually
 # called anywhere in this file's body (confirmed dead imports) — and
@@ -261,6 +272,29 @@ def run_full_pipeline():
             logger.info("No candidates to write")
     except Exception as e:
         handle_critical_error(e, "Step 10: Write results", reraise=True)
+
+    # ── STEP 11: Filter to GFT's 15-ticker universe, write separately ─────────
+    # Does NOT touch candidates_df or the main scan_results write above —
+    # this is purely additive, reading from the same already-computed
+    # candidates_df and writing to a separate table. The full-universe
+    # scanner keeps serving Bamboo/long-term investing unchanged.
+    logger.info("\n[STEP 11] Writing GFT watchlist results...")
+    try:
+        if not candidates_df.empty:
+            gft_candidates = candidates_df[
+                candidates_df["ticker"].isin(GFT_TICKERS)
+            ]
+            if not gft_candidates.empty:
+                gft_rows = write_gft_watchlist_results(gft_candidates, today)
+                logger.info(f"✅ GFT watchlist: {gft_rows} candidates written")
+            else:
+                logger.info("No GFT-ticker candidates today")
+        else:
+            logger.info("No candidates to filter for GFT watchlist")
+    except Exception as e:
+        # Non-fatal — GFT watchlist is a secondary output, shouldn't
+        # take down the main pipeline if something goes wrong here
+        logger.warning(f"Step 11: GFT watchlist write failed: {e}")
 
     # ── Done ──────────────────────────────────────────────────────────────────
     elapsed = (datetime.now() - start).seconds // 60
