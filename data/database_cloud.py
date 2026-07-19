@@ -156,6 +156,22 @@ def initialise_database() -> None:
             updated_at      TIMESTAMP DEFAULT NOW()
         )
         """,
+        """
+        CREATE TABLE IF NOT EXISTS gft_watchlist_results (
+            id             SERIAL PRIMARY KEY,
+            ticker         TEXT NOT NULL,
+            scan_date      TEXT NOT NULL,
+            direction      TEXT NOT NULL,
+            sector         TEXT,
+            sd_position    REAL,
+            volume_signal  TEXT,
+            has_valid_zone INTEGER DEFAULT 0,
+            ml_score       REAL,
+            ml_rank        INTEGER,
+            created_at     TIMESTAMP DEFAULT NOW(),
+            UNIQUE(ticker, scan_date, direction)
+        )
+        """,
     ]
 
     with get_connection() as conn:
@@ -254,6 +270,61 @@ def write_scan_results(df: pd.DataFrame, scan_date: str) -> int:
         psycopg2.extras.execute_batch(cursor, sql, records, page_size=500)
 
     logger.info(f"write_scan_results: {len(records)} candidates written for {scan_date}")
+    return len(records)
+
+
+def write_gft_watchlist_results(df: pd.DataFrame, scan_date: str) -> int:
+    """
+    Same shape as write_scan_results — writes to a SEPARATE table
+    holding only candidates for GFT's 15-ticker universe. Written
+    from an already-filtered subset of candidates_df, after the main
+    scan_results write — doesn't touch the full-universe scanner used
+    for Bamboo/long-term investing.
+
+    Args:
+        df       : Candidates already filtered to GFT_TICKERS
+        scan_date: Today's date string YYYY-MM-DD
+
+    Returns:
+        Number of rows written
+    """
+    if df.empty:
+        return 0
+
+    records = []
+    for _, row in df.iterrows():
+        records.append({
+            "ticker"        : row["ticker"],
+            "scan_date"     : scan_date,
+            "direction"     : row["direction"],
+            "sector"        : row.get("sector"),
+            "sd_position"   : float(row.get("sd_position", 0)),
+            "volume_signal" : row.get("volume_signal"),
+            "has_valid_zone": int(row.get("has_valid_zone", 0)),
+            "ml_score"      : float(row.get("ml_score", 0)),
+            "ml_rank"       : int(row.get("ml_rank", 0)),
+        })
+
+    sql = """
+        INSERT INTO gft_watchlist_results (
+            ticker, scan_date, direction, sector, sd_position,
+            volume_signal, has_valid_zone, ml_score, ml_rank
+        ) VALUES (
+            %(ticker)s, %(scan_date)s, %(direction)s, %(sector)s, %(sd_position)s,
+            %(volume_signal)s, %(has_valid_zone)s, %(ml_score)s, %(ml_rank)s
+        )
+        ON CONFLICT (ticker, scan_date, direction) DO UPDATE SET
+            ml_score       = EXCLUDED.ml_score,
+            ml_rank        = EXCLUDED.ml_rank,
+            volume_signal  = EXCLUDED.volume_signal,
+            has_valid_zone = EXCLUDED.has_valid_zone
+    """
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        psycopg2.extras.execute_batch(cursor, sql, records, page_size=500)
+
+    logger.info(f"write_gft_watchlist_results: {len(records)} candidates written for {scan_date}")
     return len(records)
 
 
@@ -374,6 +445,31 @@ def read_latest_scan_results(direction: Optional[str] = None) -> pd.DataFrame:
         sql = """
             SELECT * FROM scan_results
             WHERE scan_date = (SELECT MAX(scan_date) FROM scan_results)
+            ORDER BY ml_rank ASC
+        """
+        with get_connection() as conn:
+            return pd.read_sql(sql, conn)
+
+
+def read_latest_gft_watchlist_results(direction: Optional[str] = None) -> pd.DataFrame:
+    """Same pattern as read_latest_scan_results, reading from the
+    separate GFT-only table instead."""
+    if direction:
+        sql = """
+            SELECT * FROM gft_watchlist_results
+            WHERE scan_date = (SELECT MAX(scan_date) FROM gft_watchlist_results)
+              AND direction = %s
+            ORDER BY ml_rank ASC
+        """
+        with get_connection() as conn:
+            cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            cursor.execute(sql, (direction,))
+            rows = cursor.fetchall()
+            return pd.DataFrame(rows)
+    else:
+        sql = """
+            SELECT * FROM gft_watchlist_results
+            WHERE scan_date = (SELECT MAX(scan_date) FROM gft_watchlist_results)
             ORDER BY ml_rank ASC
         """
         with get_connection() as conn:
