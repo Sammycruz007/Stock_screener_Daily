@@ -276,7 +276,7 @@ def train_volume_classifier(
     )
 
     cv_precision = cross_val_score(pipeline, X_train, y_train,
-                                   cv=cv, scoring="precision", n_jobs=-1)
+                                   cv=cv, scoring=precision_scorer, n_jobs=-1)
 
     logger.info(
         f"Cross-validation | "
