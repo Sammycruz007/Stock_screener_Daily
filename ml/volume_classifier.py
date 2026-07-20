@@ -262,7 +262,7 @@ def train_volume_classifier(
 
     # ── Step 6: Cross-validation on TRAIN only ──────────────────────────────
     # Walk-Forward split - trains on past, test on future. gap must >= your lookback
-    cv = TimeSeriesSplit(n_splits=5, gap=SAFTY_GAP)
+    cv = TimeSeriesSplit(n_splits=5, gap=SAFETY_GAP)
 
     cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
                                   scoring="roc_auc", n_jobs=-1)
