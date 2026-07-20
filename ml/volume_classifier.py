@@ -78,11 +78,15 @@ def _load_config() -> dict:
 
 config  = _load_config()
 ML_CFG  = config["ml"]
+LINREG_CFG = config["linreg"]
 
 MIN_SAMPLES    = ML_CFG["min_training_samples"]    # 500
 MODEL_DIR      = Path(__file__).resolve().parents[1] / "models"
 MODEL_PATH     = MODEL_DIR / "volume_classifier.pkl"
 GAP = ML_CFG["label_forward_periods"]
+LINREG_PERIOD = LINREG_CFG["period"]
+
+SAFETY_GAP = max(LINREG_PERIOD, GAP)
 
 
 # =============================================================================
@@ -236,8 +240,18 @@ def train_volume_classifier(
     # Last 20% by time = walk-forward reality check
     
     split_idx  = int(len(dates) * 0.80)
+    
+    test_start = split_idx + SAFETY_GAP
+
+    if test_start >= len(dates):
+        logger.warning(
+            f"SAFETY_GAP ({SAFETY_GAP}) leaves no room for an OOS test set "
+            f"with only {len(dates)} samples — falling back to no gap."
+        )
+        test_start = split_idx
+       
     train_mask = dates.index < dates.index[split_idx]
-    test_mask  = dates.index >= dates.index[split_idx]
+    test_mask  = dates.index >= dates.index[test_start]
 
     X_train, y_train = X[train_mask], y[train_mask]
     X_test,  y_test  = X[test_mask],  y[test_mask]
@@ -248,7 +262,7 @@ def train_volume_classifier(
 
     # ── Step 6: Cross-validation on TRAIN only ──────────────────────────────
     # Walk-Forward split - trains on past, test on future. gap must >= your lookback
-    cv = TimeSeriesSplit(n_splits=5, gap=131)
+    cv = TimeSeriesSplit(n_splits=5, gap=SAFTY_GAP)
 
     cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
                                   scoring="roc_auc", n_jobs=-1)
