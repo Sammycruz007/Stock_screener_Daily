@@ -99,6 +99,15 @@ LINREG_PERIOD = LINREG_CFG["period"]
 # forward window (GAP/130). Use the largest of the two to be safe.
 SAFETY_GAP = max(LINREG_PERIOD, GAP)
 
+# GFT (Goat Funded Trader) evaluation universe — must match GFT_TICKERS
+# in run_pipeline_cloud.py. Used only for a diagnostic check below (how
+# does the trained model perform specifically on these 15 tickers within
+# the OOS window) — does NOT affect training, which stays full-universe.
+GFT_TICKERS = [
+    "AAPL", "BA", "AMZN", "COST", "JPM", "KO", "META", "MSFT",
+    "NFLX", "NVDA", "ORCL", "PLTR", "TSLA", "UNH", "V",
+]
+
 # =============================================================================
 # MODEL BUILDER
 # =============================================================================
@@ -349,6 +358,54 @@ def train_signal_ranker(
     
     logger.info(f"OOS Probability Spread | Max: {y_pred_proba.max():.4f} | Mean: {y_pred_proba.mean():.4f}")
     logger.info(f"Real Trading Metrics | Win Rate of Top 5% Signals: {top_precision:.4f} (Baseline: {y_test.mean():.4f})")
+
+    # ── GFT watchlist diagnostic ─────────────────────────────────────────────
+    # Same trained model, same OOS window, same predictions already computed
+    # above — just filtered down to the 15 tickers actually tradeable under
+    # the GFT account. This does NOT retrain anything (training stays
+    # full-universe, which is what lets the model generalize at all) — it
+    # only checks whether the model's behavior on this specific 15-ticker
+    # subset resembles its full-universe behavior.
+    #
+    # IMPORTANT: this will be a SMALL sample (dozens of rows, not thousands)
+    # — treat it as a red-flag detector, not a statistically confident
+    # confirmation. A wildly different number here (e.g. near-zero win rate)
+    # is worth investigating; a broadly similar number is reassuring but not
+    # proof the edge holds on this subset the way the full backtest does.
+    if "ticker" in df.columns:
+        ticker_test = df["ticker"][test_mask].reset_index(drop=True)
+        gft_mask    = ticker_test.isin(GFT_TICKERS).values
+
+        n_gft = int(gft_mask.sum())
+        if n_gft > 0:
+            gft_results = pd.DataFrame({
+                "true_label" : y_test[gft_mask],
+                "probability": y_pred_proba[gft_mask],
+            }).sort_values("probability", ascending=False)
+
+            gft_baseline = gft_results["true_label"].mean()
+
+            gft_top_cutoff = max(1, int(len(gft_results) * 0.05))
+            gft_top_signals = gft_results.head(gft_top_cutoff)
+            gft_top_precision = gft_top_signals["true_label"].mean()
+
+            logger.info(
+                f"GFT Watchlist Diagnostic | n={n_gft} OOS rows "
+                f"(small sample — treat as sanity check, not confirmation) | "
+                f"Overall win rate: {gft_baseline:.4f} | "
+                f"Top 5% win rate: {gft_top_precision:.4f} "
+                f"(n={gft_top_cutoff})"
+            )
+        else:
+            logger.warning(
+                "GFT Watchlist Diagnostic | No GFT tickers found in OOS "
+                "test set — cannot compute subset metrics this run"
+            )
+    else:
+        logger.warning(
+            "GFT Watchlist Diagnostic | No 'ticker' column in feature "
+            "matrix — cannot compute subset metrics"
+        )
 
    
 
