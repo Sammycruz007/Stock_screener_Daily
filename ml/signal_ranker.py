@@ -128,6 +128,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
             """
    
     # 1. Define the base XGBoost model with aggressive regularization
+    inner_cv = TimeSeriesSplit(n_splits=5, gap=safety_gap)
     base_model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 4,
@@ -149,7 +150,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     calibrated_model = CalibratedClassifierCV(
         estimator=base_model,
         method="isotonic",
-        cv=5
+        cv=inner_cv
     )
 
     # 3. Build the pipeline using the calibrated model
