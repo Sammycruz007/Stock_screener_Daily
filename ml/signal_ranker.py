@@ -128,7 +128,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
             """
    
     # 1. Define the base XGBoost model with aggressive regularization
-    inner_cv = TimeSeriesSplit(n_splits=5, gap=SAFETY_GAP)
+    inner_cv = TimeSeriesSplit(n_splits=3, gap=SAFETY_GAP)
     base_model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 4,
@@ -296,7 +296,7 @@ def train_signal_ranker(
     # std here reflects consistency WITHIN the training period only, not
     # agreement with the true held-out future period.
     
-    cv = TimeSeriesSplit(n_splits=5, gap=SAFETY_GAP)
+    cv = TimeSeriesSplit(n_splits=4, gap=SAFETY_GAP)
 
     cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
                                   scoring="roc_auc", n_jobs=-1)
@@ -327,7 +327,7 @@ def train_signal_ranker(
 
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.68).astype(int)
+    y_pred       = (y_pred_proba >= 0.65).astype(int)
     logger.info(f"OOS Probability Spread | Max: {y_pred_proba.max():.4f} | Mean: {y_pred_proba.mean():.4f}")
  
 
