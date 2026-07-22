@@ -273,6 +273,7 @@ def validate_dataframe(
     df               : any,   # pandas DataFrame
     ticker           : str,
     required_columns : list,
+    min_rows         : int = 50,
 ) -> bool:
     """
     Validate a DataFrame returned from yfinance.
@@ -281,13 +282,27 @@ def validate_dataframe(
     1. DataFrame is not None and not empty
     2. All required columns are present
     3. No required column is entirely null
-    4. At least 200 rows of data exist
-       (LinReg needs 200 candles to compute meaningfully)
+    4. At least min_rows rows of data exist
+
+    IMPORTANT — min_rows must match the fetch MODE:
+    A full-history fetch should have hundreds of rows (LinReg needs
+    200+ candles to compute meaningfully) — 50 is a reasonable floor
+    there. But an INCREMENTAL fetch (a small trailing window, e.g. the
+    last ~10 calendar days) is CORRECTLY only a handful of rows by
+    design — using the same 50-row floor for both fetch modes rejects
+    every legitimate incremental fetch, every single day. This exact
+    bug caused a near-total pipeline failure once most of the universe
+    had transitioned from full to incremental status in fetch_tracker.
+    Callers MUST pass a small min_rows (e.g. 1-2) for incremental
+    fetches — see fetcher.py's smart_fetch().
 
     Args:
         df              : pandas DataFrame to validate
         ticker          : Ticker symbol (used only for logging)
         required_columns: List of column names that must be present
+        min_rows        : Minimum row count to pass — caller-specified,
+                           must reflect whether this is a full or
+                           incremental fetch (see above)
 
     Returns:
         True if all checks pass, False if any check fails
@@ -309,10 +324,10 @@ def validate_dataframe(
             logger.warning(f"[VALIDATION] {ticker} | Column '{col}' is all nulls")
             return False
 
-    # ── Check 4: Sufficient rows for LinReg ──────────────────────────────────
-    if len(df) < 50:
+    # ── Check 4: Sufficient rows for this fetch mode ─────────────────────────
+    if len(df) < min_rows:
         logger.warning(
-            f"[VALIDATION] {ticker} | Only {len(df)} rows — Skipping"
+            f"[VALIDATION] {ticker} | Only {len(df)} rows (need {min_rows}+) — Skipping"
         )
         return False
 
