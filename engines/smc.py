@@ -703,6 +703,13 @@ def run_smc_engine(
 
     if not results:
         logger.warning("SMC engine: No results produced")
-        return pd.DataFrame()
+        # Bare pd.DataFrame() has NO columns at all — the downstream
+        # merge in run_pipeline_cloud.py does
+        # smc_df[["ticker","date","smc_structure","has_valid_zone"]],
+        # which crashes with a KeyError if those columns don't exist,
+        # even on an empty DataFrame. Return the correct empty schema
+        # instead, so a zero-result day degrades gracefully (empty
+        # merge) rather than crashing the whole pipeline.
+        return pd.DataFrame(columns=["ticker", "date", "smc_structure", "has_valid_zone"])
 
     return pd.DataFrame(results)
