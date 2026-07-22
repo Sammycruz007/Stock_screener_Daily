@@ -128,7 +128,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
             """
    
     # 1. Define the base XGBoost model with aggressive regularization
-    inner_cv = TimeSeriesSplit(n_splits=3, gap=SAFETY_GAP)
+    inner_cv = TimeSeriesSplit(n_splits=2, gap=SAFETY_GAP)
     base_model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 4,
@@ -296,7 +296,7 @@ def train_signal_ranker(
     # std here reflects consistency WITHIN the training period only, not
     # agreement with the true held-out future period.
     
-    cv = TimeSeriesSplit(n_splits=4, gap=SAFETY_GAP)
+    cv = TimeSeriesSplit(n_splits=5, gap=SAFETY_GAP)
 
     cv_auc_roc  = cross_val_score(pipeline, X_train, y_train, cv=cv,
                                   scoring="roc_auc", n_jobs=-1)
