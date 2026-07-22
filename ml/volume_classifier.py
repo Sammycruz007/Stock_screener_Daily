@@ -293,7 +293,7 @@ def train_volume_classifier(
     # ── Step 8: Compute REAL OOS metrics on HOLDOUT only ────────────────────
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.50).astype(int) 
+    y_pred       = (y_pred_proba >= 0.65).astype(int) 
 
     precision = precision_score(y_test, y_pred, zero_division=0)
     recall    = recall_score(y_test, y_pred, zero_division=0)
