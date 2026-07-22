@@ -566,6 +566,7 @@ def fetch_single_ticker(
     ticker     : str,
     start_date : str,
     end_date   : str,
+    min_rows   : int = 50,
 ) -> Optional[pd.DataFrame]:
     """
     Fetch OHLCV data for a single ticker via yfinance.
@@ -583,6 +584,19 @@ def fetch_single_ticker(
         ticker    : Ticker symbol
         start_date: Start date string YYYY-MM-DD
         end_date  : End date string YYYY-MM-DD
+        min_rows  : Minimum row count to pass validation — MUST reflect
+                    whether this is a full or incremental fetch. A full
+                    fetch should have hundreds of rows (50 is a
+                    reasonable floor); an incremental fetch (a small
+                    trailing window) is CORRECTLY only a handful of
+                    rows by design. Using the full-fetch threshold for
+                    incremental fetches rejects every legitimate
+                    incremental result — this exact bug caused a
+                    near-total pipeline failure once most of the
+                    universe had transitioned to incremental status.
+                    Passed down from smart_fetch(), which is the only
+                    place that actually knows which mode a given
+                    ticker is in.
 
     Returns:
         Clean OHLCV DataFrame or None if fetch/validation fails
@@ -630,8 +644,8 @@ def fetch_single_ticker(
         raw["date"]   = raw.index.strftime("%Y-%m-%d")
         raw           = raw.reset_index(drop=True)
 
-        # Validate
-        if not validate_dataframe(raw, ticker, required):
+        # Validate — min_rows reflects fetch mode (see docstring above)
+        if not validate_dataframe(raw, ticker, required, min_rows=min_rows):
             return None
 
         # Drop rows with null OHLCV or zero/negative prices
@@ -656,6 +670,7 @@ def fetch_batch(
     tickers    : list[str],
     start_date : str,
     end_date   : str,
+    min_rows   : int = 50,
 ) -> pd.DataFrame:
     """
     Fetch OHLCV data for a batch of tickers in parallel.
@@ -679,7 +694,7 @@ def fetch_batch(
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_ticker = {
-            executor.submit(fetch_single_ticker, ticker, start_date, end_date): ticker
+            executor.submit(fetch_single_ticker, ticker, start_date, end_date, min_rows): ticker
             for ticker in tickers
         }
 
@@ -713,6 +728,7 @@ def fetch_universe(
     tickers    : list[str],
     start_date : str,
     end_date   : str,
+    min_rows   : int = 50,
 ) -> pd.DataFrame:
     """
     Fetch OHLCV data for the entire universe in batches.
@@ -728,6 +744,9 @@ def fetch_universe(
         tickers   : Full list of tickers
         start_date: Start date YYYY-MM-DD
         end_date  : End date YYYY-MM-DD
+        min_rows  : Minimum row count for validation — MUST match fetch
+                    mode (full vs incremental). See fetch_single_ticker's
+                    docstring for why this matters.
 
     Returns:
         Combined DataFrame for all tickers
@@ -744,12 +763,13 @@ def fetch_universe(
     logger.info(
         f"Fetching {total} tickers | "
         f"{len(batches)} batches of {BATCH_SIZE} | "
-        f"Period: {start_date} to {end_date}"
+        f"Period: {start_date} to {end_date} | "
+        f"min_rows: {min_rows}"
     )
 
     for i, batch in enumerate(batches, 1):
         logger.info(f"Batch {i}/{len(batches)} | {len(batch)} tickers")
-        batch_df = fetch_batch(batch, start_date, end_date)
+        batch_df = fetch_batch(batch, start_date, end_date, min_rows)
 
         if not batch_df.empty:
             all_data.append(batch_df)
@@ -845,7 +865,7 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
         ).strftime("%Y-%m-%d")
 
         logger.info(f"Full fetch: {start_full} to {end_date}")
-        df_full = fetch_universe(full_tickers, start_full, end_date)
+        df_full = fetch_universe(full_tickers, start_full, end_date, min_rows=50)
 
         if not df_full.empty:
             all_data.append(df_full)
@@ -856,8 +876,15 @@ def smart_fetch(tickers: list[str]) -> pd.DataFrame:
             today - timedelta(days=INCREMENTAL_DAYS)
         ).strftime("%Y-%m-%d")
 
+        # min_rows=1 — an incremental fetch (a small trailing window,
+        # ~INCREMENTAL_DAYS calendar days ≈ a handful of trading days)
+        # is CORRECTLY only a few rows by design. Using the full-fetch
+        # threshold (50) here rejected every legitimate incremental
+        # result — the actual root cause of the 2026-07-22 outage,
+        # where nearly the whole universe (already past its first full
+        # fetch) got silently thrown out every single run.
         logger.info(f"Incremental fetch: {start_incr} to {end_date}")
-        df_incr = fetch_universe(incremental_tickers, start_incr, end_date)
+        df_incr = fetch_universe(incremental_tickers, start_incr, end_date, min_rows=1)
 
         if not df_incr.empty:
             all_data.append(df_incr)
