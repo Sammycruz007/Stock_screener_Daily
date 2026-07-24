@@ -2,8 +2,16 @@ name: Eagle Logic — Daily Scan
 
 on:
   schedule:
-    # 5AM UTC = 6AM WAT (GMT+1) — Monday to Friday only
-    - cron: '0 5 * * 1,3,5'
+    # 00:00, 12:00, 20:00 UTC — Monday to Friday only (FX trades
+    # continuously Sun evening through Fri evening; skips Sat/Sun
+    # since no new 4H candles form during the weekend close).
+    # One cron line covers all 3 times since they share the same
+    # day-of-week pattern — '0 0,12,20' means "at minute 0 of hours
+    # 0, 12, and 20" every matching day.
+    # 00:00 UTC — Asian/Tokyo session open
+    # 12:00 UTC — London session in full swing, pre-NY open
+    # 20:00 UTC — NY session close, next 4H candle forming into Asia
+    - cron: '0 0,12,20 * * 1,2,3,4,5'
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
 
