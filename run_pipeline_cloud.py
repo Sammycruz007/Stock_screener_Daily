@@ -154,16 +154,39 @@ def run_full_pipeline():
     except Exception as e:
         handle_critical_error(e, "Step 5: Sector metadata", reraise=True)
 
-    # ── STEP 6: Load price data for engines (from in-memory raw_df) ──────────
-    logger.info("\n[STEP 6] Loading price data for indicator engines...")
+    # ── STEP 6: Load FULL price history from Storage (not just today's fetch) ─
+    # BUG THIS FIXES: previously built tickers_data straight from raw_df —
+    # the in-memory result of THIS run's smart_fetch() call. For any ticker
+    # that was fetched INCREMENTALLY (the vast majority, once past their
+    # first-ever full fetch), that's only ~INCREMENTAL_DAYS worth of rows
+    # (~8 rows) — nowhere near enough for LinReg (needs 250+), SMC (~90+),
+    # or Volume (46+). Those engines correctly skipped almost every ticker
+    # for insufficient data, which is why indicator_results ended up nearly
+    # empty and SPY/QQQ/DIA/sector ETFs went missing from the scanner's
+    # market/sector checks — they were incrementally-fetched too, and hit
+    # the exact same starvation. read_price_history() reads ALL accumulated
+    # Storage snapshots (today's plus every previous day's), same as
+    # train_models.py already does — that's the actual full history these
+    # engines need.
+    logger.info("\n[STEP 6] Loading full price history from Storage...")
     try:
+        from data.storage_cloud import read_price_history
+        full_history = read_price_history()
+
+        if full_history is None or full_history.empty:
+            logger.error("No price history available in Storage — aborting")
+            return
+
         tickers_data = {}
         for ticker in passed_tickers:
-            df = raw_df[raw_df["ticker"] == ticker].sort_values("date").copy()
+            df = full_history[full_history["ticker"] == ticker].sort_values("date").copy()
             if not df.empty:
                 tickers_data[ticker] = df
 
-        logger.info(f"✅ Loaded data for {len(tickers_data)} tickers")
+        logger.info(
+            f"✅ Loaded full history for {len(tickers_data)} tickers | "
+            f"{len(full_history)} total rows across all snapshots"
+        )
     except Exception as e:
         handle_critical_error(e, "Step 6: Load prices", reraise=True)
 
@@ -243,7 +266,7 @@ def run_full_pipeline():
 
                 candidates_df = score_candidates(
                     candidates_df  = candidates_df,
-                    prices_df      = raw_df,
+                    prices_df      = full_history,   # was raw_df — same bug as Step 6
                     indicators_df  = indicator_df,
                     market_ind_df  = market_ind_df,
                     vol_scores     = vol_scores,
