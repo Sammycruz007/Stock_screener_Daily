@@ -57,6 +57,9 @@ so the highest-conviction ideas surface to the top.
   evaluation account's tradeable universe, without altering or
   restricting the main scanner used for broader investing decisions
 
+
+### Dashboard link: [https://stockscreenerdaily.streamlit.app/]
+
 ## 3. System Architecture
 
 ```
@@ -205,6 +208,16 @@ Two models, trained monthly:
   trusted, after early iterations of this project showed CV metrics
   looking strong while true OOS performance collapsed due to
   insufficient historical regime coverage in the training data
+
+### Ideal Trade Set-up 
+
+IDEAL LONG SET UP
+
+![alt text](ideal_long_setup.png)
+
+IDEAL SHORT SET-UP
+
+![alt text](ideal_short_setup.png)
 
 ### 3.5 Orchestration & Deployment
 
