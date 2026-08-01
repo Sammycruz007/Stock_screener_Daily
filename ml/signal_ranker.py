@@ -128,6 +128,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
             """
    
     # 1. Define the base XGBoost model with aggressive regularization
+    inner_cv = TimeSeriesSplit(n_splits=2, gap=SAFETY_GAP)
     base_model = XGBClassifier(
         n_estimators       = 400,
         max_depth          = 4,
@@ -149,7 +150,7 @@ def _build_pipeline(scale_pos_weight: float = 1.0) -> Pipeline:
     calibrated_model = CalibratedClassifierCV(
         estimator=base_model,
         method="isotonic",
-        cv=5
+        cv=inner_cv
     )
 
     # 3. Build the pipeline using the calibrated model
@@ -326,7 +327,7 @@ def train_signal_ranker(
 
     y_pred_proba = pipeline.predict_proba(X_test)[:, 1]
     # Use 0.5 for now, but for 8.92 imbalance you'll want to tune this later
-    y_pred       = (y_pred_proba >= 0.65).astype(int)
+    y_pred       = (y_pred_proba >= 0.68).astype(int)
     logger.info(f"OOS Probability Spread | Max: {y_pred_proba.max():.4f} | Mean: {y_pred_proba.mean():.4f}")
  
 
