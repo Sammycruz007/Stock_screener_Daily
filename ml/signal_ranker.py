@@ -426,6 +426,11 @@ def train_signal_ranker(
         "cv_precision_std"  : round(cv_precision.std(), 4),
         "n_train"        : len(X_train),
         "n_test"         : len(X_test),
+        # Sample count for the ACTUAL DEPLOYED model (Stage B, full
+        # dataset) — distinct from n_train above, which reflects only
+        # Stage A's validation split. Deployed model trained on n_train
+        # + n_test combined, once Step 9/10 below run.
+        "n_production"   : len(X_train) + len(X_test),
     }
 
     logger.info(
@@ -438,17 +443,62 @@ def train_signal_ranker(
         f"CV AUC-ROC: {cv_auc_roc.mean():.4f} ± {cv_auc_roc.std():.4f}"
     )
 
-    # ── Step 9: Save model to disk ────────────────────────────────────────────
+    # ── Step 9: Refit on FULL dataset (train + OOS) for production use ───────
+    # Everything above — CV, OOS test metrics, top-N% win rate, GFT
+    # diagnostic — used `pipeline`, fit ONLY on X_train. That's necessary
+    # and correct for measuring honest, unbiased performance: X_test exists
+    # specifically to check how well this approach generalizes to data the
+    # model never saw. But that's a VALIDATION exercise — there's no reason
+    # the model actually deployed for live daily scoring should keep
+    # ignoring real, recent data (X_test) once that measurement is done.
+    #
+    # Two-stage approach:
+    #   Stage A (above)  = fit on TRAIN only, evaluate on TEST → the
+    #                      metrics logged/saved above are the honest
+    #                      estimate of this model's forward-looking ability
+    #   Stage B (here)   = fit a FRESH model on TRAIN + TEST combined
+    #                      (everything to date) → this is the model that
+    #                      actually gets saved and used for live scoring
+    #
+    # IMPORTANT: Stage A's metrics are NOT re-measured against Stage B —
+    # there's no more genuinely unseen data left to test it against once
+    # X_test is folded into training. Each new monthly retrain's own
+    # Stage A check is what tells you whether real-world results are
+    # still tracking what was estimated here. A fresh pipeline is built
+    # (not the already-fitted one refit in place) so CalibratedClassifierCV
+    # recomputes its internal calibration folds against the full dataset,
+    # not whatever it fit against the smaller X_train alone.
+    logger.info("Refitting on FULL dataset (train + OOS) for production use...")
+
+    X_full = pd.concat([X_train, X_test], axis=0)
+    y_full = np.concatenate([y_train, y_test])
+
+    n_negative_full       = int((y_full == 0).sum())
+    n_positive_full       = int((y_full == 1).sum())
+    scale_pos_weight_full = (
+        n_negative_full / n_positive_full if n_positive_full > 0 else 1.0
+    )
+
+    production_pipeline = _build_pipeline(scale_pos_weight_full)
+    production_pipeline.fit(X_full, y_full)
+
+    logger.info(
+        f"Full-dataset refit complete | "
+        f"Total samples: {len(X_full)} (Train: {len(X_train)} + "
+        f"OOS: {len(X_test)}) | scale_pos_weight: {scale_pos_weight_full:.2f}"
+    )
+
+    # ── Step 10: Save the PRODUCTION model (full-dataset fit) to disk ────────
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     with open(MODEL_PATH, "wb") as f:
-        pickle.dump(pipeline, f)
+        pickle.dump(production_pipeline, f)
 
     logger.info(f"Signal Ranker saved to {MODEL_PATH}")
     logger.info("=" * 60)
     logger.info("SIGNAL RANKER TRAINING COMPLETE")
     logger.info("=" * 60)
 
-    return pipeline, metrics
+    return production_pipeline, metrics
 
 
 # =============================================================================
